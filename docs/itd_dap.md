@@ -1,7 +1,7 @@
 # Design and Planning Document
 
 ### UML Diagram
-![](/uml.pdf)
+![](jhu-oose/2020-spring-group-NoteBook/uml.pdf)
 
 ### Wireframe Diagram
 
