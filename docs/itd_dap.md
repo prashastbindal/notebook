@@ -1,11 +1,11 @@
 # Design and Planning Document
 
 ### UML Diagram
-![](jhu-oose/2020-spring-group-NoteBook/uml.pdf)
+![](docs/uml.pdf)
 
 ### Wireframe Diagram
 
-![](/wire.pdf)
+![](docs/wire.pdf)
 
 ### Iteration Backlog
 
