@@ -1,11 +1,11 @@
 # Design and Planning Document
 
 ### UML Diagram
-![UML](docs/uml.png)
+![uml](docs/uml.png)
 
 ### Wireframe Diagram
 
-![Wire_frame](docs/wire.png)
+![wire](docs/wire.png)
 
 ### Iteration Backlog
 
