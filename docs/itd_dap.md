@@ -9,9 +9,8 @@
 
 ### Iteration Backlog
 
-* User can select a course and view the current note.
-* User can upload a note to a course.
-* User can click on a note and veiw it in more detail.
+* As a student, I want to view notes for a course.
+* As a student, I want to upload notes for a course.
 
 ### Tasks
 * Create database(s) holding the courses and reviews.
