@@ -48,8 +48,8 @@ public class ApiServer {
   }
 
   private static void createSampleCourses(CourseDao courseDao) {
-    courseDao.add(new Course("OOSE", "jhu-oose.com"));
-    courseDao.add(new Course("Gateway", "jhu-gateway.com"));
+    courseDao.add(new Course("OOSE"));
+    courseDao.add(new Course("Gateway"));
   }
 
   private static CourseDao createCourseDao(Sql2o sql2o) {

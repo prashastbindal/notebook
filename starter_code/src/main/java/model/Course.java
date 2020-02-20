@@ -32,7 +32,7 @@ public class Course {
     if (o == null || getClass() != o.getClass()) return false;
     Course course = (Course) o;
     return id == course.id &&
-        name.equals(course.name)
+        name.equals(course.name);
   }
 
   @Override
