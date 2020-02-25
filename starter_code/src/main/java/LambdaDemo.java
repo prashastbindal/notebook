@@ -71,9 +71,9 @@ public class LambdaDemo {
 
   private static List<Course> getSampleCourses() {
     List<Course> courses = new ArrayList<>();
-    courses.add(new Course("OOSE", "oos.com"));
-    courses.add(new Course("Into CS", "cs.com"));
-    courses.add(new Course("Data Structures", "ds.com"));
+    courses.add(new Course("OOSE"));
+    courses.add(new Course("Into CS"));
+    courses.add(new Course("Data Structures"));
     return courses;
   }
 }
