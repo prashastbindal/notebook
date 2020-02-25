@@ -43,7 +43,10 @@ public class ApiServer {
     });
 
     app.get("/courses", ctx -> {
-      ctx.render("/courses.mustache", TemplateUtil.model("courseList", courseDao.findAll()));
+      ctx.render(
+        "/courses.mustache",
+        TemplateUtil.model("courseList", courseDao.findAll())
+      );
     });
 
     app.post("/courses", ctx -> {
@@ -67,7 +70,7 @@ public class ApiServer {
       ctx.status(201);
     });
 
-    app.get("/courses/:id/notes", ctx -> {
+    app.get("/courses/:id/notes_json", ctx -> {
       String courseId = ctx.pathParam("id");
       int cId;
       List<Note> notes;
@@ -80,6 +83,28 @@ public class ApiServer {
           ctx.json(notes);
           ctx.status(200);
           ctx.contentType("application/json");
+        }
+      } catch (NumberFormatException e) {
+        ctx.json("Error 404 not found");
+      }
+    });
+
+    app.get("/courses/:id/notes", ctx -> {
+      String courseId = ctx.pathParam("id");
+      try {
+        int cId = Integer.parseInt(courseId);
+        Course course = courseDao.findCourse(cId);
+        List<Note> notes = noteDao.findNoteWithCourseId(cId);
+        if (notes.isEmpty()) {
+          ctx.json("Error 404 not found");
+        } else {
+          ctx.render(
+          "/notes.mustache",
+          TemplateUtil.model(
+                  "courseName", course.getName(),
+                  "noteList", notes
+          )
+          );
         }
       } catch (NumberFormatException e) {
         ctx.json("Error 404 not found");
