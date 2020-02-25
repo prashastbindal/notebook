@@ -37,6 +37,27 @@ public class ApiServer {
       ctx.contentType("application/json");
     });
 
+    app.post("/courses", ctx -> {
+      // Typically, the user provides the course as a JSON object.
+      // Maps a JSON body to a Java class using JavalinJson:
+      Course course = ctx.bodyAsClass(Course.class);
+      // Next, add the course to our database using our DAO:
+      courseDao.add(course);
+      // Conventionally, return the added course to client:
+      ctx.json(course);
+      ctx.contentType("application/json");
+      // Also, return 201 status code to say operation succeeded.
+      ctx.status(201);
+    });
+
+    app.delete("/courses", ctx -> {
+      Course course = ctx.bodyAsClass(Course.class);
+      System.out.println(course.getId());
+      courseDao.remove(course);
+      ctx.contentType("application/json");
+      ctx.status(201);
+    });
+
   }
 
   private static Javalin createJavalinServer() {
@@ -59,8 +80,7 @@ public class ApiServer {
   private static void createCoursesTable(Sql2o sql2o) {
     String sql = "CREATE TABLE IF NOT EXISTS Courses(" +
                     "id INTEGER PRIMARY KEY," +
-                    "name VARCHAR(30) NOT NULL," +
-                    "url VARCHAR(100)" +
+                    "name VARCHAR(30) NOT NULL" +
                   ");";
     try(Connection conn = sql2o.open()) {
       conn.createQuery(sql).executeUpdate();
@@ -68,7 +88,7 @@ public class ApiServer {
   }
 
   private static Sql2o createSql2o() {
-    final String URI = "jdbc:sqlite:./Store.db";
+    final String URI = "jdbc:sqlite:./Courses.db";
     final String USERNAME = "";
     final String PASSWORD = "";
     return new Sql2o(URI, USERNAME, PASSWORD);
