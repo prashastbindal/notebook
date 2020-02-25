@@ -10,11 +10,13 @@
 
 <h1>NoteBook</h1>
 <h2>{{ courseName }}</h2>
-<h3>Notes</h3>
 
+<a href="../addNote/">Add Note</a><br>
+
+<h3>Notes</h3>
 <ul>
     {{#noteList}}
-        <li> {{ title }} by {{creator}} </li>
+        <li><a href="{{ id }}/"> {{ title }} by {{ creator }} </a></li>
     {{/noteList}}
 </ul>
 

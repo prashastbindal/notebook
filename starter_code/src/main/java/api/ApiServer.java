@@ -31,7 +31,7 @@ public class ApiServer {
     createTestData(courseDao, noteDao);
 
     // HTTP Get for the fist page
-    app.get("/", ctx -> ctx.result("Welcome to NoteBook APP!"));
+    app.get("/", ctx -> ctx.redirect("/courses"));
 
     // Get the HTTP Get request and respond with courses in the database
     app.get("/courses_json", ctx -> {
