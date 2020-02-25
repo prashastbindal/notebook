@@ -17,9 +17,11 @@ public class Sql2oNoteDao implements NoteDao {
 
     @Override
     public void add(Note note) throws DaoException {
+        String sql2 = "PRAGMA foreign_keys = ON;";
         String sql = "INSERT INTO Notes(courseId, title, creator)" +
                 "VALUES(:courseId, :title, :creator);";
         try(Connection conn = sql2o.open()){
+            conn.createQuery(sql).executeUpdate();
             int id = (int) conn.createQuery(sql)
                     .bind(Note.class)
                     .bind(note)
