@@ -61,26 +61,26 @@ public class ApiServer {
       ctx.status(201);
     });
 
-    app.get("/notes", ctx -> {
-      String courseId = ctx.queryString();
-      int equal_location;
-      String no_equal;
-      Integer cId;
+    app.get("/courses/:id/notes", ctx -> {
+      String courseId = ctx.pathParam("id");
+      int cId;
       List<Note> notes;
-      if (courseId==null){
-         notes = noteDao.findAll();
-      } else {
-        equal_location = courseId.indexOf('=');
-        no_equal = courseId.substring(equal_location+1);
-        cId = Integer.parseInt(no_equal);
+      try {
+        cId = Integer.parseInt(courseId);
         notes = noteDao.findNoteWithCourseId(cId);
+        if (notes.isEmpty()) {
+          ctx.json("Error 404 not found");
+        } else {
+          ctx.json(notes);
+          ctx.status(200);
+          ctx.contentType("application/json");
+        }
+      } catch (NumberFormatException e) {
+        ctx.json("Error 404 not found");
       }
-      ctx.json(notes);
-      ctx.status(200);
-      ctx.contentType("application/json");
     });
 
-    app.post("/notes", ctx -> {
+    app.post("/courses/:id/notes", ctx -> {
       Note note = ctx.bodyAsClass(Note.class);
       noteDao.add(note);
       ctx.json(note);
@@ -88,7 +88,7 @@ public class ApiServer {
       ctx.status(201);
     });
 
-    app.delete("/notes", ctx -> {
+    app.delete("/courses/:id/notes", ctx -> {
       Note note = ctx.bodyAsClass(Note.class);
       System.out.println(note.getId());
       noteDao.remove(note);

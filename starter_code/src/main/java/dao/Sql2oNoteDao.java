@@ -44,13 +44,6 @@ public class Sql2oNoteDao implements NoteDao {
         }
     }
 
-    @Override
-    public List<Note> findAll() {
-        String sql = "SELECT * FROM Notes";
-        try(Connection conn = sql2o.open()){
-            return conn.createQuery(sql).executeAndFetch(Note.class);
-        }
-    }
 
     @Override
     public List<Note> findNoteWithCourseId(int courseId) {
