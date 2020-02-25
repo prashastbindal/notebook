@@ -11,7 +11,6 @@ import model.Course;
 import model.Note;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
-import io.javalin.plugin.rendering.template.JavalinMustache;
 import io.javalin.plugin.rendering.template.TemplateUtil;
 
 import java.util.List;
@@ -99,11 +98,11 @@ public class ApiServer {
           ctx.json("Error 404 not found");
         } else {
           ctx.render(
-          "/notes.mustache",
-          TemplateUtil.model(
-                  "courseName", course.getName(),
-                  "noteList", notes
-          )
+            "/notes.mustache",
+            TemplateUtil.model(
+              "courseName", course.getName(),
+              "noteList", notes
+            )
           );
         }
       } catch (NumberFormatException e) {
@@ -140,11 +139,12 @@ public class ApiServer {
           ctx.json("Error 404 not found");
         } else {
           ctx.render(
-                  "/note.mustache",
-                  TemplateUtil.model(
-                          "courseName", course.getName(),
-                          "noteName", note.getTitle()
-                  )
+            "/note.mustache",
+            TemplateUtil.model(
+              "courseName", course.getName(),
+              "noteName", note.getTitle(),
+              "creatorName", note.getCreator()
+            )
           );
         }
       } catch (NumberFormatException e) {
