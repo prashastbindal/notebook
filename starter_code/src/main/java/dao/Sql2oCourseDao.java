@@ -18,16 +18,30 @@ public class Sql2oCourseDao implements CourseDao {
 
   @Override
   public void add(Course course) throws DaoException {
-    String sql = "INSERT INTO Courses(name, url)" +
-        "VALUES(:name, :url);";
+    String sql = "INSERT INTO Courses(name)" +
+        "VALUES(:name);";
     try(Connection conn = sql2o.open()){
       int id = (int) conn.createQuery(sql)
-          .bind(course)
-          .executeUpdate()
-          .getKey();
+              .addParameter("name", course.getName())
+              .bind(course)
+              .executeUpdate()
+              .getKey();
       course.setId(id);
     } catch (Sql2oException ex) {
       throw new DaoException("Unable to add the course", ex);
+    }
+  }
+
+  @Override
+  public void remove(Course course) throws DaoException {
+    String sql = "DELETE FROM Courses WHERE id = :id;";
+    try(Connection conn = sql2o.open()) {
+      System.out.println(course);
+      conn.createQuery(sql)
+              .addParameter("id", course.getId())
+              .executeUpdate();
+    } catch (Sql2oException ex) {
+      throw new DaoException("Unable to delete course", ex);
     }
   }
 
