@@ -16,6 +16,7 @@ dependencies {
     compile 'org.slf4j:slf4j-api:2.0.0-alpha1'
     compile 'org.slf4j:slf4j-simple:1.8.0-beta4';
     compile 'io.javalin:javalin:3.7.0';
+    compile "com.github.spullara.mustache.java:compiler:0.9.5"
     compile 'org.sql2o:sql2o:1.5.4'
     compile 'com.sparkjava:spark-template-mustache:2.7.1'
     compile 'com.sparkjava:spark-template-handlebars:2.7.1'
