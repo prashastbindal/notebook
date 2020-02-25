@@ -17,7 +17,6 @@ import java.util.List;
 public class ApiServer {
   public static void main(String[] args) {
 
-
     // create a database
     Sql2o sql2o = createSql2o();
     // add Courses and Notes tables to database
