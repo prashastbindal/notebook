@@ -6,12 +6,6 @@
 # Log file
 *.log
 
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
 # Package Files #
 *.jar
 *.war
@@ -70,21 +64,13 @@ gradle-app.setting
 .idea/**/gradle.xml
 .idea/**/libraries
 
-# CMake
-cmake-build-*/
-
-# File-based project format
-*.iws
-
 # IntelliJ
 out/
 
-# Crashlytics plugin (for Android Studio and IntelliJ)
-com_crashlytics_export_strings.xml
-crashlytics.properties
-crashlytics-build.properties
-fabric.properties
-
 # Editor-based Rest Client
 .idea/httpRequests
+
+## Other
+.DS_Store
+*.db
 
