@@ -2,6 +2,7 @@ package dao;
 
 import exception.DaoException;
 import model.Course;
+import model.Note;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
@@ -50,6 +51,17 @@ public class Sql2oCourseDao implements CourseDao {
     String sql = "SELECT * FROM Courses;";
     try(Connection conn = sql2o.open()){
       return conn.createQuery(sql).executeAndFetch(Course.class);
+    }
+  }
+
+  @Override
+  public Course findCourse(int courseId) {
+    String sql = "SELECT * FROM Courses WHERE id = :courseId;";
+    try(Connection conn = sql2o.open()){
+      return conn.createQuery(sql)
+              .addParameter("courseId", courseId)
+              .executeAndFetch(Course.class)
+              .iterator().next();
     }
   }
 }

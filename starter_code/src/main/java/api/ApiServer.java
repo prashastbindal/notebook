@@ -29,10 +29,7 @@ public class ApiServer {
     // Run the server
     Javalin app = createJavalinServer();
 
-    Course c1 = new Course("Example Course 1");
-    Course c2 = new Course("Example Course 1");
-    courseDao.add(c1);
-    courseDao.add(c2);
+    createTestData(courseDao, noteDao);
 
     // HTTP Get for the fist page
     app.get("/", ctx -> ctx.result("Welcome to NoteBook APP!"));
@@ -105,6 +102,31 @@ public class ApiServer {
       ctx.status(201);
     });
 
+    app.get("/courses/:courseId/notes/:noteId/", ctx -> {
+      String courseId = ctx.pathParam("courseId");
+      String noteId = ctx.pathParam("noteId");
+      int cId, nId;
+      try {
+        cId = Integer.parseInt(courseId);
+        nId = Integer.parseInt(noteId);
+        Course course = courseDao.findCourse(cId);
+        Note note = noteDao.findNote(nId);
+        if (note == null || course == null) {
+          ctx.json("Error 404 not found");
+        } else {
+          ctx.render(
+                  "/note.mustache",
+                  TemplateUtil.model(
+                          "courseName", course.getName(),
+                          "noteName", note.getTitle()
+                  )
+          );
+        }
+      } catch (NumberFormatException e) {
+        ctx.json("Error 404 not found");
+      }
+    });
+
   }
 
   private static Javalin createJavalinServer() {
@@ -112,9 +134,6 @@ public class ApiServer {
     JavalinJson.setToJsonMapper(gson::toJson);
     JavalinJson.setFromJsonMapper(gson::fromJson);
     final int PORT = 7000;
-//    return Javalin.create(config -> {
-//      config.addStaticFiles("resources");
-//    }).start(PORT);
     return Javalin.create().start(PORT);
   }
 
@@ -145,6 +164,22 @@ public class ApiServer {
             "FOREIGN KEY (courseId) REFERENCES Courses (id));";
     try(Connection conn = sql2o.open()) {
       conn.createQuery(sql).executeUpdate();
+    }
+  }
+
+  private static void createTestData(CourseDao courseDao, NoteDao noteDao) {
+    Javalin.log.info("Creating test data...");
+    if (courseDao.findAll().isEmpty()) {
+      Course c1 = new Course("Example Course 1");
+      Course c2 = new Course("Example Course 2");
+      courseDao.add(c1);
+      courseDao.add(c2);
+      Note n1 = new Note(c1.getId(), "Note1", "student1");
+      Note n2 = new Note(c1.getId(), "Note2", "student2");
+      Note n3 = new Note(c2.getId(), "Note3", "student1");
+      noteDao.add(n1);
+      noteDao.add(n2);
+      noteDao.add(n3);
     }
   }
 

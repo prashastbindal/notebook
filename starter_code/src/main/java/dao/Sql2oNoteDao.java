@@ -21,7 +21,7 @@ public class Sql2oNoteDao implements NoteDao {
         String sql = "INSERT INTO Notes(courseId, title, creator)" +
                 "VALUES(:courseId, :title, :creator);";
         try(Connection conn = sql2o.open()){
-            conn.createQuery(sql).executeUpdate();
+            conn.createQuery(sql2).executeUpdate();
             int id = (int) conn.createQuery(sql)
                     .bind(Note.class)
                     .bind(note)
@@ -52,6 +52,17 @@ public class Sql2oNoteDao implements NoteDao {
         String sql = "SELECT * FROM Notes WHERE courseId = :courseId;";
         try(Connection conn = sql2o.open()){
             return conn.createQuery(sql).addParameter("courseId", courseId).executeAndFetch(Note.class);
+        }
+    }
+
+    @Override
+    public Note findNote(int noteId) {
+        String sql = "SELECT * FROM Notes WHERE id = :noteId;";
+        try(Connection conn = sql2o.open()){
+            return conn.createQuery(sql)
+                    .addParameter("noteId", noteId)
+                    .executeAndFetch(Note.class)
+                    .iterator().next();
         }
     }
 }
