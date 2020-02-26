@@ -6,6 +6,8 @@ import dao.NoteDao;
 import dao.Sql2oCourseDao;
 import dao.Sql2oNoteDao;
 import io.javalin.Javalin;
+import io.javalin.core.util.FileUtil;
+import io.javalin.http.UploadedFile;
 import io.javalin.plugin.json.JavalinJson;
 import model.Course;
 import model.Note;
@@ -13,6 +15,7 @@ import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import io.javalin.plugin.rendering.template.TemplateUtil;
 
+import java.io.File;
 import java.util.List;
 
 public class ApiServer {
@@ -136,6 +139,19 @@ public class ApiServer {
           ctx.formParam("creator")
         );
         noteDao.add(note);
+
+        UploadedFile file = ctx.uploadedFile("file");
+
+        String folder = "src/uploads/" + cId + "/";
+        if (! new File(folder).exists()) {
+          new File(folder).mkdirs();
+        }
+        String fn = note.getId() + file.getExtension();
+        Javalin.log.info(folder);
+        Javalin.log.info(fn);
+
+        FileUtil.streamToFile(file.getContent(), folder + fn);
+
         ctx.redirect("/courses/".concat(courseId).concat("/notes/"));
       } catch (NumberFormatException e) {
         ctx.json("Error 404 not found");
@@ -162,12 +178,16 @@ public class ApiServer {
         if (note == null || course == null) {
           ctx.json("Error 404 not found");
         } else {
+          String path = "/uploads/" + cId + "/" + nId + ".pdf";
+          Boolean showfile = new File("./src/main/resources/static/" + path).exists();
           ctx.render(
             "/note.mustache",
             TemplateUtil.model(
               "courseName", course.getName(),
               "noteName", note.getTitle(),
-              "creatorName", note.getCreator()
+              "creatorName", note.getCreator(),
+              "filepath", path,
+              "showFile", showfile
             )
           );
         }
@@ -183,7 +203,9 @@ public class ApiServer {
     JavalinJson.setToJsonMapper(gson::toJson);
     JavalinJson.setFromJsonMapper(gson::fromJson);
     final int PORT = 7000;
-    return Javalin.create().start(PORT);
+    return Javalin.create(config -> {
+      config.addStaticFiles("/static/");
+    }).start(PORT);
   }
 
   private static CourseDao createCourseDao(Sql2o sql2o) {
