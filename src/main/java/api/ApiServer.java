@@ -263,9 +263,7 @@ public class ApiServer {
   }
 
   private static Sql2o createSql2o() {
-    final String URI = "jdbc:sqlite:./Courses.db";
-    final String USERNAME = "";
-    final String PASSWORD = "";
-    return new Sql2o(URI, USERNAME, PASSWORD);
+    final String dbURI = System.getenv("JDBC_DATABASE_URL");
+    return new Sql2o(dbURI);
   }
 }
