@@ -5,9 +5,12 @@ import dao.CourseDao;
 import dao.NoteDao;
 import dao.Sql2oCourseDao;
 import dao.Sql2oNoteDao;
+import fileserver.FileServer;
+import fileserver.LocalFileServer;
 import io.javalin.Javalin;
 import io.javalin.core.util.FileUtil;
 import io.javalin.http.UploadedFile;
+import io.javalin.http.staticfiles.Location;
 import io.javalin.plugin.json.JavalinJson;
 import model.Course;
 import model.Note;
@@ -16,6 +19,9 @@ import org.sql2o.Sql2o;
 import io.javalin.plugin.rendering.template.TemplateUtil;
 
 import java.io.File;
+import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class ApiServer {
@@ -28,6 +34,9 @@ public class ApiServer {
     // connect the database to CourseDao and NoteDao
     CourseDao courseDao = createCourseDao(sql2o);
     NoteDao noteDao = createNoteDao(sql2o);
+    // Connect to file server
+    Path uploadFileLocation = Paths.get("./static/uploads/");
+    FileServer fileServer = new LocalFileServer(uploadFileLocation.toString());
     // Run the server
     Javalin app = createJavalinServer();
 
@@ -99,7 +108,7 @@ public class ApiServer {
         ctx.render(
           "/addNote.mustache",
           TemplateUtil.model(
-      "courseName", course.getName()
+            "courseName", course.getName()
           )
         );
       } catch (NumberFormatException e) {
@@ -141,16 +150,7 @@ public class ApiServer {
         noteDao.add(note);
 
         UploadedFile file = ctx.uploadedFile("file");
-
-        String folder = "src/uploads/" + cId + "/";
-        if (! new File(folder).exists()) {
-          new File(folder).mkdirs();
-        }
-        String fn = note.getId() + file.getExtension();
-        Javalin.log.info(folder);
-        Javalin.log.info(fn);
-
-        FileUtil.streamToFile(file.getContent(), folder + fn);
+        fileServer.upload(file.getContent(), cId, note.getId());
 
         ctx.redirect("/courses/".concat(courseId).concat("/notes/"));
       } catch (NumberFormatException e) {
@@ -178,15 +178,15 @@ public class ApiServer {
         if (note == null || course == null) {
           ctx.json("Error 404 not found");
         } else {
-          String path = "/uploads/" + cId + "/" + nId + ".pdf";
-          Boolean showfile = new File("./src/main/resources/static/" + path).exists();
+          String filepath = fileServer.getURL(cId, nId);
+          Boolean showfile = (filepath != null);
           ctx.render(
             "/note.mustache",
             TemplateUtil.model(
               "courseName", course.getName(),
               "noteName", note.getTitle(),
               "creatorName", note.getCreator(),
-              "filepath", path,
+              "filepath", filepath,
               "showFile", showfile
             )
           );
@@ -204,7 +204,7 @@ public class ApiServer {
     JavalinJson.setFromJsonMapper(gson::fromJson);
     final int PORT = getHerokuAssignedPort();
     return Javalin.create(config -> {
-      config.addStaticFiles("/static/");
+      config.addStaticFiles("static/", Location.EXTERNAL);
     }).start(PORT);
   }
 
@@ -263,7 +263,7 @@ public class ApiServer {
   }
 
   private static Sql2o createSql2o() {
-    final String dbURI = System.getenv("JDBC_DATABASE_URL");
-    return new Sql2o(dbURI);
+    String dbURI = System.getenv("JDBC_DATABASE_URL");
+    return new Sql2o(dbURI, "", "");
   }
 }
