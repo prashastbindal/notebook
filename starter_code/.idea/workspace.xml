@@ -2,19 +2,52 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2d6aa69e-5587-4bd2-9013-fa0c37e2af15" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/upload.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileChanges/last-build.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/gc.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/vcs-1/gc.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/checkstyle-idea.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/starter_code.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Store.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/api/ApiServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/ApiServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Courses.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/addNote.mustache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/courses.mustache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/note.mustache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/notes.mustache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/static/uploads/1/9.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/ApiServer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/CourseDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/NoteDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/Sql2oCourseDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/Sql2oNoteDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/exception/DaoException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Course.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Note.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/addNote.mustache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/courses.mustache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/note.mustache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/notes.mustache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/uploads/1/9.pdf" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +72,16 @@
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
     </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view />
+      </state>
+    </system>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -139,28 +182,28 @@
       <screen x="46" y="23" width="1234" height="777" />
     </state>
     <state x="180" y="23" width="967" height="777" key="CommitChangelistDialog2/46.23.1234.777@46.23.1234.777" timestamp="1582222423759" />
-    <state width="1358" height="217" key="GridCell.Tab.0.bottom" timestamp="1582659660607">
+    <state width="1358" height="217" key="GridCell.Tab.0.bottom" timestamp="1582693341683">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1358" height="217" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1582659660607" />
+    <state width="1358" height="217" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1582693341683" />
     <state width="1190" height="184" key="GridCell.Tab.0.bottom/46.23.1234.777@46.23.1234.777" timestamp="1582222413636" />
     <state width="1190" height="184" key="GridCell.Tab.0.bottom/48.23.1232.777@48.23.1232.777" timestamp="1582221731764" />
-    <state width="1358" height="217" key="GridCell.Tab.0.center" timestamp="1582659660606">
+    <state width="1358" height="217" key="GridCell.Tab.0.center" timestamp="1582693341682">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1358" height="217" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1582659660606" />
+    <state width="1358" height="217" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1582693341682" />
     <state width="1190" height="184" key="GridCell.Tab.0.center/46.23.1234.777@46.23.1234.777" timestamp="1582222413635" />
     <state width="1190" height="184" key="GridCell.Tab.0.center/48.23.1232.777@48.23.1232.777" timestamp="1582221731763" />
-    <state width="1358" height="217" key="GridCell.Tab.0.left" timestamp="1582659660606">
+    <state width="1358" height="217" key="GridCell.Tab.0.left" timestamp="1582693341682">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1358" height="217" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1582659660606" />
+    <state width="1358" height="217" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1582693341682" />
     <state width="1190" height="184" key="GridCell.Tab.0.left/46.23.1234.777@46.23.1234.777" timestamp="1582222413635" />
     <state width="1190" height="184" key="GridCell.Tab.0.left/48.23.1232.777@48.23.1232.777" timestamp="1582221731762" />
-    <state width="1358" height="217" key="GridCell.Tab.0.right" timestamp="1582659660606">
+    <state width="1358" height="217" key="GridCell.Tab.0.right" timestamp="1582693341683">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1358" height="217" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1582659660606" />
+    <state width="1358" height="217" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1582693341683" />
     <state width="1190" height="184" key="GridCell.Tab.0.right/46.23.1234.777@46.23.1234.777" timestamp="1582222413636" />
     <state width="1190" height="184" key="GridCell.Tab.0.right/48.23.1232.777@48.23.1232.777" timestamp="1582221731764" />
     <state x="122" y="23" key="SettingsEditor" timestamp="1582652065530">
