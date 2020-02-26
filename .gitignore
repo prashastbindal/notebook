@@ -25,5 +25,4 @@ out/
 
 ## Other
 .DS_Store
- *.db
-
+*.db

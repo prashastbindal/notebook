@@ -202,7 +202,7 @@ public class ApiServer {
     Gson gson = new Gson();
     JavalinJson.setToJsonMapper(gson::toJson);
     JavalinJson.setFromJsonMapper(gson::fromJson);
-    final int PORT = 7000;
+    final int PORT = getHerokuAssignedPort();
     return Javalin.create(config -> {
       config.addStaticFiles("/static/");
     }).start(PORT);
@@ -239,8 +239,8 @@ public class ApiServer {
   }
 
   private static void createTestData(CourseDao courseDao, NoteDao noteDao) {
-    Javalin.log.info("Creating test data...");
     if (courseDao.findAll().isEmpty()) {
+      Javalin.log.info("Creating test data...");
       Course c1 = new Course("Example Course 1");
       Course c2 = new Course("Example Course 2");
       courseDao.add(c1);
@@ -252,6 +252,14 @@ public class ApiServer {
       noteDao.add(n2);
       noteDao.add(n3);
     }
+  }
+
+  private static int getHerokuAssignedPort() {
+    String herokuPort = System.getenv("PORT");
+    if (herokuPort != null) {
+      return Integer.parseInt(herokuPort);
+    }
+    return 7000;
   }
 
   private static Sql2o createSql2o() {
