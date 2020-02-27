@@ -20,6 +20,7 @@ import io.javalin.plugin.rendering.template.TemplateUtil;
 
 import java.io.File;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;

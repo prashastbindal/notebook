@@ -13,10 +13,10 @@
 <h3>{{ creatorName }}</h3>
 
 {{#showFile}}
-    <object id="pdf" type="application/pdf" data="{{ filepath }}" width="75%" height="600px"></object>
+<embed type="application/pdf" src="{{ filepath }}" width="500" height="375">
 {{/showFile}}
 {{^showFile}}
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PDF_file_icon.svg/1024px-PDF_file_icon.svg.png", height="200px">
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PDF_file_icon.svg/1024px-PDF_file_icon.svg.png", height="200px">
 {{/showFile}}
 
 
