@@ -214,6 +214,9 @@ public class ApiServer {
     JavalinJson.setToJsonMapper(gson::toJson);
     JavalinJson.setFromJsonMapper(gson::fromJson);
     final int PORT = getAssignedPort();
+    if (! new File("static/").exists()) {
+      new File("static/").mkdirs();
+    }
     return Javalin.create(config -> {
       config.addStaticFiles("static/", Location.EXTERNAL);
     }).start(PORT);
@@ -246,8 +249,6 @@ public class ApiServer {
             "FOREIGN KEY (courseId) REFERENCES Courses (id));";
     try(Connection conn = sql2o.open()) {
       conn.createQuery(sql).executeUpdate();
-//      sql = "PRAGMA foreign_keys = ON;";
-//      conn.createQuery(sql).executeUpdate();
     }
   }
 
