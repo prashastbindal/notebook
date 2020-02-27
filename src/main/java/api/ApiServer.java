@@ -246,8 +246,8 @@ public class ApiServer {
             "FOREIGN KEY (courseId) REFERENCES Courses (id));";
     try(Connection conn = sql2o.open()) {
       conn.createQuery(sql).executeUpdate();
-      sql = "PRAGMA foreign_keys = ON;";
-      conn.createQuery(sql).executeUpdate();
+//      sql = "PRAGMA foreign_keys = ON;";
+//      conn.createQuery(sql).executeUpdate();
     }
   }
 

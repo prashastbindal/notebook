@@ -22,7 +22,7 @@ public class Sql2oCourseDao implements CourseDao {
     String sql = "INSERT INTO Courses(name)" +
         "VALUES(:name);";
     try(Connection conn = sql2o.open()){
-      int id = (int) conn.createQuery(sql)
+      int id = (int) conn.createQuery(sql, true)
               .addParameter("name", course.getName())
               .bind(course)
               .executeUpdate()

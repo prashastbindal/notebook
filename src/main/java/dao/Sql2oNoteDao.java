@@ -20,7 +20,7 @@ public class Sql2oNoteDao implements NoteDao {
         String sql = "INSERT INTO Notes(courseId, title, creator)" +
                 "VALUES(:courseId, :title, :creator);";
         try(Connection conn = sql2o.open()){
-            int id = (int) conn.createQuery(sql)
+            int id = (int) conn.createQuery(sql, true)
                     .bind(Note.class)
                     .bind(note)
                     .executeUpdate()
