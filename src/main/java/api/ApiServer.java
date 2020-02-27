@@ -20,12 +20,19 @@ import io.javalin.plugin.rendering.template.TemplateUtil;
 
 import java.io.File;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
 public class ApiServer {
   public static void main(String[] args) {
+
+    // hack to make jar build properly
+    try {
+      Class.forName("org.sqlite.JDBC");
+    } catch (ClassNotFoundException e) {}
+
     // create a database
     Sql2o sql2o = createSql2o();
 
@@ -197,7 +204,7 @@ public class ApiServer {
               "courseName", course.getName(),
               "noteName", note.getTitle(),
               "creatorName", note.getCreator(),
-              "filepath", filepath,
+              "filepath", URLEncoder.encode(filepath, "UTF-8"),
               "showFile", showfile
             )
           );

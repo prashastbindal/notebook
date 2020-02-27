@@ -15,7 +15,9 @@ import io.javalin.Javalin;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Date;
 
 public class S3FileServer implements FileServer {
@@ -71,8 +73,9 @@ public class S3FileServer implements FileServer {
                             .withMethod(HttpMethod.GET)
                             .withExpiration(expiration);
             URL url = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
-            Javalin.log.info("Found " + url.toString() + " in S3 fileserver.");
-            return url.toString();
+            String urlString = url.toString();
+            Javalin.log.info("Found " + urlString + " in S3 fileserver.");
+            return urlString;
         } catch (AmazonServiceException e) {
             e.printStackTrace();
         } catch (SdkClientException e) {
