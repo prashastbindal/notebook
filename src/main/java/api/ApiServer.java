@@ -26,6 +26,12 @@ import java.util.List;
 
 public class ApiServer {
   public static void main(String[] args) {
+
+    // hack to make jar build properly
+    try {
+      Class.forName("org.sqlite.JDBC");
+    } catch (ClassNotFoundException e) {}
+
     // create a database
     Sql2o sql2o = createSql2o();
 
@@ -223,7 +229,7 @@ public class ApiServer {
 
   private static void createCoursesTable(Sql2o sql2o) {
     String sql = "CREATE TABLE IF NOT EXISTS Courses(" +
-                    "id SERIAL PRIMARY KEY," +
+                    "id INTEGER PRIMARY KEY," +
                     "name VARCHAR(30) NOT NULL" +
                   ");";
     try(Connection conn = sql2o.open()) {
@@ -233,7 +239,7 @@ public class ApiServer {
 
   private static void createNotesTable(Sql2o sql2o) {
     String sql = "CREATE TABLE IF NOT EXISTS Notes(" +
-            "id SERIAL PRIMARY KEY," +
+            "id INTEGER PRIMARY KEY," +
             "courseId INTEGER NOT NULL," +
             "title VARCHAR(30) NOT NULL," +
             "creator VARCHAR(30)," +

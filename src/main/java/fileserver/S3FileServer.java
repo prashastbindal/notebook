@@ -11,6 +11,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import io.javalin.Javalin;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,9 +35,11 @@ public class S3FileServer implements FileServer {
 
     public void upload(InputStream file, int courseId, int noteId) {
         String filepath = courseId + "/" + noteId + ".pdf";
+        Javalin.log.info("Uploading " + filepath + " to S3 fileserver.");
         try {
             Boolean exists = s3Client.doesObjectExist(this.bucketName, filepath);
-            if (!exists) {
+            if (exists) {
+                Javalin.log.info(filepath + " already exists in S3 fileserver.");
                 return;
             }
             PutObjectRequest uploadRequest = new PutObjectRequest(this.bucketName, filepath, file, new ObjectMetadata());
@@ -50,6 +53,7 @@ public class S3FileServer implements FileServer {
 
     public String getURL(int courseId, int noteId) {
         String objectKey = courseId + "/" + noteId + ".pdf";
+        Javalin.log.info("Retrieving " + objectKey + " from S3 fileserver.");
 
         Date expiration = new Date();
         long expTimeMillis = expiration.getTime();
@@ -59,6 +63,7 @@ public class S3FileServer implements FileServer {
         try {
             Boolean exists = s3Client.doesObjectExist(this.bucketName, objectKey);
             if (!exists) {
+                Javalin.log.info("Could not find " + objectKey + " in S3 fileserver.");
                 return null;
             }
             GeneratePresignedUrlRequest generatePresignedUrlRequest =
@@ -66,6 +71,7 @@ public class S3FileServer implements FileServer {
                             .withMethod(HttpMethod.GET)
                             .withExpiration(expiration);
             URL url = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
+            Javalin.log.info("Found " + url.toString() + " in S3 fileserver.");
             return url.toString();
         } catch (AmazonServiceException e) {
             e.printStackTrace();

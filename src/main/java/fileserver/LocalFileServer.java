@@ -19,7 +19,7 @@ public class LocalFileServer implements FileServer {
 
     public void upload(InputStream file, int courseId, int noteId) {
         String path = this.basepath + "/" + courseId + "/" + noteId + ".pdf";
-        Javalin.log.info("Saving uploaded file to: " + path);
+        Javalin.log.info("Uploading " + path + " to local fileserver.");
         FileUtil.streamToFile(file, path);
     }
 
@@ -27,8 +27,10 @@ public class LocalFileServer implements FileServer {
         String fullpath = this.basepath + "/" + courseId + "/" + noteId + ".pdf";
         String urlpath = "/uploads/" + courseId + "/" + noteId + ".pdf";
         if (new File(fullpath).exists()) {
+            Javalin.log.info("Retrieving " + fullpath + " from local fileserver.");
             return urlpath;
         } else {
+            Javalin.log.info("Could not find " + fullpath + " in local fileserver.");
             return null;
         }
     }
