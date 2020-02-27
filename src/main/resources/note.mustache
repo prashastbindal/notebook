@@ -13,7 +13,7 @@
 <h3>{{ creatorName }}</h3>
 
 {{#showFile}}
-    <iframe id="iframepdf" src="{{ filepath }}" width="75%" height="600px"></iframe>
+    <object id="pdf" type="application/pdf" data="{{ filepath }}" width="75%" height="600px"></object>
 {{/showFile}}
 {{^showFile}}
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PDF_file_icon.svg/1024px-PDF_file_icon.svg.png", height="200px">
