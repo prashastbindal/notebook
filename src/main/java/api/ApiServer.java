@@ -38,14 +38,8 @@ public class ApiServer {
     NoteDao noteDao = createNoteDao(sql2o);
 
     // Connect to file server
-    String use_aws = System.getenv("AWS_ENABLE");
-    FileServer fileServer;
-    if (use_aws != null && use_aws == "TRUE") {
-      fileServer = new S3FileServer();
-    } else {
-      Path uploadFileLocation = Paths.get("./static/uploads/");
-      fileServer = new LocalFileServer(uploadFileLocation.toString());
-    }
+    Path uploadFileLocation = Paths.get("./static/uploads/");
+    FileServer fileServer = new LocalFileServer(uploadFileLocation.toString());
 
     // Run the server
     Javalin app = createJavalinServer();
@@ -246,8 +240,8 @@ public class ApiServer {
             "FOREIGN KEY (courseId) REFERENCES Courses (id));";
     try(Connection conn = sql2o.open()) {
       conn.createQuery(sql).executeUpdate();
-//      sql = "PRAGMA foreign_keys = ON;";
-//      conn.createQuery(sql).executeUpdate();
+      sql = "PRAGMA foreign_keys = ON;";
+      conn.createQuery(sql).executeUpdate();
     }
   }
 
@@ -268,15 +262,11 @@ public class ApiServer {
   }
 
   private static int getAssignedPort() {
-    String herokuPort = System.getenv("PORT");
-    if (herokuPort != null) {
-      return Integer.parseInt(herokuPort);
-    }
     return 7000;
   }
 
   private static Sql2o createSql2o() {
-    String dbURI = System.getenv("JDBC_DATABASE_URL");
+    String dbURI = "jdbc:sqlite:Courses.db";
     return new Sql2o(dbURI, "", "");
   }
 }
