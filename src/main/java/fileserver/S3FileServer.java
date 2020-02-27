@@ -38,7 +38,7 @@ public class S3FileServer implements FileServer {
         Javalin.log.info("Uploading " + filepath + " to S3 fileserver.");
         try {
             Boolean exists = s3Client.doesObjectExist(this.bucketName, filepath);
-            if (!exists) {
+            if (exists) {
                 Javalin.log.info(filepath + " already exists.");
                 return;
             }
