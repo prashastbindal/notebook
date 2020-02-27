@@ -18,11 +18,12 @@ A web app would allow students to upload different types of files and allow othe
 * As a student I want to upvote notes that I think are useful so other students will find them
 * As a student I want to comment on or suggest changes to a note
 * As an admin I want to remove posts that are inappropriate or not relevant to the course
+* As a student I want to be able to search all notes for a course for mentions of specific topics so I can easily find information
+* As a student I want to be able to sort notes by metadata such as date, popularity, rating, etc.
 
 ### Nice to have
 * As a student I want to create notes collaboratively with others
 * As a student I want to be able to highlight sections of notes (typed and handwritten) that are important so I and others can easily find the information
-* As a student I want to be able to search all notes for a course for mentions of specific topics so I can easily find information
 * As a student I want to be able to edit notes in Markdown or LaTeX
 * As a student I want to be able to draw diagrams in the note editor
 * As a student I want there to be text recognition so I can search inside of handwritten notes
