@@ -28,14 +28,24 @@ public class S3FileServer implements FileServer {
         AWSCredentialsProvider awsCredentials = new EnvironmentVariableCredentialsProvider();
         s3Client = AmazonS3ClientBuilder.standard()
                 .withCredentials(awsCredentials)
-                .withRegion(Regions.DEFAULT_REGION)
+                .withRegion(Regions.US_EAST_1)
                 .build();
     }
 
     public void upload(InputStream file, int courseId, int noteId) {
         String filepath = courseId + "/" + noteId + ".pdf";
-        PutObjectRequest uploadRequest = new PutObjectRequest(bucketName, filepath, file, new ObjectMetadata());
-        s3Client.putObject(uploadRequest);
+        try {
+            Boolean exists = s3Client.doesObjectExist(this.bucketName, filepath);
+            if (!exists) {
+                return;
+            }
+            PutObjectRequest uploadRequest = new PutObjectRequest(this.bucketName, filepath, file, new ObjectMetadata());
+            s3Client.putObject(uploadRequest);
+        } catch (AmazonServiceException e) {
+            e.printStackTrace();
+        } catch (SdkClientException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getURL(int courseId, int noteId) {
@@ -46,12 +56,23 @@ public class S3FileServer implements FileServer {
         expTimeMillis += 1000 * 60 * 60;
         expiration.setTime(expTimeMillis);
 
-        GeneratePresignedUrlRequest generatePresignedUrlRequest =
-                new GeneratePresignedUrlRequest(bucketName, objectKey)
-                        .withMethod(HttpMethod.GET)
-                        .withExpiration(expiration);
-        URL url = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
-        return url.toString();
+        try {
+            Boolean exists = s3Client.doesObjectExist(this.bucketName, objectKey);
+            if (!exists) {
+                return null;
+            }
+            GeneratePresignedUrlRequest generatePresignedUrlRequest =
+                    new GeneratePresignedUrlRequest(this.bucketName, objectKey)
+                            .withMethod(HttpMethod.GET)
+                            .withExpiration(expiration);
+            URL url = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
+            return url.toString();
+        } catch (AmazonServiceException e) {
+            e.printStackTrace();
+        } catch (SdkClientException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

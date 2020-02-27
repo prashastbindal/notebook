@@ -7,8 +7,8 @@ import dao.Sql2oCourseDao;
 import dao.Sql2oNoteDao;
 import fileserver.FileServer;
 import fileserver.LocalFileServer;
+import fileserver.S3FileServer;
 import io.javalin.Javalin;
-import io.javalin.core.util.FileUtil;
 import io.javalin.http.UploadedFile;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.plugin.json.JavalinJson;
@@ -28,24 +28,35 @@ public class ApiServer {
   public static void main(String[] args) {
     // create a database
     Sql2o sql2o = createSql2o();
+
     // add Courses and Notes tables to database
     createCoursesTable(sql2o);
     createNotesTable(sql2o);
+
     // connect the database to CourseDao and NoteDao
     CourseDao courseDao = createCourseDao(sql2o);
     NoteDao noteDao = createNoteDao(sql2o);
+
     // Connect to file server
-    Path uploadFileLocation = Paths.get("./static/uploads/");
-    FileServer fileServer = new LocalFileServer(uploadFileLocation.toString());
+    String use_aws = System.getenv("AWS_ENABLE");
+    FileServer fileServer;
+    if (use_aws != null && use_aws == "TRUE") {
+      fileServer = new S3FileServer();
+    } else {
+      Path uploadFileLocation = Paths.get("./static/uploads/");
+      fileServer = new LocalFileServer(uploadFileLocation.toString());
+    }
+
     // Run the server
     Javalin app = createJavalinServer();
 
+    // Create test data
     createTestData(courseDao, noteDao);
 
     // HTTP Get for the fist page
     app.get("/", ctx -> ctx.redirect("/courses"));
 
-    // Get the HTTP Get request and respond with courses in the database
+    // Get the HTTP Get request and respond with courses in the database as json
     app.get("/courses_json", ctx -> {
       List<Course> courses = courseDao.findAll();
       ctx.json(courses);
@@ -202,7 +213,7 @@ public class ApiServer {
     Gson gson = new Gson();
     JavalinJson.setToJsonMapper(gson::toJson);
     JavalinJson.setFromJsonMapper(gson::fromJson);
-    final int PORT = getHerokuAssignedPort();
+    final int PORT = getAssignedPort();
     return Javalin.create(config -> {
       config.addStaticFiles("static/", Location.EXTERNAL);
     }).start(PORT);
@@ -254,7 +265,7 @@ public class ApiServer {
     }
   }
 
-  private static int getHerokuAssignedPort() {
+  private static int getAssignedPort() {
     String herokuPort = System.getenv("PORT");
     if (herokuPort != null) {
       return Integer.parseInt(herokuPort);
