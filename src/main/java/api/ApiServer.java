@@ -40,7 +40,7 @@ public class ApiServer {
     // Connect to file server
     String use_aws = System.getenv("AWS_ENABLE");
     FileServer fileServer;
-    if (use_aws != null && use_aws == "TRUE") {
+    if (use_aws != null && use_aws.equals("TRUE")) {
       fileServer = new S3FileServer();
     } else {
       Path uploadFileLocation = Paths.get("./static/uploads/");
