@@ -229,7 +229,7 @@ public class ApiServer {
 
   private static void createCoursesTable(Sql2o sql2o) {
     String sql = "CREATE TABLE IF NOT EXISTS Courses(" +
-                    "id INTEGER PRIMARY KEY," +
+                    "id SERIAL PRIMARY KEY," +
                     "name VARCHAR(30) NOT NULL" +
                   ");";
     try(Connection conn = sql2o.open()) {
@@ -239,12 +239,14 @@ public class ApiServer {
 
   private static void createNotesTable(Sql2o sql2o) {
     String sql = "CREATE TABLE IF NOT EXISTS Notes(" +
-            "id INTEGER PRIMARY KEY," +
-            "courseId Integer NOT NULL," +
+            "id SERIAL PRIMARY KEY," +
+            "courseId INTEGER NOT NULL," +
             "title VARCHAR(30) NOT NULL," +
             "creator VARCHAR(30)," +
             "FOREIGN KEY (courseId) REFERENCES Courses (id));";
     try(Connection conn = sql2o.open()) {
+      conn.createQuery(sql).executeUpdate();
+      sql = "PRAGMA foreign_keys = ON;";
       conn.createQuery(sql).executeUpdate();
     }
   }
