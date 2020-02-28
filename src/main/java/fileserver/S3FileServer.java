@@ -75,8 +75,9 @@ public class S3FileServer implements FileServer {
             URL url = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
             String urlString = url.toString();
             Javalin.log.info("Found " + urlString + " in S3 fileserver.");
+            urlString = URLEncoder.encode(urlString, "UTF-8");
             return urlString;
-        } catch (AmazonServiceException e) {
+        } catch (AmazonServiceException | UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (SdkClientException e) {
             e.printStackTrace();

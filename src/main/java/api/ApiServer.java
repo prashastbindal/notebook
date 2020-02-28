@@ -204,7 +204,7 @@ public class ApiServer {
               "courseName", course.getName(),
               "noteName", note.getTitle(),
               "creatorName", note.getCreator(),
-              "filepath", URLEncoder.encode(filepath, "UTF-8"),
+              "filepath", filepath,
               "showFile", showfile
             )
           );
