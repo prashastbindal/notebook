@@ -1,12 +1,11 @@
-#Iteration 2:
-# Design and Planning Document
+# Iteration 2 Design and Planning Document
 
 ### UML Diagram
 ![uml](uml2.png)
 
 ### Wireframe Diagram
 
-![wire](wire.png)
+![wire](wire2.png)
 
 ### Iteration Backlog
 
