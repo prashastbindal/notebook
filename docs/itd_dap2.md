@@ -11,7 +11,7 @@
 
 * As a student, I want to view notes for a course.
 * As a student, I want to upload notes for a course.
-* As a studemt, I want to be able to comment on notes. 
+* As a student, I want to be able to comment on notes. 
 * As a student, I want to be able to search and sort notes. 
 
 ### Tasks
