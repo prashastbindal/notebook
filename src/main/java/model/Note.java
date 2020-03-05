@@ -7,11 +7,13 @@ public class Note {
     private int courseId;
     private String title;
     private String creator;
+    private String filetype;
 
-    public Note (int courseId, String title, String creator) {
+    public Note(int courseId, String title, String creator, String filetype) {
         this.courseId = courseId;
         this.title = title;
         this.creator = creator;
+        this.filetype = filetype;
     }
 
     public int getId() {
@@ -44,6 +46,14 @@ public class Note {
 
     public void setCreator(String creator) {
         this.creator = creator;
+    }
+
+    public String getFiletype() {
+        return filetype;
+    }
+
+    public void setFiletype(String filetype) {
+        this.filetype = filetype;
     }
 
     @Override

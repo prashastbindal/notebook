@@ -7,7 +7,6 @@ import dao.Sql2oCourseDao;
 import dao.Sql2oNoteDao;
 import fileserver.FileServer;
 import fileserver.LocalFileServer;
-import fileserver.S3FileServer;
 import io.javalin.Javalin;
 import io.javalin.http.UploadedFile;
 import io.javalin.http.staticfiles.Location;
@@ -18,9 +17,9 @@ import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import io.javalin.plugin.rendering.template.TemplateUtil;
 
-import java.io.File;
-import java.net.URI;
-import java.net.URLEncoder;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -157,12 +156,20 @@ public class ApiServer {
         Note note = new Note(
           cId,
           ctx.formParam("title"),
-          ctx.formParam("creator")
-        );
+          ctx.formParam("creator"),
+          ctx.formParam("filetype"));
         noteDao.add(note);
 
+        Javalin.log.info(ctx.formParam("filetype"));
+
         UploadedFile file = ctx.uploadedFile("file");
-        fileServer.upload(file.getContent(), cId, note.getId());
+        if (note.getFiletype().equals("pdf")) {
+          fileServer.upload(file.getContent(), note);
+        } else if (note.getFiletype().equals("html")) {
+          String text = ctx.formParam("text");
+          InputStream textstream = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
+          fileServer.upload(textstream, note);
+        }
 
         ctx.redirect("/courses/".concat(courseId).concat("/notes/"));
       } catch (NumberFormatException e) {
@@ -190,7 +197,7 @@ public class ApiServer {
         if (note == null || course == null) {
           ctx.json("Error 404 not found");
         } else {
-          String filepath = fileServer.getURL(cId, nId);
+          String filepath = fileServer.getURL(note);
           Boolean showfile = (filepath != null);
           ctx.render(
             "/note.mustache",
@@ -199,7 +206,9 @@ public class ApiServer {
               "noteName", note.getTitle(),
               "creatorName", note.getCreator(),
               "filepath", filepath,
-              "showFile", showfile
+              "showPDF", (showfile && note.getFiletype().equals("pdf")),
+              "showHTML", (showfile && note.getFiletype().equals("html")),
+              "showPlaceholder", !showfile
             )
           );
         }
@@ -244,6 +253,7 @@ public class ApiServer {
             "courseId INTEGER NOT NULL," +
             "title VARCHAR(30) NOT NULL," +
             "creator VARCHAR(30)," +
+            "filetype VARCHAR(30)," +
             "FOREIGN KEY (courseId) REFERENCES Courses (id));";
     try(Connection conn = sql2o.open()) {
       conn.createQuery(sql).executeUpdate();
@@ -259,9 +269,9 @@ public class ApiServer {
       Course c2 = new Course("Example Course 2");
       courseDao.add(c1);
       courseDao.add(c2);
-      Note n1 = new Note(c1.getId(), "Note1", "student1");
-      Note n2 = new Note(c1.getId(), "Note2", "student2");
-      Note n3 = new Note(c2.getId(), "Note3", "student1");
+      Note n1 = new Note(c1.getId(), "Note1", "student1", "none");
+      Note n2 = new Note(c1.getId(), "Note2", "student2", "none");
+      Note n3 = new Note(c2.getId(), "Note3", "student1", "none");
       noteDao.add(n1);
       noteDao.add(n2);
       noteDao.add(n3);

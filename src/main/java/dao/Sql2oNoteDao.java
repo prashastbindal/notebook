@@ -17,8 +17,8 @@ public class Sql2oNoteDao implements NoteDao {
 
     @Override
     public void add(Note note) throws DaoException {
-        String sql = "INSERT INTO Notes(courseId, title, creator)" +
-                "VALUES(:courseId, :title, :creator);";
+        String sql = "INSERT INTO Notes(courseId, title, creator, filetype)" +
+                "VALUES(:courseId, :title, :creator, :filetype);";
         try(Connection conn = sql2o.open()){
             int id = (int) conn.createQuery(sql, true)
                     .bind(Note.class)
