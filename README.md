@@ -11,20 +11,21 @@ Prashast Bindal
 We have started using PostgreSQL as our database, which needs to be setup for the app to work locally.
 Instructions for installing PostgreSQL can be found [here](https://www.postgresql.org/download/).
 
-On MacOS, to install PostgreSQL, start the database server, and create the database run:
+On MacOS, run these commands to install and setup the database:
 ```
-brew install postgresql
-pg_ctl -D /usr/local/var/postgres start
-psql postgres -c "CREATE DATABASE notebookdb;"
+brew install postgresql                                         # install postgres
+pg_ctl -D /usr/local/var/postgres start                         # start the postgres server
+psql postgres -c "CREATE USER dbuser WITH PASSWORD 'dbpasswd'"; # add a postgres user
+psql postgres -c "CREATE DATABASE notebookdb;"                  # create the database
 ```
 
 Before running the app, ensure that the following environment variables are set:
 ```
-JDBC_DATABASE_URL=jdbc:postgres://localhost/notebookdb
+JDBC_DATABASE_URL=jdbc:postgresql://localhost:5432/notebookdb?user=dbuser&password=dbpasswd
 PORT=7000
 AWS_ENABLE=FALSE
 ```
-These can be set manually in IntelliJ, or by running `./heroku_local.sh` which builds and runs the app locally.
+These can be set manually in IntelliJ by modifying the run configutation, or by running `./heroku_local.sh` which builds and runs the app locally.
 
 ## Iteration 1
 

@@ -33,9 +33,6 @@ public class ApiServer {
 
     // hack to make jar build properly
     try {
-      Class.forName("org.sqlite.JDBC");
-    } catch (ClassNotFoundException e) {}
-    try {
       Class.forName("org.postgresql.JDBC");
     } catch (ClassNotFoundException e) {}
 
