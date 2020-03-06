@@ -35,6 +35,9 @@ public class ApiServer {
     try {
       Class.forName("org.sqlite.JDBC");
     } catch (ClassNotFoundException e) {}
+    try {
+      Class.forName("org.postgresql.JDBC");
+    } catch (ClassNotFoundException e) {}
 
     // create a database
     Sql2o sql2o = createSql2o();
@@ -248,7 +251,7 @@ public class ApiServer {
 
   private static void createCoursesTable(Sql2o sql2o) {
     String sql = "CREATE TABLE IF NOT EXISTS Courses(" +
-                    "id INTEGER PRIMARY KEY," +
+                    "id SERIAL PRIMARY KEY," +
                     "name VARCHAR(30) NOT NULL" +
                   ");";
     try(Connection conn = sql2o.open()) {
@@ -258,7 +261,7 @@ public class ApiServer {
 
   private static void createNotesTable(Sql2o sql2o) {
     String sql = "CREATE TABLE IF NOT EXISTS Notes(" +
-            "id INTEGER PRIMARY KEY," +
+            "id SERIAL PRIMARY KEY," +
             "courseId INTEGER NOT NULL," +
             "title VARCHAR(30) NOT NULL," +
             "creator VARCHAR(30)," +
@@ -290,7 +293,7 @@ public class ApiServer {
   }
 
   private static Sql2o createSql2o() {
-    String dbURI = "jdbc:sqlite:Courses.db";
+    String dbURI = System.getenv("JDBC_DATABASE_URL");
     return new Sql2o(dbURI, "", "");
   }
 }
