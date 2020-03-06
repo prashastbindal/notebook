@@ -289,6 +289,10 @@ public class ApiServer {
   }
 
   private static int getAssignedPort() {
+    String herokuPort = System.getenv("PORT");
+    if (herokuPort != null) {
+      return Integer.parseInt(herokuPort);
+    }
     return 7000;
   }
 
