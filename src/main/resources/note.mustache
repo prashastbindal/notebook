@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.3.200/pdf.min.js"></script>
     <title>NoteBook</title>
 </head>
 <body>
@@ -13,7 +14,7 @@
 <h3>{{ creatorName }}</h3>
 
 {{#showPDF}}
-<embed type="application/pdf" src="{{ filepath }}" width="500" height="375">
+    <embed src="https://docs.google.com/gview?embedded=true&url={{ filepath }}" width="500" height="375">
 {{/showPDF}}
 
 {{#showHTML}}

@@ -7,6 +7,7 @@ import dao.Sql2oCourseDao;
 import dao.Sql2oNoteDao;
 import fileserver.FileServer;
 import fileserver.LocalFileServer;
+import fileserver.S3FileServer;
 import io.javalin.Javalin;
 import io.javalin.http.UploadedFile;
 import io.javalin.http.staticfiles.Location;
@@ -20,6 +21,9 @@ import io.javalin.plugin.rendering.template.TemplateUtil;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.io.File;
+import java.net.URI;
+import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -44,8 +48,14 @@ public class ApiServer {
     NoteDao noteDao = createNoteDao(sql2o);
 
     // Connect to file server
-    Path uploadFileLocation = Paths.get("./static/uploads/");
-    FileServer fileServer = new LocalFileServer(uploadFileLocation.toString());
+    String use_aws = System.getenv("AWS_ENABLE");
+    FileServer fileServer;
+    if (use_aws != null && use_aws.equals("TRUE")) {
+      fileServer = new S3FileServer();
+    } else {
+      Path uploadFileLocation = Paths.get("./static/uploads/");
+      fileServer = new LocalFileServer(uploadFileLocation.toString());
+    }
 
     // Run the server
     Javalin app = createJavalinServer();
@@ -160,8 +170,6 @@ public class ApiServer {
           ctx.formParam("filetype"));
         noteDao.add(note);
 
-        Javalin.log.info(ctx.formParam("filetype"));
-
         UploadedFile file = ctx.uploadedFile("file");
         if (note.getFiletype().equals("pdf")) {
           fileServer.upload(file.getContent(), note);
@@ -224,6 +232,9 @@ public class ApiServer {
     JavalinJson.setToJsonMapper(gson::toJson);
     JavalinJson.setFromJsonMapper(gson::fromJson);
     final int PORT = getAssignedPort();
+    if (! new File("static/").exists()) {
+      new File("static/").mkdirs();
+    }
     return Javalin.create(config -> {
       config.addStaticFiles("static/", Location.EXTERNAL);
     }).start(PORT);
@@ -256,8 +267,6 @@ public class ApiServer {
             "filetype VARCHAR(30)," +
             "FOREIGN KEY (courseId) REFERENCES Courses (id));";
     try(Connection conn = sql2o.open()) {
-      conn.createQuery(sql).executeUpdate();
-      sql = "PRAGMA foreign_keys = ON;";
       conn.createQuery(sql).executeUpdate();
     }
   }

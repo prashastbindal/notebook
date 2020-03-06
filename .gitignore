@@ -27,3 +27,4 @@ out/
 .DS_Store
 *.db
 static/
+heroku_local_aws.sh

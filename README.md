@@ -1,4 +1,4 @@
-# NoteBook
+# [NoteBook](https://notebook-oose.herokuapp.com/)
 
 Felix Parker \
 Matt Chodaczek \
@@ -6,6 +6,25 @@ Nico Ivanov \
 Alex Hepp \
 Anirudh Sharma \
 Prashast Bindal
+
+## Iteration 2
+We have started using PostgreSQL as our database, which needs to be setup for the app to work locally.
+Instructions for installing PostgreSQL can be found [here](https://www.postgresql.org/download/).
+
+On MacOS, to install PostgreSQL, start the database server, and create the database run:
+```
+brew install postgresql
+pg_ctl -D /usr/local/var/postgres start
+psql postgres -c "CREATE DATABASE notebookdb;"
+```
+
+Before running the app, ensure that the following environment variables are set:
+```
+JDBC_DATABASE_URL=jdbc:postgres://localhost/notebookdb
+PORT=7000
+AWS_ENABLE=FALSE
+```
+These can be set manually in IntelliJ, or by running `./heroku_local.sh` which builds and runs the app locally.
 
 ## Iteration 1
 
