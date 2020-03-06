@@ -214,9 +214,7 @@ public class ApiServer {
               "noteName", note.getTitle(),
               "creatorName", note.getCreator(),
               "filepath", filepath,
-              "showPDF", (showfile && note.getFiletype().equals("pdf")),
-              "showHTML", (showfile && note.getFiletype().equals("html")),
-              "showPlaceholder", !showfile
+              "showContent", showfile
             )
           );
         }

@@ -46,7 +46,17 @@ public class S3FileServer implements FileServer {
                 Javalin.log.info(filepath + " already exists in S3 fileserver.");
                 return;
             }
+
             PutObjectRequest uploadRequest = new PutObjectRequest(this.bucketName, filepath, file, new ObjectMetadata());
+
+            ObjectMetadata metadata = new ObjectMetadata();
+            if (note.getFiletype().equals("pdf")) {
+                metadata.setContentType("application/pdf");
+            } else if (note.getFiletype().equals("html")) {
+                metadata.setContentType("text/html");
+            }
+            uploadRequest.setMetadata(metadata);
+
             s3Client.putObject(uploadRequest);
         } catch (AmazonServiceException e) {
             e.printStackTrace();
@@ -82,8 +92,8 @@ public class S3FileServer implements FileServer {
             URL url = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
 
             Javalin.log.info("Found " + url.toString() + " in S3 fileserver.");
-            return URLEncoder.encode(url.toString(), "UTF-8");
-        } catch (UnsupportedEncodingException | SdkClientException e) {
+            return url.toString();
+        } catch (SdkClientException e) {
             e.printStackTrace();
         }
         return null;
