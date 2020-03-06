@@ -12,6 +12,7 @@ import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import io.javalin.Javalin;
+import model.Note;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,16 +36,27 @@ public class S3FileServer implements FileServer {
                 .build();
     }
 
-    public void upload(InputStream file, int courseId, int noteId) {
-        String filepath = courseId + "/" + noteId + ".pdf";
+    public void upload(InputStream file, Note note) {
+        String filepath = note.getCourseId() + "/" + note.getId() + "." + note.getFiletype();
+
         Javalin.log.info("Uploading " + filepath + " to S3 fileserver.");
         try {
             Boolean exists = s3Client.doesObjectExist(this.bucketName, filepath);
             if (exists) {
-                Javalin.log.info(filepath + " already exists.");
+                Javalin.log.info(filepath + " already exists in S3 fileserver.");
                 return;
             }
+
             PutObjectRequest uploadRequest = new PutObjectRequest(this.bucketName, filepath, file, new ObjectMetadata());
+
+            ObjectMetadata metadata = new ObjectMetadata();
+            if (note.getFiletype().equals("pdf")) {
+                metadata.setContentType("application/pdf");
+            } else if (note.getFiletype().equals("html")) {
+                metadata.setContentType("text/html");
+            }
+            uploadRequest.setMetadata(metadata);
+
             s3Client.putObject(uploadRequest);
         } catch (AmazonServiceException e) {
             e.printStackTrace();
@@ -53,8 +65,13 @@ public class S3FileServer implements FileServer {
         }
     }
 
-    public String getURL(int courseId, int noteId) {
-        String objectKey = courseId + "/" + noteId + ".pdf";
+    public String getURL(Note note) {
+        if (note.getFiletype().equals("none")) {
+            return null;
+        }
+
+        String objectKey = note.getCourseId() + "/" + note.getId() + "." + note.getFiletype();
+
         Javalin.log.info("Retrieving " + objectKey + " from S3 fileserver.");
 
         Date expiration = new Date();
@@ -73,12 +90,9 @@ public class S3FileServer implements FileServer {
                             .withMethod(HttpMethod.GET)
                             .withExpiration(expiration);
             URL url = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
-            String urlString = url.toString();
-            Javalin.log.info("Found " + urlString + " in S3 fileserver.");
-            urlString = URLEncoder.encode(urlString, "UTF-8");
-            return urlString;
-        } catch (AmazonServiceException | UnsupportedEncodingException e) {
-            e.printStackTrace();
+
+            Javalin.log.info("Found " + url.toString() + " in S3 fileserver.");
+            return url.toString();
         } catch (SdkClientException e) {
             e.printStackTrace();
         }
