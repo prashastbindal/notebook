@@ -21,7 +21,7 @@ psql postgres -c "CREATE DATABASE notebookdb;"                  # create the dat
 
 Before running the app, ensure that the following environment variables are set:
 ```
-JDBC_DATABASE_URL=jdbc:postgresql://localhost:5432/notebookdb?user=dbuser&password=dbpasswd
+JDBC_DATABASE_URL='jdbc:postgresql://localhost:5432/notebookdb?user=dbuser&password=dbpasswd'
 PORT=7000
 AWS_ENABLE=FALSE
 ```
