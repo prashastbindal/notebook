@@ -235,6 +235,7 @@ public class ApiServer {
                 ctx.formParam("text"),
                 ctx.formParam("creator"));
         commentDao.add(comment);
+        //TODO add validation
         ctx.redirect("/courses/".concat(courseId).concat("/notes/").concat(noteId).concat("/"));
       } catch (NumberFormatException e) {
         ctx.json("Error 404 not found");
