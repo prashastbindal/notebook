@@ -27,7 +27,7 @@ public class Sql2oNoteDao implements NoteDao {
                     .getKey();
             note.setId(id);
         } catch (Sql2oException ex) {
-            throw new DaoException("Unable to add the course", ex);
+            throw new DaoException("Unable to add the note", ex);
         }
     }
 
@@ -35,12 +35,11 @@ public class Sql2oNoteDao implements NoteDao {
     public void remove(Note note) throws DaoException {
         String sql = "DELETE FROM Notes WHERE id = :id;";
         try(Connection conn = sql2o.open()) {
-            System.out.println(note);
             conn.createQuery(sql)
                     .addParameter("id", note.getId())
                     .executeUpdate();
         } catch (Sql2oException ex) {
-            throw new DaoException("Unable to delete course", ex);
+            throw new DaoException("Unable to delete note", ex);
         }
     }
 

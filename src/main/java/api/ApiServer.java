@@ -1,10 +1,7 @@
 package api;
 
 import com.google.gson.Gson;
-import dao.CourseDao;
-import dao.NoteDao;
-import dao.Sql2oCourseDao;
-import dao.Sql2oNoteDao;
+import dao.*;
 import fileserver.FileServer;
 import fileserver.LocalFileServer;
 import fileserver.S3FileServer;
@@ -39,13 +36,15 @@ public class ApiServer {
     // create a database
     Sql2o sql2o = createSql2o();
 
-    // add Courses and Notes tables to database
+    // add Courses, Notes, and Comments tables to database
     createCoursesTable(sql2o);
     createNotesTable(sql2o);
+    createCommentTable(sql2o);
 
-    // connect the database to CourseDao and NoteDao
+    // connect the database to CourseDao, NoteDao, and CommentDao
     CourseDao courseDao = createCourseDao(sql2o);
     NoteDao noteDao = createNoteDao(sql2o);
+    CommentDao commentDao = createCommentDao(sql2o);
 
     // Connect to file server
     String use_aws = System.getenv("AWS_ENABLE");
@@ -225,7 +224,7 @@ public class ApiServer {
 
   }
 
-  private static Javalin createJavalinServer() {
+    private static Javalin createJavalinServer() {
     Gson gson = new Gson();
     JavalinJson.setToJsonMapper(gson::toJson);
     JavalinJson.setFromJsonMapper(gson::fromJson);
@@ -246,6 +245,10 @@ public class ApiServer {
     return new Sql2oNoteDao(sql2o);
   }
 
+  private static CommentDao createCommentDao(Sql2o sql2o) {
+    return new Sql2oCommentDao(sql2o);
+  }
+
   private static void createCoursesTable(Sql2o sql2o) {
     String sql = "CREATE TABLE IF NOT EXISTS Courses(" +
                     "id SERIAL PRIMARY KEY," +
@@ -256,7 +259,7 @@ public class ApiServer {
     }
   }
 
-  private static void createNotesTable(Sql2o sql2o) {
+    private static void createNotesTable(Sql2o sql2o) {
     String sql = "CREATE TABLE IF NOT EXISTS Notes(" +
             "id SERIAL PRIMARY KEY," +
             "courseId INTEGER NOT NULL," +
@@ -266,6 +269,18 @@ public class ApiServer {
             "FOREIGN KEY (courseId) REFERENCES Courses (id));";
     try(Connection conn = sql2o.open()) {
       conn.createQuery(sql).executeUpdate();
+    }
+  }
+  private static void createCommentTable(Sql2o sql2o) {
+    String sql = "CREATE TABLE IF NOT EXISTS Comments(" +
+                    "id SERIAL PRIMARY KEY," +
+                    "noteId INTEGER NOT NULL," +
+                    "text VARCHAR(1000) NOT NULL," +
+                    "creator VARCHAR(30)," +
+                    "FOREIGN KEY (noteId) REFERENCES Notes (id)" +
+                ");";
+    try(Connection conn = sql2o.open()) {
+        conn.createQuery(sql).executeUpdate();
     }
   }
 
