@@ -46,7 +46,6 @@ public class Sql2oCommentDao implements CommentDao {
 
     @Override
     public List<Comment> findCommentWithNoteId(int noteId) {
-        System.out.println("hello loser");
         String sql = "SELECT * FROM Comments WHERE noteId = :noteId;";
         try(Connection conn = sql2o.open()){
             return conn.createQuery(sql).addParameter("noteId", noteId).executeAndFetch(Comment.class);

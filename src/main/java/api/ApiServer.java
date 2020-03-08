@@ -61,7 +61,7 @@ public class ApiServer {
     Javalin app = createJavalinServer();
 
     // Create test data
-    createTestData(courseDao, noteDao);
+    createTestData(courseDao, noteDao, commentDao);
 
     // HTTP Get for the fist page
     app.get("/", ctx -> ctx.redirect("/courses"));
@@ -193,12 +193,11 @@ public class ApiServer {
       ctx.status(201);
     });
 
-    app.get("/courses/:courseId/notes/:noteId/", ctx -> {
+    app.get("/courses/:courseId/notes/:noteId", ctx -> {
       String courseId = ctx.pathParam("courseId");
       String noteId = ctx.pathParam("noteId");
       int cId, nId;
       try {
-        System.out.println("trying to get a note thing ahhhhhh");
         cId = Integer.parseInt(courseId);
         nId = Integer.parseInt(noteId);
         Course course = courseDao.findCourse(cId);
@@ -226,6 +225,21 @@ public class ApiServer {
       }
     });
 
+    app.post("/courses/:id/notes/:noteId/addComment", ctx -> {
+      String courseId = ctx.pathParam("id");
+      String noteId = ctx.pathParam("noteId");
+      try {
+        int nId = Integer.parseInt(noteId);
+        Comment comment = new Comment(
+                nId,
+                ctx.formParam("text"),
+                ctx.formParam("creator"));
+        commentDao.add(comment);
+        ctx.redirect("/courses/".concat(courseId).concat("/notes/").concat(noteId).concat("/"));
+      } catch (NumberFormatException e) {
+        ctx.json("Error 404 not found");
+      }
+    });
   }
 
     private static Javalin createJavalinServer() {
@@ -288,7 +302,7 @@ public class ApiServer {
     }
   }
 
-  private static void createTestData(CourseDao courseDao, NoteDao noteDao) {
+  private static void createTestData(CourseDao courseDao, NoteDao noteDao, CommentDao commentDao) {
     if (courseDao.findAll().isEmpty()) {
       Javalin.log.info("Creating test data...");
       Course c1 = new Course("Example Course 1");
@@ -301,6 +315,12 @@ public class ApiServer {
       noteDao.add(n1);
       noteDao.add(n2);
       noteDao.add(n3);
+      Comment cmt1 = new Comment(n1.getId(), "this is a comment", "student 1");
+      Comment cmt2 = new Comment(n1.getId(), "this is also one!", "student 2");
+      Comment cmt3 = new Comment(n2.getId(), "test data comment. Hello!", "Matt");
+      commentDao.add(cmt1);
+      commentDao.add(cmt2);
+      commentDao.add(cmt3);
     }
   }
 

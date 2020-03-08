@@ -21,9 +21,17 @@
 
 <ul>
     {{#commentList}}
-        <li>{{ creator }} {{ text }}</li>
+        <li>{{ creator }}: {{ text }}</li>
     {{/commentList}}
 </ul>
+
+<h3>Add a comment:</h3>
+<form id="comment-form" action="./addComment" method="post" enctype="multipart/form-data">
+    <textarea id="textarea" name="text"></textarea>
+    <div id="texteditor"></div>
+    <input type="text" id="creator-field" name="creator" placeholder="User"><br>
+
+<button id="submit">Submit</button>
 
 </body>
 </html>
