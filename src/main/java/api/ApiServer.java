@@ -9,6 +9,7 @@ import io.javalin.Javalin;
 import io.javalin.http.UploadedFile;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.plugin.json.JavalinJson;
+import model.Comment;
 import model.Course;
 import model.Note;
 import org.sql2o.Connection;
@@ -197,10 +198,12 @@ public class ApiServer {
       String noteId = ctx.pathParam("noteId");
       int cId, nId;
       try {
+        System.out.println("trying to get a note thing ahhhhhh");
         cId = Integer.parseInt(courseId);
         nId = Integer.parseInt(noteId);
         Course course = courseDao.findCourse(cId);
         Note note = noteDao.findNote(nId);
+        List<Comment> comments = commentDao.findCommentWithNoteId(nId);
         if (note == null || course == null) {
           ctx.json("Error 404 not found");
         } else {
@@ -213,7 +216,8 @@ public class ApiServer {
               "noteName", note.getTitle(),
               "creatorName", note.getCreator(),
               "filepath", filepath,
-              "showContent", showfile
+              "showContent", showfile,
+              "commentList", comments
             )
           );
         }
