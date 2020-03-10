@@ -19,5 +19,24 @@
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PDF_file_icon.svg/1024px-PDF_file_icon.svg.png", height="200px">
 {{/showContent}}
 
+<h3>Comments</h3>
+<ul>
+    {{#commentList}}
+        <li>{{ creator }}: {{ text }}</li>
+    {{/commentList}}
+</ul>
+<!-- TODO style -->
+
+<h3>Add a comment:</h3>
+<form id="comment-form" action="./addComment" method="post" enctype="multipart/form-data">
+    <textarea id="textarea" name="text"></textarea>
+    <div id="texteditor"></div>
+    <input type="text" id="creator-field" name="creator" placeholder="User"><br>
+
+<button id="submit">Submit</button>
+</form>
+<!--- TODO style -->
+<!--- TODO check for vulnerability to sql injection/other attacks -->
+
 </body>
 </html>

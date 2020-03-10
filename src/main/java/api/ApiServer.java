@@ -1,10 +1,7 @@
 package api;
 
 import com.google.gson.Gson;
-import dao.CourseDao;
-import dao.NoteDao;
-import dao.Sql2oCourseDao;
-import dao.Sql2oNoteDao;
+import dao.*;
 import fileserver.FileServer;
 import fileserver.LocalFileServer;
 import fileserver.S3FileServer;
@@ -12,6 +9,7 @@ import io.javalin.Javalin;
 import io.javalin.http.UploadedFile;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.plugin.json.JavalinJson;
+import model.Comment;
 import model.Course;
 import model.Note;
 import org.sql2o.Connection;
@@ -39,13 +37,15 @@ public class ApiServer {
     // create a database
     Sql2o sql2o = createSql2o();
 
-    // add Courses and Notes tables to database
+    // add Courses, Notes, and Comments tables to database
     createCoursesTable(sql2o);
     createNotesTable(sql2o);
+    createCommentTable(sql2o);
 
-    // connect the database to CourseDao and NoteDao
+    // connect the database to CourseDao, NoteDao, and CommentDao
     CourseDao courseDao = createCourseDao(sql2o);
     NoteDao noteDao = createNoteDao(sql2o);
+    CommentDao commentDao = createCommentDao(sql2o);
 
     // Connect to file server
     String use_aws = System.getenv("AWS_ENABLE");
@@ -61,7 +61,7 @@ public class ApiServer {
     Javalin app = createJavalinServer();
 
     // Create test data
-    createTestData(courseDao, noteDao);
+    createTestData(courseDao, noteDao, commentDao);
 
     // HTTP Get for the fist page
     app.get("/", ctx -> ctx.redirect("/courses"));
@@ -193,7 +193,7 @@ public class ApiServer {
       ctx.status(201);
     });
 
-    app.get("/courses/:courseId/notes/:noteId/", ctx -> {
+    app.get("/courses/:courseId/notes/:noteId", ctx -> {
       String courseId = ctx.pathParam("courseId");
       String noteId = ctx.pathParam("noteId");
       int cId, nId;
@@ -202,6 +202,7 @@ public class ApiServer {
         nId = Integer.parseInt(noteId);
         Course course = courseDao.findCourse(cId);
         Note note = noteDao.findNote(nId);
+        List<Comment> comments = commentDao.findCommentWithNoteId(nId);
         if (note == null || course == null) {
           ctx.json("Error 404 not found");
         } else {
@@ -214,7 +215,8 @@ public class ApiServer {
               "noteName", note.getTitle(),
               "creatorName", note.getCreator(),
               "filepath", filepath,
-              "showContent", showfile
+              "showContent", showfile,
+              "commentList", comments
             )
           );
         }
@@ -223,9 +225,25 @@ public class ApiServer {
       }
     });
 
+    app.post("/courses/:id/notes/:noteId/addComment", ctx -> {
+      String courseId = ctx.pathParam("id");
+      String noteId = ctx.pathParam("noteId");
+      try {
+        int nId = Integer.parseInt(noteId);
+        Comment comment = new Comment(
+                nId,
+                ctx.formParam("text"),
+                ctx.formParam("creator"));
+        commentDao.add(comment);
+        //TODO add validation
+        ctx.redirect("/courses/".concat(courseId).concat("/notes/").concat(noteId).concat("/"));
+      } catch (NumberFormatException e) {
+        ctx.json("Error 404 not found");
+      }
+    });
   }
 
-  private static Javalin createJavalinServer() {
+    private static Javalin createJavalinServer() {
     Gson gson = new Gson();
     JavalinJson.setToJsonMapper(gson::toJson);
     JavalinJson.setFromJsonMapper(gson::fromJson);
@@ -246,6 +264,10 @@ public class ApiServer {
     return new Sql2oNoteDao(sql2o);
   }
 
+  private static CommentDao createCommentDao(Sql2o sql2o) {
+    return new Sql2oCommentDao(sql2o);
+  }
+
   private static void createCoursesTable(Sql2o sql2o) {
     String sql = "CREATE TABLE IF NOT EXISTS Courses(" +
                     "id SERIAL PRIMARY KEY," +
@@ -256,7 +278,7 @@ public class ApiServer {
     }
   }
 
-  private static void createNotesTable(Sql2o sql2o) {
+    private static void createNotesTable(Sql2o sql2o) {
     String sql = "CREATE TABLE IF NOT EXISTS Notes(" +
             "id SERIAL PRIMARY KEY," +
             "courseId INTEGER NOT NULL," +
@@ -268,8 +290,20 @@ public class ApiServer {
       conn.createQuery(sql).executeUpdate();
     }
   }
+  private static void createCommentTable(Sql2o sql2o) {
+    String sql = "CREATE TABLE IF NOT EXISTS Comments(" +
+                    "id SERIAL PRIMARY KEY," +
+                    "noteId INTEGER NOT NULL," +
+                    "text VARCHAR(1000) NOT NULL," +
+                    "creator VARCHAR(30)," +
+                    "FOREIGN KEY (noteId) REFERENCES Notes (id)" +
+                ");";
+    try(Connection conn = sql2o.open()) {
+        conn.createQuery(sql).executeUpdate();
+    }
+  }
 
-  private static void createTestData(CourseDao courseDao, NoteDao noteDao) {
+  private static void createTestData(CourseDao courseDao, NoteDao noteDao, CommentDao commentDao) {
     if (courseDao.findAll().isEmpty()) {
       Javalin.log.info("Creating test data...");
       Course c1 = new Course("Example Course 1");
@@ -282,6 +316,12 @@ public class ApiServer {
       noteDao.add(n1);
       noteDao.add(n2);
       noteDao.add(n3);
+      Comment cmt1 = new Comment(n1.getId(), "this is a comment", "student 1");
+      Comment cmt2 = new Comment(n1.getId(), "this is also one!", "student 2");
+      Comment cmt3 = new Comment(n2.getId(), "test data comment. Hello!", "Matt");
+      commentDao.add(cmt1);
+      commentDao.add(cmt2);
+      commentDao.add(cmt3);
     }
   }
 
