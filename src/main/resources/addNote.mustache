@@ -1,14 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+{{>header}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.20.0/ui/trumbowyg.min.css">
-    <title>NoteBook</title>
-</head>
-<body>
 
-<h1>NoteBook</h1>
 <h2>{{ courseName }} - Add Note</h2>
 
 <form id="note-form" action="../notes" method="post" enctype="multipart/form-data">
@@ -49,5 +41,4 @@ $('#note-form').submit(function() {
 });
 
 </script>
-</body>
-</html>
+{{> footer}}

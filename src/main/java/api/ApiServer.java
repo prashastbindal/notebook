@@ -20,8 +20,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.io.File;
-import java.net.URI;
-import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -76,7 +74,7 @@ public class ApiServer {
 
     app.get("/courses", ctx -> {
       ctx.render(
-        "/courses.mustache",
+              "/courses.mustache",
         TemplateUtil.model("courseList", courseDao.findAll())
       );
     });

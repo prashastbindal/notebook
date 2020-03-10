@@ -14,7 +14,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.6'
     compile 'org.slf4j:slf4j-simple:1.8.0-beta4';
     compile 'io.javalin:javalin:3.7.0';
-    compile "com.github.spullara.mustache.java:compiler:0.9.5"
+    compile 'com.github.spullara.mustache.java:compiler:0.9.5'
     compile 'org.sql2o:sql2o:1.5.4'
     compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.730'
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.10'
