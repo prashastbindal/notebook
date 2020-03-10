@@ -20,8 +20,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.io.File;
-import java.net.URI;
-import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -76,7 +74,7 @@ public class ApiServer {
 
     app.get("/courses", ctx -> {
       ctx.render(
-        "/courses.mustache",
+              "/courses.mustache",
         TemplateUtil.model("courseList", courseDao.findAll())
       );
     });
@@ -127,7 +125,7 @@ public class ApiServer {
         int cId = Integer.parseInt(courseId);
         Course course = courseDao.findCourse(cId);
         ctx.render(
-          "/addNote.mustache",
+                "/addNote.mustache",
           TemplateUtil.model(
             "courseName", course.getName()
           )
@@ -147,7 +145,7 @@ public class ApiServer {
           ctx.json("Error 404 not found");
         } else {
           ctx.render(
-            "/notes.mustache",
+                  "/notes.mustache",
             TemplateUtil.model(
               "courseName", course.getName(),
               "noteList", notes
@@ -209,7 +207,7 @@ public class ApiServer {
           String filepath = fileServer.getURL(note);
           Boolean showfile = (filepath != null);
           ctx.render(
-            "/note.mustache",
+                  "/note.mustache",
             TemplateUtil.model(
               "courseName", course.getName(),
               "noteName", note.getTitle(),
