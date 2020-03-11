@@ -62,7 +62,13 @@ public class ApiServer {
     createTestData(courseDao, noteDao, commentDao);
 
     // HTTP Get for the fist page
-    app.get("/", ctx -> ctx.redirect("/courses"));
+    app.get("/", ctx -> ctx.redirect("/home"));
+
+    app.get("/home", ctx -> {
+      ctx.render(
+              "/home.mustache"
+      );
+    });
 
     // Get the HTTP Get request and respond with courses in the database as json
     app.get("/courses_json", ctx -> {
