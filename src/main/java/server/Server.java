@@ -1,6 +1,7 @@
 package server;
 
 import com.google.gson.Gson;
+import controller.*;
 import dao.*;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
@@ -41,11 +42,9 @@ public class Server {
         app.get("/", ctx -> ctx.redirect("/courses"));
 
         // setup all request handlers
-        RequestHandler coursesPageHandler = new CoursesPageHandler(app, sql2o);
-        RequestHandler coursePageHandler  = new CoursePageHandler(app, sql2o);
-        RequestHandler notePageHandler    = new NotePageHandler(app, sql2o);
-        RequestHandler noteFormHandler    = new NoteFormHandler(app, sql2o);
-        RequestHandler commentsHandler    = new CommentsHandler(app, sql2o);
+        Controller coursesPageHandler = new MainController(app, sql2o);
+        Controller coursePageHandler  = new CourseController(app, sql2o);
+        Controller notePageHandler    = new NoteController(app, sql2o);
     }
 
     private static Javalin startServer() {
