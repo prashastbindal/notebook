@@ -2,11 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import dao.*;
-import fileserver.FileServer;
-import fileserver.LocalFileServer;
-import fileserver.S3FileServer;
 import io.javalin.Javalin;
-import io.javalin.http.UploadedFile;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.plugin.json.JavalinJson;
 import model.Comment;
@@ -14,15 +10,8 @@ import model.Course;
 import model.Note;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
-import io.javalin.plugin.rendering.template.TemplateUtil;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
 
 public class Server {
     public static void main(String[] args) {
@@ -46,7 +35,7 @@ public class Server {
         createTestData(sql2o);
 
         // start server
-        Javalin app = createJavalinServer();
+        Javalin app = startServer();
 
         // set the home page
         app.get("/", ctx -> ctx.redirect("/courses"));
@@ -59,14 +48,18 @@ public class Server {
         RequestHandler commentsHandler    = new CommentsHandler(app, sql2o);
     }
 
-    private static Javalin createJavalinServer() {
+    private static Javalin startServer() {
+
         Gson gson = new Gson();
         JavalinJson.setToJsonMapper(gson::toJson);
         JavalinJson.setFromJsonMapper(gson::fromJson);
+
         final int PORT = getAssignedPort();
+
         if (! new File("static/").exists()) {
             new File("static/").mkdirs();
         }
+
         return Javalin.create(config -> {
             config.addStaticFiles("static/", Location.EXTERNAL);
         }).start(PORT);

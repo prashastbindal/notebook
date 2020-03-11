@@ -36,8 +36,8 @@ public class Sql2oCommentDao implements CommentDao {
         String sql = "DELETE FROM Comments WHERE id = :id;";
         try(Connection conn = sql2o.open()) {
             conn.createQuery(sql)
-                    .addParameter("id", comment.getId())
-                    .executeUpdate();
+                .addParameter("id", comment.getId())
+                .executeUpdate();
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to delete comment", ex);
         }
@@ -47,7 +47,9 @@ public class Sql2oCommentDao implements CommentDao {
     public List<Comment> findCommentWithNoteId(int noteId) {
         String sql = "SELECT * FROM Comments WHERE noteId = :noteId;";
         try(Connection conn = sql2o.open()){
-            return conn.createQuery(sql).addParameter("noteId", noteId).executeAndFetch(Comment.class);
+            return conn.createQuery(sql)
+                       .addParameter("noteId", noteId)
+                       .executeAndFetch(Comment.class);
         }
     }
 
@@ -56,9 +58,9 @@ public class Sql2oCommentDao implements CommentDao {
         String sql = "SELECT * FROM Comments WHERE id = :commentId;";
         try(Connection conn = sql2o.open()){
             return conn.createQuery(sql)
-                    .addParameter("commentId", commentId)
-                    .executeAndFetch(Comment.class)
-                    .iterator().next();
+                       .addParameter("commentId", commentId)
+                       .executeAndFetch(Comment.class)
+                       .iterator().next();
         }
     }
 }
