@@ -18,13 +18,13 @@ public class Sql2oNoteDao implements NoteDao {
     @Override
     public void add(Note note) throws DaoException {
         String sql = "INSERT INTO Notes(courseId, title, creator, filetype)" +
-                "VALUES(:courseId, :title, :creator, :filetype);";
+                     "VALUES(:courseId, :title, :creator, :filetype);";
         try(Connection conn = sql2o.open()){
             int id = (int) conn.createQuery(sql, true)
-                    .bind(Note.class)
-                    .bind(note)
-                    .executeUpdate()
-                    .getKey();
+                               .bind(Note.class)
+                               .bind(note)
+                               .executeUpdate()
+                               .getKey();
             note.setId(id);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to add the note", ex);
@@ -36,19 +36,20 @@ public class Sql2oNoteDao implements NoteDao {
         String sql = "DELETE FROM Notes WHERE id = :id;";
         try(Connection conn = sql2o.open()) {
             conn.createQuery(sql)
-                    .addParameter("id", note.getId())
-                    .executeUpdate();
+                .addParameter("id", note.getId())
+                .executeUpdate();
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to delete note", ex);
         }
     }
-
-
+    
     @Override
     public List<Note> findNoteWithCourseId(int courseId) {
         String sql = "SELECT * FROM Notes WHERE courseId = :courseId;";
         try(Connection conn = sql2o.open()){
-            return conn.createQuery(sql).addParameter("courseId", courseId).executeAndFetch(Note.class);
+            return conn.createQuery(sql)
+                       .addParameter("courseId", courseId)
+                       .executeAndFetch(Note.class);
         }
     }
 
@@ -57,9 +58,9 @@ public class Sql2oNoteDao implements NoteDao {
         String sql = "SELECT * FROM Notes WHERE id = :noteId;";
         try(Connection conn = sql2o.open()){
             return conn.createQuery(sql)
-                    .addParameter("noteId", noteId)
-                    .executeAndFetch(Note.class)
-                    .iterator().next();
+                       .addParameter("noteId", noteId)
+                       .executeAndFetch(Note.class)
+                       .iterator().next();
         }
     }
 }

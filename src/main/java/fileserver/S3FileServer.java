@@ -31,9 +31,9 @@ public class S3FileServer implements FileServer {
 
         AWSCredentialsProvider awsCredentials = new EnvironmentVariableCredentialsProvider();
         s3Client = AmazonS3ClientBuilder.standard()
-                .withCredentials(awsCredentials)
-                .withRegion(Regions.US_EAST_1)
-                .build();
+                                        .withCredentials(awsCredentials)
+                                        .withRegion(Regions.US_EAST_1)
+                                        .build();
     }
 
     public void upload(InputStream file, Note note) {
@@ -47,7 +47,12 @@ public class S3FileServer implements FileServer {
                 return;
             }
 
-            PutObjectRequest uploadRequest = new PutObjectRequest(this.bucketName, filepath, file, new ObjectMetadata());
+            PutObjectRequest uploadRequest = new PutObjectRequest(
+                this.bucketName,
+                filepath,
+                file,
+                new ObjectMetadata()
+            );
 
             ObjectMetadata metadata = new ObjectMetadata();
             if (note.getFiletype().equals("pdf")) {

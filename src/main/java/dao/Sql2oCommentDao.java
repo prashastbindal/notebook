@@ -18,13 +18,13 @@ public class Sql2oCommentDao implements CommentDao {
     @Override
     public void add(Comment comment) throws DaoException {
         String sql = "INSERT INTO Comments(noteId, text, creator)" +
-                "VALUES(:noteId, :text, :creator);";
+                     "VALUES(:noteId, :text, :creator);";
         try(Connection conn = sql2o.open()){
             int id = (int) conn.createQuery(sql, true)
-                    .bind(Comment.class)
-                    .bind(comment)
-                    .executeUpdate()
-                    .getKey();
+                               .bind(Comment.class)
+                               .bind(comment)
+                               .executeUpdate()
+                               .getKey();
             comment.setId(id);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to add the comment", ex);
@@ -42,7 +42,6 @@ public class Sql2oCommentDao implements CommentDao {
             throw new DaoException("Unable to delete comment", ex);
         }
     }
-
 
     @Override
     public List<Comment> findCommentWithNoteId(int noteId) {
