@@ -6,6 +6,7 @@ import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class Sql2oNoteDao implements NoteDao {
 
@@ -56,11 +57,13 @@ public class Sql2oNoteDao implements NoteDao {
     @Override
     public Note findNote(int noteId) {
         String sql = "SELECT * FROM Notes WHERE id = :noteId;";
-        try(Connection conn = sql2o.open()){
+        try(Connection conn = sql2o.open()) {
             return conn.createQuery(sql)
                        .addParameter("noteId", noteId)
                        .executeAndFetch(Note.class)
                        .iterator().next();
+        } catch (NoSuchElementException e) {
+            return null;
         }
     }
 }

@@ -8,6 +8,7 @@ import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class Sql2oCourseDao implements CourseDao {
 
@@ -57,11 +58,13 @@ public class Sql2oCourseDao implements CourseDao {
     @Override
     public Course findCourse(int courseId) {
         String sql = "SELECT * FROM Courses WHERE id = :courseId;";
-        try(Connection conn = sql2o.open()){
+        try(Connection conn = sql2o.open()) {
             return conn.createQuery(sql)
                        .addParameter("courseId", courseId)
                        .executeAndFetch(Course.class)
                        .iterator().next();
+        } catch (NoSuchElementException e) {
+            return null;
         }
     }
 }

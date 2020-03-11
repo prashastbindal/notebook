@@ -4,6 +4,7 @@ import dao.*;
 import fileserver.FileServer;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import io.javalin.http.NotFoundResponse;
 import io.javalin.http.UploadedFile;
 import io.javalin.plugin.rendering.template.TemplateUtil;
 import model.Comment;
@@ -57,98 +58,117 @@ public class NoteController extends Controller {
     }
 
     public void getNote(Context ctx) {
-        String courseId = ctx.pathParam("courseId");
-        String noteId = ctx.pathParam("noteId");
-        int cId, nId;
-        try {
-            cId = Integer.parseInt(courseId);
-            nId = Integer.parseInt(noteId);
-            Course course = courseDao.findCourse(cId);
-            Note note = noteDao.findNote(nId);
-            List<Comment> comments = commentDao.findCommentWithNoteId(nId);
-            if (note == null || course == null) {
-                ctx.json("Error 404 not found");
-            } else {
-                String filepath = fileServer.getURL(note);
-                Boolean showfile = (filepath != null);
-                ctx.render(
-                    "/note.mustache",
-                    TemplateUtil.model(
-                        "courseName", course.getName(),
-                        "noteName", note.getTitle(),
-                        "creatorName", note.getCreator(),
-                        "filepath", filepath,
-                        "showContent", showfile,
-                        "commentList", comments
-                    )
-                );
-            }
-        } catch (NumberFormatException e) {
-            ctx.json("Error 404 not found");
-        }
+        Course course = this.findCourse(ctx);
+        Note note = this.findNote(ctx);
+
+        List<Comment> comments = commentDao.findCommentWithNoteId(note.getId());
+
+        String filepath = fileServer.getURL(note);
+        Boolean fileExists = (filepath != null);
+
+        ctx.render(
+            "/note.mustache",
+            TemplateUtil.model(
+                "courseName", course.getName(),
+                "noteName", note.getTitle(),
+                "creatorName", note.getCreator(),
+                "filepath", filepath,
+                "showContent", fileExists,
+                "commentList", comments
+            )
+        );
     }
 
     public void getNoteJSON(Context ctx) {
+        Note note = this.findNote(ctx);
+
+        ctx.json(note);
+        ctx.status(200);
+        ctx.contentType("application/json");
     }
 
     public void addComment(Context ctx) {
-        String courseId = ctx.pathParam("courseId");
-        String noteId = ctx.pathParam("noteId");
-        try {
-            int nId = Integer.parseInt(noteId);
-            Comment comment = new Comment(
-                nId,
-                ctx.formParam("text"),
-                ctx.formParam("creator")
-            );
-            commentDao.add(comment);
-            ctx.redirect("/courses/".concat(courseId).concat("/notes/").concat(noteId).concat("/"));
-        } catch (NumberFormatException e) {
-            ctx.json("Error 404 not found");
-        }
+        Note note = this.findNote(ctx);
+
+        Comment comment = new Comment(
+            note.getId(),
+            ctx.formParam("text"),
+            ctx.formParam("creator")
+        );
+        commentDao.add(comment);
+
+        ctx.redirect("/courses/" + note.getCourseId() + "/notes/" + note.getId());
     }
 
     public void addNote(Context ctx) {
-        String courseId = ctx.pathParam("courseId");
-        try {
-            int cId = Integer.parseInt(courseId);
-            Note note = new Note(
-                cId,
-                ctx.formParam("title"),
-                ctx.formParam("creator"),
-                ctx.formParam("filetype")
-            );
-            noteDao.add(note);
+        Course course = this.findCourse(ctx);
 
-            UploadedFile file = ctx.uploadedFile("file");
-            if (note.getFiletype().equals("pdf")) {
-                fileServer.upload(file.getContent(), note);
-            } else if (note.getFiletype().equals("html")) {
-                String text = ctx.formParam("text");
-                InputStream textstream = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
-                fileServer.upload(textstream, note);
-            }
+        Note note = new Note(
+            course.getId(),
+            ctx.formParam("title"),
+            ctx.formParam("creator"),
+            ctx.formParam("filetype")
+        );
+        noteDao.add(note);
 
-            ctx.redirect("/courses/".concat(courseId).concat("/notes/"));
-        } catch (NumberFormatException e) {
-            ctx.json("Error 404 not found");
+        UploadedFile file = ctx.uploadedFile("file");
+        if (note.getFiletype().equals("pdf")) {
+            assert file != null;
+            fileServer.upload(file.getContent(), note);
+        } else if (note.getFiletype().equals("html")) {
+            String text = ctx.formParam("text");
+            assert text != null;
+            InputStream textstream = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
+            fileServer.upload(textstream, note);
         }
+
+        ctx.redirect("/courses/" + course.getId() + "/notes");
     }
 
     public void addNoteForm(Context ctx) {
-        String courseId = ctx.pathParam("courseId");
+        Course course = this.findCourse(ctx);
+        ctx.render(
+            "/addNote.mustache",
+            TemplateUtil.model(
+                "courseName", course.getName()
+            )
+        );
+    }
+
+    private Course findCourse(Context ctx) throws NotFoundResponse {
+        String courseIdString = ctx.pathParam("courseId");
+
+        int courseId;
         try {
-            int cId = Integer.parseInt(courseId);
-            Course course = courseDao.findCourse(cId);
-            ctx.render(
-                "/addNote.mustache",
-                TemplateUtil.model(
-                    "courseName", course.getName()
-                )
-            );
+            courseId = Integer.parseInt(courseIdString);
         } catch (NumberFormatException e) {
-            ctx.json("Error 404 not found");
+            throw new NotFoundResponse("Could not parse course ID in URL");
         }
+
+        Course course = courseDao.findCourse(courseId);
+        if (course == null) {
+            throw new NotFoundResponse("Course not found.");
+        }
+
+        return course;
+    }
+
+    private Note findNote(Context ctx) throws NotFoundResponse {
+        String noteIdString = ctx.pathParam("noteId");
+
+        int noteId;
+        try {
+            noteId = Integer.parseInt(noteIdString);
+        } catch (NumberFormatException e) {
+            throw new NotFoundResponse("Could not parse note ID in URL");
+        }
+
+        Note note = noteDao.findNote(noteId);
+        if (note == null) {
+            throw new NotFoundResponse("Note not found.");
+        }
+
+        return note;
     }
 
 }
