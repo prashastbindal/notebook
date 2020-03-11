@@ -3,7 +3,7 @@ plugins {
     id "ua.eshepelyuk.ManifestClasspath" version "1.0.0"
 }
 
-version '0.1-SNAPSHOT'
+version '0.2'
 
 sourceCompatibility = 1.8
 
@@ -26,7 +26,7 @@ jar {
     manifest {
         attributes(
             'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
-            'Main-Class': 'api.ApiServer'
+            'Main-Class': 'server.Server'
         )
     }
 
