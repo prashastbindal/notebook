@@ -10,14 +10,28 @@ import org.sql2o.Sql2oException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * Database interface for courses.
+ */
 public class CourseDao {
 
     private Sql2o sql2o;
 
+    /**
+     * Instantiates a new Course DAO.
+     *
+     * @param sql2o database connection
+     */
     public CourseDao(Sql2o sql2o) {
         this.sql2o = sql2o;
     }
 
+    /**
+     * Add a course to the database.
+     *
+     * @param course course to add
+     * @throws DaoException if failed to add course to the database
+     */
     public void add(Course course) throws DaoException {
         String sql = "INSERT INTO Courses(name)" +
                      "VALUES(:name);";
@@ -33,6 +47,12 @@ public class CourseDao {
         }
     }
 
+    /**
+     * Remove a course from the database.
+     *
+     * @param course course to remove
+     * @throws DaoException if failed to remove course from database
+     */
     public void remove(Course course) throws DaoException {
         String sql = "DELETE FROM Courses WHERE id = :id;";
         try(Connection conn = sql2o.open()) {
@@ -45,6 +65,11 @@ public class CourseDao {
         }
     }
 
+    /**
+     * List all courses.
+     *
+     * @return list of all courses in the database
+     */
     public List<Course> findAll() {
         String sql = "SELECT * FROM Courses;";
         try(Connection conn = sql2o.open()){
@@ -52,6 +77,12 @@ public class CourseDao {
         }
     }
 
+    /**
+     * Find specified course.
+     *
+     * @param courseId ID of course to fetch
+     * @return specified course
+     */
     public Course findCourse(int courseId) {
         String sql = "SELECT * FROM Courses WHERE id = :courseId;";
         try(Connection conn = sql2o.open()) {

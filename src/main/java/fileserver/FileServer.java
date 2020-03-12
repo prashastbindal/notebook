@@ -6,10 +6,32 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * The interface for file servers.
+ */
 public interface FileServer {
+
+    /**
+     * Upload a file to the file server.
+     *
+     * @param file file to upload
+     * @param note note that the file belongs to
+     */
     void upload(InputStream file, Note note);
+
+    /**
+     * Get the URL of the file associated with a note.
+     *
+     * @param note the note
+     * @return URL of the file
+     */
     String getURL(Note note);
 
+    /**
+     * Use environment flags to get the correct file server.
+     *
+     * @return the file server
+     */
     static FileServer getFileServer() {
         String use_aws = System.getenv("AWS_ENABLE");
         FileServer fileServer;

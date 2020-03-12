@@ -14,7 +14,16 @@ import org.sql2o.Sql2o;
 
 import java.io.File;
 
+/**
+ * NoteBook Server.
+ */
 public class Server {
+
+    /**
+     * Main method for the server.
+     *
+     * @param args none
+     */
     public static void main(String[] args) {
 
         // hack to make jar build properly
@@ -47,6 +56,9 @@ public class Server {
         Controller notePageHandler    = new NoteController(app, sql2o);
     }
 
+    /**
+     * Setup and start the Javalin server.
+     */
     private static Javalin startServer() {
 
         Gson gson = new Gson();
@@ -64,6 +76,11 @@ public class Server {
         }).start(PORT);
     }
 
+    /**
+     * Determine the port to run the server on.
+     *
+     * @return port to run on
+     */
     private static int getAssignedPort() {
         String herokuPort = System.getenv("PORT");
         if (herokuPort != null) {
@@ -72,6 +89,11 @@ public class Server {
         return 7000;
     }
 
+    /**
+     * Setup the connection to the database.
+     *
+     * @return database connection
+     */
     private static Sql2o connectSql2o() {
         String dbURI = System.getenv("JDBC_DATABASE_URL");
         if (dbURI == null) {
@@ -80,6 +102,11 @@ public class Server {
         return new Sql2o(dbURI, "", "");
     }
 
+    /**
+     * Create a table for courses in the database if it does not already exist.
+     *
+     * @param sql2o database connection
+     */
     private static void createCoursesTable(Sql2o sql2o) {
         String sql = "CREATE TABLE IF NOT EXISTS Courses(" +
                 "id SERIAL PRIMARY KEY," +
@@ -90,6 +117,11 @@ public class Server {
         }
     }
 
+    /**
+     * Create a table for notes in the database if it does not already exist.
+     *
+     * @param sql2o database connection
+     */
     private static void createNotesTable(Sql2o sql2o) {
         String sql = "CREATE TABLE IF NOT EXISTS Notes(" +
                 "id SERIAL PRIMARY KEY," +
@@ -102,6 +134,12 @@ public class Server {
             conn.createQuery(sql).executeUpdate();
         }
     }
+
+    /**
+     * Create a table for comments in the database if it does not already exist.
+     *
+     * @param sql2o database connection
+     */
     private static void createCommentTable(Sql2o sql2o) {
         String sql = "CREATE TABLE IF NOT EXISTS Comments(" +
                 "id SERIAL PRIMARY KEY," +
@@ -115,6 +153,11 @@ public class Server {
         }
     }
 
+    /**
+     * Populate the database with some basic test data.
+     *
+     * @param sql2o database connection
+     */
     private static void createTestData(Sql2o sql2o) {
 
         CourseDao courseDao = new CourseDao(sql2o);

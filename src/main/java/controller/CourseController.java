@@ -13,11 +13,20 @@ import static io.javalin.apibuilder.ApiBuilder.*;
 
 import java.util.List;
 
+/**
+ * Controller for course page with list of notes.
+ */
 public class CourseController extends Controller {
 
     CourseDao courseDao;
     NoteDao noteDao;
 
+    /**
+     * Instantiates a new controller.
+     *
+     * @param app   Javalin connection
+     * @param sql2o database connection
+     */
     public CourseController(Javalin app, Sql2o sql2o) {
         super(app, sql2o);
     }
@@ -40,6 +49,11 @@ public class CourseController extends Controller {
 
     }
 
+    /**
+     * Handler for course page with list of notes.
+     *
+     * @param ctx request context
+     */
     public void getNotes(Context ctx) {
         Course course = this.findCourse(ctx);
         List<Note> notes = noteDao.findNoteWithCourseId(course.getId());
@@ -53,6 +67,11 @@ public class CourseController extends Controller {
         );
     }
 
+    /**
+     * Handler for notes list JSON requests.
+     *
+     * @param ctx request context
+     */
     public void getNotesJSON(Context ctx) {
         Course course = this.findCourse(ctx);
         List<Note> notes = noteDao.findNoteWithCourseId(course.getId());
@@ -62,6 +81,11 @@ public class CourseController extends Controller {
         ctx.contentType("application/json");
     }
 
+    /**
+     * Get the course referenced in the given request.
+     *
+     * @param ctx request context
+     */
     private Course findCourse(Context ctx) throws NotFoundResponse {
         String courseIdString = ctx.pathParam("courseId");
 

@@ -12,10 +12,19 @@ import java.util.List;
 import static io.javalin.apibuilder.ApiBuilder.get;
 import static io.javalin.apibuilder.ApiBuilder.path;
 
+/**
+ * Controller for the homepage (list of courses).
+ */
 public class MainController extends Controller {
 
     CourseDao courseDao;
 
+    /**
+     * Instantiates a new controller.
+     *
+     * @param app   Javalin connection
+     * @param sql2o database connection
+     */
     public MainController(Javalin app, Sql2o sql2o) {
         super(app, sql2o);
     }
@@ -37,6 +46,11 @@ public class MainController extends Controller {
 
     }
 
+    /**
+     * Handler for homepage.
+     *
+     * @param ctx request context
+     */
     public void getCourses(Context ctx) {
         ctx.render(
             "/courses.mustache",
@@ -44,6 +58,11 @@ public class MainController extends Controller {
         );
     }
 
+    /**
+     * Handler for course list JSON requests.
+     *
+     * @param ctx request context
+     */
     public void getCoursesJSON(Context ctx) {
         List<Course> courses = this.courseDao.findAll();
         ctx.json(courses);

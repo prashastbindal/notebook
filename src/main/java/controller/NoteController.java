@@ -19,6 +19,9 @@ import java.util.List;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
 
+/**
+ * Controller for note pages/endpoints.
+ */
 public class NoteController extends Controller {
 
     CourseDao courseDao;
@@ -26,6 +29,12 @@ public class NoteController extends Controller {
     CommentDao commentDao;
     FileServer fileServer;
 
+    /**
+     * Instantiates a new controller.
+     *
+     * @param app   Javalin connection
+     * @param sql2o database connection
+     */
     public NoteController(Javalin app, Sql2o sql2o) {
         super(app, sql2o);
     }
@@ -57,6 +66,11 @@ public class NoteController extends Controller {
 
     }
 
+    /**
+     * Handler for note display page.
+     *
+     * @param ctx request context
+     */
     public void getNote(Context ctx) {
         Course course = this.findCourse(ctx);
         Note note = this.findNote(ctx);
@@ -79,6 +93,11 @@ public class NoteController extends Controller {
         );
     }
 
+    /**
+     * Handler for note JSON requests.
+     *
+     * @param ctx request context
+     */
     public void getNoteJSON(Context ctx) {
         Note note = this.findNote(ctx);
 
@@ -87,6 +106,11 @@ public class NoteController extends Controller {
         ctx.contentType("application/json");
     }
 
+    /**
+     * Handler for the add comment form.
+     *
+     * @param ctx request context
+     */
     public void addComment(Context ctx) {
         Note note = this.findNote(ctx);
 
@@ -100,6 +124,11 @@ public class NoteController extends Controller {
         ctx.redirect("/courses/" + note.getCourseId() + "/notes/" + note.getId());
     }
 
+    /**
+     * Handler for the add note form.
+     *
+     * @param ctx request context
+     */
     public void addNote(Context ctx) {
         Course course = this.findCourse(ctx);
 
@@ -125,6 +154,11 @@ public class NoteController extends Controller {
         ctx.redirect("/courses/" + course.getId() + "/notes");
     }
 
+    /**
+     * Handler for displaying the add note form.
+     *
+     * @param ctx request context
+     */
     public void addNoteForm(Context ctx) {
         Course course = this.findCourse(ctx);
         ctx.render(
@@ -135,6 +169,11 @@ public class NoteController extends Controller {
         );
     }
 
+    /**
+     * Get the course referenced in the given request.
+     *
+     * @param ctx request context
+     */
     private Course findCourse(Context ctx) throws NotFoundResponse {
         String courseIdString = ctx.pathParam("courseId");
 
@@ -153,6 +192,11 @@ public class NoteController extends Controller {
         return course;
     }
 
+    /**
+     * Get the note referenced in the given request.
+     *
+     * @param ctx request context
+     */
     private Note findNote(Context ctx) throws NotFoundResponse {
         String noteIdString = ctx.pathParam("noteId");
 

@@ -8,14 +8,28 @@ import org.sql2o.Sql2oException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * Database interface for notes.
+ */
 public class NoteDao {
 
     private Sql2o sql2o;
 
+    /**
+     * Instantiates a new Note DAO.
+     *
+     * @param sql2o database connection
+     */
     public NoteDao(Sql2o sql2o) {
         this.sql2o = sql2o;
     }
 
+    /**
+     * Add a note to the database.
+     *
+     * @param note note to add
+     * @throws DaoException if failed to add note to the database
+     */
     public void add(Note note) throws DaoException {
         String sql = "INSERT INTO Notes(courseId, title, creator, filetype)" +
                      "VALUES(:courseId, :title, :creator, :filetype);";
@@ -31,6 +45,12 @@ public class NoteDao {
         }
     }
 
+    /**
+     * Remove a note from the database.
+     *
+     * @param note note to remove
+     * @throws DaoException if failed to remove note from the database
+     */
     public void remove(Note note) throws DaoException {
         String sql = "DELETE FROM Notes WHERE id = :id;";
         try(Connection conn = sql2o.open()) {
@@ -41,7 +61,13 @@ public class NoteDao {
             throw new DaoException("Unable to delete note", ex);
         }
     }
-    
+
+    /**
+     * List all notes associated with a specified course.
+     *
+     * @param courseId ID of the course
+     * @return list of all notes for the course
+     */
     public List<Note> findNoteWithCourseId(int courseId) {
         String sql = "SELECT * FROM Notes WHERE courseId = :courseId;";
         try(Connection conn = sql2o.open()){
@@ -51,6 +77,12 @@ public class NoteDao {
         }
     }
 
+    /**
+     * Find specified note.
+     *
+     * @param noteId ID of the note to fetch
+     * @return the note
+     */
     public Note findNote(int noteId) {
         String sql = "SELECT * FROM Notes WHERE id = :noteId;";
         try(Connection conn = sql2o.open()) {

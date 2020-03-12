@@ -14,18 +14,21 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import io.javalin.Javalin;
 import model.Note;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.Date;
 
+/**
+ * File server that hosts files on AWS S3.
+ */
 public class S3FileServer implements FileServer {
 
     private String bucketName;
     private AmazonS3 s3Client;
 
+    /**
+     * Instantiates a new S3 file server.
+     */
     public S3FileServer() {
         bucketName = System.getenv("AWS_S3_BUCKET");
 
@@ -36,6 +39,12 @@ public class S3FileServer implements FileServer {
                                         .build();
     }
 
+    /**
+     * Upload a file to the file server.
+     *
+     * @param file file to upload
+     * @param note note that the file belongs to
+     */
     public void upload(InputStream file, Note note) {
         String filepath = note.getCourseId() + "/" + note.getId() + "." + note.getFiletype();
 
@@ -70,6 +79,12 @@ public class S3FileServer implements FileServer {
         }
     }
 
+    /**
+     * Get the URL of the file associated with a note.
+     *
+     * @param note the note
+     * @return URL of the file
+     */
     public String getURL(Note note) {
         if (note.getFiletype().equals("none")) {
             return null;
