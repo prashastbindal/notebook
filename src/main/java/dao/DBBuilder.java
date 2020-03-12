@@ -99,19 +99,17 @@ public final class DBBuilder {
         String sqlCreateNotesTable =
                 "CREATE TABLE IF NOT EXISTS Notes(" +
                     "id SERIAL PRIMARY KEY," +
-                    "courseId INTEGER NOT NULL," +
+                    "courseId INTEGER NOT NULL REFERENCES Courses(id)," +
                     "title VARCHAR(30) NOT NULL," +
                     "creator VARCHAR(30)," +
-                    "filetype VARCHAR(30)," +
-                    "FOREIGN KEY (courseId) REFERENCES Courses (id)" +
+                    "filetype VARCHAR(30)" +
                 ");";
         String sqlCreateCommentsTable =
                 "CREATE TABLE IF NOT EXISTS Comments(" +
                     "id SERIAL PRIMARY KEY," +
-                    "noteId INTEGER NOT NULL," +
-                    "text VARCHAR(1000) NOT NULL," +
-                    "creator VARCHAR(30)," +
-                    "FOREIGN KEY (noteId) REFERENCES Notes (id)" +
+                    "noteId INTEGER NOT NULL REFERENCES Notes(id)," +
+                    "text TEXT NOT NULL," +
+                    "creator VARCHAR(30)" +
                 ");";
 
         Connection conn = sql2o.open();
