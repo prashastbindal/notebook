@@ -1,6 +1,7 @@
 package daotest;
 
 import dao.CourseDao;
+import dao.DBBuilder;
 import dao.NoteDao;
 import model.Course;
 import model.Note;
@@ -19,48 +20,9 @@ public class NoteDaoTest {
 
     @Before
     public void setUp() throws Exception {
-        try {
-            Class.forName("org.postgresql.JDBC");
-        } catch (ClassNotFoundException e) {}
-
-        String dbURI = "jdbc:postgresql://localhost:5432/postgres";
-        Sql2o sql2o = new Sql2o(dbURI, "dbuser", "dbpasswd");
-
-        Connection conn = sql2o.open();
-        conn.createQuery("CREATE DATABASE coursedaotestdb;").executeUpdate();
-        conn.close();
-
-        dbURI = "jdbc:postgresql://localhost:5432/coursedaotestdb";
-        sql2o = new Sql2o(dbURI, "dbuser", "dbpasswd");
-        conn = sql2o.open();
-
-        String sqlCreateCoursesTable =
-                "CREATE TABLE IF NOT EXISTS Courses(" +
-                        "id SERIAL PRIMARY KEY," +
-                        "name VARCHAR(30) NOT NULL" +
-                        ");";
-        String sqlCreateNotesTable =
-                "CREATE TABLE IF NOT EXISTS Notes(" +
-                        "id SERIAL PRIMARY KEY," +
-                        "courseId INTEGER NOT NULL," +
-                        "title VARCHAR(30) NOT NULL," +
-                        "creator VARCHAR(30)," +
-                        "filetype VARCHAR(30)," +
-                        "FOREIGN KEY (courseId) REFERENCES Courses (id)" +
-                        ");";
-        String sqlCreateCommentsTable =
-                "CREATE TABLE IF NOT EXISTS Comments(" +
-                        "id SERIAL PRIMARY KEY," +
-                        "noteId INTEGER NOT NULL," +
-                        "text VARCHAR(1000) NOT NULL," +
-                        "creator VARCHAR(30)," +
-                        "FOREIGN KEY (noteId) REFERENCES Notes (id)" +
-                        ");";
-
-        conn.createQuery(sqlCreateCoursesTable).executeUpdate();
-        conn.createQuery(sqlCreateNotesTable).executeUpdate();
-        conn.createQuery(sqlCreateCommentsTable).executeUpdate();
-        conn.close();
+        DBBuilder.createTestDatabase("notedaotestdb");
+        Sql2o sql2o = DBBuilder.getTestDatabaseConnection("notedaotestdb");
+        DBBuilder.createTables(sql2o, true);
 
         this.courseDao = new CourseDao(sql2o);
         this.noteDao = new NoteDao(sql2o);
@@ -71,12 +33,7 @@ public class NoteDaoTest {
 
     @After
     public void tearDown() throws Exception {
-        String dbURI = "jdbc:postgresql://localhost:5432/postgres";
-        Sql2o sql2o = new Sql2o(dbURI, "dbuser", "dbpasswd");
-
-        Connection conn = sql2o.open();
-        conn.createQuery("DROP DATABASE coursedaotestdb;").executeUpdate();
-        conn.close();
+        DBBuilder.deleteTestDatabase("notedaotestdb");
     }
 
     @Test
