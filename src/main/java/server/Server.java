@@ -26,13 +26,6 @@ public class Server {
      */
     public static void main(String[] args) {
 
-        // hack to make jar build properly
-        /*
-        try {
-          Class.forName("org.postgresql.JDBC");
-        } catch (ClassNotFoundException e) {}
-         */
-
         // open connection with database
         Sql2o sql2o = connectSql2o();
 
