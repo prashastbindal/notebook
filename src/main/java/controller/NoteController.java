@@ -32,9 +32,9 @@ public class NoteController extends Controller {
 
     @Override
     void init() {
-        this.courseDao = new Sql2oCourseDao(sql2o);
-        this.noteDao = new Sql2oNoteDao(sql2o);
-        this.commentDao = new Sql2oCommentDao(sql2o);
+        this.courseDao = new CourseDao(sql2o);
+        this.noteDao = new NoteDao(sql2o);
+        this.commentDao = new CommentDao(sql2o);
         this.fileServer = FileServer.getFileServer();
     }
 

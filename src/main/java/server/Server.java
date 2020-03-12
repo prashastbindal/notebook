@@ -117,9 +117,9 @@ public class Server {
 
     private static void createTestData(Sql2o sql2o) {
 
-        CourseDao courseDao = new Sql2oCourseDao(sql2o);
-        NoteDao noteDao = new Sql2oNoteDao(sql2o);
-        CommentDao commentDao = new Sql2oCommentDao(sql2o);
+        CourseDao courseDao = new CourseDao(sql2o);
+        NoteDao noteDao = new NoteDao(sql2o);
+        CommentDao commentDao = new CommentDao(sql2o);
 
         if (courseDao.findAll().isEmpty()) {
             Javalin.log.info("Creating test data...");

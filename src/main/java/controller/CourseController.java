@@ -2,8 +2,6 @@ package controller;
 
 import dao.CourseDao;
 import dao.NoteDao;
-import dao.Sql2oCourseDao;
-import dao.Sql2oNoteDao;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.NotFoundResponse;
@@ -26,8 +24,8 @@ public class CourseController extends Controller {
 
     @Override
     void init() {
-        this.courseDao = new Sql2oCourseDao(sql2o);
-        this.noteDao = new Sql2oNoteDao(sql2o);
+        this.courseDao = new CourseDao(sql2o);
+        this.noteDao = new NoteDao(sql2o);
     }
 
     @Override

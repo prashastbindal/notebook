@@ -1,7 +1,6 @@
 package controller;
 
 import dao.CourseDao;
-import dao.Sql2oCourseDao;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.plugin.rendering.template.TemplateUtil;
@@ -23,7 +22,7 @@ public class MainController extends Controller {
 
     @Override
     void init() {
-        this.courseDao = new Sql2oCourseDao(this.sql2o);
+        this.courseDao = new CourseDao(this.sql2o);
     }
 
     @Override
