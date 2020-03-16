@@ -25,7 +25,7 @@ public class Server {
         // open and setup connection with database
         Sql2o sql2o = DBBuilder.getDatabaseConnection();
         DBBuilder.createTables(sql2o, false);
-        DBBuilder.createTestData(sql2o);
+        DBBuilder.createTestData(sql2o, true);
 
         // start server
         Javalin app = startServer();
@@ -37,6 +37,7 @@ public class Server {
         Controller coursesPageHandler = new MainController(app, sql2o);
         Controller coursePageHandler  = new CourseController(app, sql2o);
         Controller notePageHandler    = new NoteController(app, sql2o);
+        Controller adminPageHandler   = new AdminController(app, sql2o);
     }
 
     /**

@@ -8,15 +8,16 @@ import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import io.javalin.Javalin;
+import kotlin.NotImplementedError;
 import model.Note;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * File server that hosts files on AWS S3.
@@ -117,6 +118,38 @@ public class S3FileServer implements FileServer {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * Remove the file associated with a note.
+     *
+     * @param note the note
+     */
+    @Override
+    public void remove(Note note) {
+        if (note.getFiletype().equals("none")) {
+            return;
+        }
+
+        String objectKey = note.getCourseId() + "/" + note.getId() + "." + note.getFiletype();
+        s3Client.deleteObject(this.bucketName, objectKey);
+    }
+
+    /**
+     * Remove all files in the file server.
+     */
+    @Override
+    public void reset() {
+        List<DeleteObjectsRequest.KeyVersion> keys = new ArrayList<DeleteObjectsRequest.KeyVersion>();
+
+        ObjectListing objects = s3Client.listObjects(this.bucketName);
+        for (S3ObjectSummary objectSummary : objects.getObjectSummaries()) {
+            keys.add(new DeleteObjectsRequest.KeyVersion(objectSummary.getKey()));
+        }
+
+        DeleteObjectsRequest req = new DeleteObjectsRequest(this.bucketName);
+        req.setKeys(keys);
+        s3Client.deleteObjects(req);
     }
 
 }

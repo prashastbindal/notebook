@@ -2,6 +2,7 @@ package fileserver;
 
 import io.javalin.Javalin;
 import io.javalin.core.util.FileUtil;
+import kotlin.NotImplementedError;
 import model.Note;
 
 import java.io.File;
@@ -59,6 +60,41 @@ public class LocalFileServer implements FileServer {
         } else {
             Javalin.log.info("Could not find " + fullpath + " in local fileserver.");
             return null;
+        }
+    }
+
+    /**
+     * Remove the file associated with a note.
+     *
+     * @param note the note
+     */
+    @Override
+    public void remove(Note note) {
+        if (note.getFiletype().equals("none")) {
+            return;
+        }
+
+        String shortpath = note.getCourseId() + "/" + note.getId() + "." + note.getFiletype();
+        String fullpath = this.basepath + "/" + shortpath;
+        File file = new File(fullpath);
+
+        if (file.exists() && file.isFile()) {
+            file.delete();
+        }
+    }
+
+    /**
+     * Remove all files in the file server.
+     */
+    @Override
+    public void reset() {
+        File base = new File(this.basepath);
+        for (File dir : base.listFiles()) {
+            for (File file : dir.listFiles()) {
+                Javalin.log.info(file.getAbsolutePath());
+                file.delete();
+            }
+            dir.delete();
         }
     }
 

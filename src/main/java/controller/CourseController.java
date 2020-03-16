@@ -5,12 +5,16 @@ import dao.NoteDao;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.NotFoundResponse;
+import io.javalin.http.UploadedFile;
 import io.javalin.plugin.rendering.template.TemplateUtil;
 import model.Course;
 import model.Note;
 import org.sql2o.Sql2o;
 import static io.javalin.apibuilder.ApiBuilder.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -45,6 +49,8 @@ public class CourseController extends Controller {
                 get(this::getNotes);
                 get("json", this::getNotesJSON);
             });
+            post("courses/:courseId/delete", this::deleteCourse);
+            post("courses/addCourse", this::addCourse);
         });
 
     }
@@ -79,6 +85,26 @@ public class CourseController extends Controller {
         ctx.json(notes);
         ctx.status(200);
         ctx.contentType("application/json");
+    }
+
+    /**
+     * Handler for the add course form.
+     *
+     * @param ctx request context
+     */
+    public void addCourse(Context ctx) {
+        Course course = new Course(ctx.formParam("courseName"));
+        courseDao.add(course);
+    }
+
+    /**
+     * Handler for removing courses.
+     *
+     * @param ctx request context
+     */
+    public void deleteCourse(Context ctx) {
+        Course course = this.findCourse(ctx);
+        courseDao.remove(course);
     }
 
     /**

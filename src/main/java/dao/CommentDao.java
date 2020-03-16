@@ -2,6 +2,7 @@ package dao;
 
 import exception.DaoException;
 import model.Comment;
+import model.Note;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
@@ -91,4 +92,17 @@ public class CommentDao {
                        .iterator().next();
         }
     }
+
+    /**
+     * List all comments.
+     *
+     * @return list of all comments in the database
+     */
+    public List<Comment> findAll() {
+        String sql = "SELECT * FROM Comments;";
+        try(Connection conn = sql2o.open()){
+            return conn.createQuery(sql).executeAndFetch(Comment.class);
+        }
+    }
+
 }

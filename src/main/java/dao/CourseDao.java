@@ -54,6 +54,12 @@ public class CourseDao {
      * @throws DaoException if failed to remove course from database
      */
     public void remove(Course course) throws DaoException {
+        NoteDao noteDao = new NoteDao(this.sql2o);
+        List<Note> notes = noteDao.findNoteWithCourseId(course.getId());
+        for (Note note : notes) {
+            noteDao.remove(note);
+        }
+
         String sql = "DELETE FROM Courses WHERE id = :id;";
         try(Connection conn = sql2o.open()) {
             System.out.println(course);

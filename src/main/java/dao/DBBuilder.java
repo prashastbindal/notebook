@@ -1,5 +1,6 @@
 package dao;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import model.Comment;
 import model.Course;
 import model.Note;
@@ -125,14 +126,14 @@ public final class DBBuilder {
      * @param sql2o database connection
      */
     public static void dropTablesIfExist(Sql2o sql2o) {
-        String sqlDropCoursesTable  = "DROP TABLE IF EXISTS Courses;";
-        String sqlDropNotesTable    = "DROP TABLE IF EXISTS Notes;";
         String sqlDropCommentsTable = "DROP TABLE IF EXISTS Comments;";
+        String sqlDropNotesTable    = "DROP TABLE IF EXISTS Notes;";
+        String sqlDropCoursesTable  = "DROP TABLE IF EXISTS Courses;";
 
         Connection conn = sql2o.open();
-        conn.createQuery(sqlDropCoursesTable).executeUpdate();
-        conn.createQuery(sqlDropNotesTable).executeUpdate();
         conn.createQuery(sqlDropCommentsTable).executeUpdate();
+        conn.createQuery(sqlDropNotesTable).executeUpdate();
+        conn.createQuery(sqlDropCoursesTable).executeUpdate();
         conn.close();
     }
 
@@ -141,13 +142,13 @@ public final class DBBuilder {
      *
      * @param sql2o database connection
      */
-    public static void createTestData(Sql2o sql2o) {
+    public static void createTestData(Sql2o sql2o, Boolean onlyIfEmpty) {
 
         CourseDao courseDao = new CourseDao(sql2o);
         NoteDao noteDao = new NoteDao(sql2o);
         CommentDao commentDao = new CommentDao(sql2o);
 
-        if (courseDao.findAll().isEmpty()) {
+        if (courseDao.findAll().isEmpty() || (!onlyIfEmpty)) {
             Course c1 = new Course("Example Course 1");
             Course c2 = new Course("Example Course 2");
             courseDao.add(c1);

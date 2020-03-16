@@ -55,6 +55,7 @@ public class NoteController extends Controller {
                 get(this::getNote);
                 get("json", this::getNoteJSON);
                 post("comment", this::addComment);
+                post("delete", this::deleteNote);
             });
             path("/courses/:courseId/notes", () -> {
                 post(this::addNote);
@@ -62,6 +63,8 @@ public class NoteController extends Controller {
             path("/courses/:courseId/addNote", () -> {
                 get(this::addNoteForm);
             });
+            post("/notes/:noteId/delete", this::deleteNote);
+            post("/comments/:commentId/delete", this::deleteComment);
         });
 
     }
@@ -125,6 +128,16 @@ public class NoteController extends Controller {
     }
 
     /**
+     * Handler for removing comments.
+     *
+     * @param ctx request context
+     */
+    public void deleteComment(Context ctx) {
+        Comment comment = this.findComment(ctx);
+        commentDao.remove(comment);
+    }
+
+    /**
      * Handler for the add note form.
      *
      * @param ctx request context
@@ -167,6 +180,16 @@ public class NoteController extends Controller {
                 "courseName", course.getName()
             )
         );
+    }
+
+    /**
+     * Handler for removing notes.
+     *
+     * @param ctx request context
+     */
+    public void deleteNote(Context ctx) {
+        Note note = this.findNote(ctx);
+        noteDao.remove(note);
     }
 
     /**
@@ -213,6 +236,29 @@ public class NoteController extends Controller {
         }
 
         return note;
+    }
+
+    /**
+     * Get the comment referenced in the given request.
+     *
+     * @param ctx request context
+     */
+    private Comment findComment(Context ctx) throws NotFoundResponse {
+        String noteIdString = ctx.pathParam("commentId");
+
+        int commentId;
+        try {
+            commentId = Integer.parseInt(noteIdString);
+        } catch (NumberFormatException e) {
+            throw new NotFoundResponse("Could not parse note ID in URL");
+        }
+
+        Comment comment = commentDao.findComment(commentId);
+        if (comment == null) {
+            throw new NotFoundResponse("Comment not found.");
+        }
+
+        return comment;
     }
 
 }

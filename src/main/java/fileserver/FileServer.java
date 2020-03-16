@@ -28,6 +28,18 @@ public interface FileServer {
     String getURL(Note note);
 
     /**
+     * Remove the file associated with a note.
+     *
+     * @param note the note
+     */
+    void remove(Note note);
+
+    /**
+     * Remove all files in the file server.
+     */
+    void reset();
+
+    /**
      * Use environment flags to get the correct file server.
      *
      * @return the file server

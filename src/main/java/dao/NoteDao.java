@@ -1,6 +1,9 @@
 package dao;
 
 import exception.DaoException;
+import fileserver.FileServer;
+import model.Comment;
+import model.Course;
 import model.Note;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
@@ -14,6 +17,7 @@ import java.util.NoSuchElementException;
 public class NoteDao {
 
     private Sql2o sql2o;
+    private FileServer fileServer;
 
     /**
      * Instantiates a new Note DAO.
@@ -22,6 +26,7 @@ public class NoteDao {
      */
     public NoteDao(Sql2o sql2o) {
         this.sql2o = sql2o;
+        this.fileServer = FileServer.getFileServer();
     }
 
     /**
@@ -52,6 +57,14 @@ public class NoteDao {
      * @throws DaoException if failed to remove note from the database
      */
     public void remove(Note note) throws DaoException {
+        CommentDao commentDao = new CommentDao(this.sql2o);
+        List<Comment> comments = commentDao.findCommentWithNoteId(note.getId());
+        for (Comment comment : comments) {
+            commentDao.remove(comment);
+        }
+
+        this.fileServer.remove(note);
+
         String sql = "DELETE FROM Notes WHERE id = :id;";
         try(Connection conn = sql2o.open()) {
             conn.createQuery(sql)
@@ -94,4 +107,17 @@ public class NoteDao {
             return null;
         }
     }
+
+    /**
+     * List all notes.
+     *
+     * @return list of all notes in the database
+     */
+    public List<Note> findAll() {
+        String sql = "SELECT * FROM Notes;";
+        try(Connection conn = sql2o.open()){
+            return conn.createQuery(sql).executeAndFetch(Note.class);
+        }
+    }
+
 }

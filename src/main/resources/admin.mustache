@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>NoteBook - Admin</title>
+
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+        table {
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+
+<h1>NoteBook - Database Admin</h1>
+
+<form>
+<button formaction="/admin/reset" formmethod="post" type="submit">Reset Database</button>
+<button formaction="/admin/insertTestData" formmethod="post" type="submit">Insert Test Data</button>
+</form>
+
+<h2>Courses</h2>
+<form>
+<button formaction="/admin/reset" formmethod="post" type="submit">Remove All Courses</button><br><br>
+</form>
+<table>
+    {{#courseList}}
+        <tr>
+            <td><a href="/courses/{{ id }}/notes/"> {{ name }} </a></td>
+            <td><button onclick="removeCourse({{id}});">Delete</button></td>
+        </tr>
+    {{/courseList}}
+</table>
+<br>
+Add:
+<form id="addCourseForm">
+    <input type="text" name="courseName">
+    <input type="submit">
+</form>
+
+<h2>Notes</h2>
+<form>
+<button formaction="/admin/resetNotes" formmethod="post" type="submit">Remove All Notes</button><br><br>
+</form>
+<table>
+    {{#noteList}}
+        <tr>
+            <td><a href="/courses/{{ courseId }}/notes/{{ id }}/"> {{ title }} </a></td>
+            <td><button onclick="removeNote({{id}});">Delete</button></td>
+        </tr>
+    {{/noteList}}
+</table>
+
+<h2>Comments</h2>
+<form>
+<button formaction="/admin/resetComments" formmethod="post" type="submit">Remove All Comments</button><br><br>
+</form>
+<table>
+    {{#commentList}}
+        <tr>
+            <td>{{text}}</td>
+            <td><button onclick="removeComment({{id}});">Delete</button></td>
+        </tr>
+    {{/commentList}}
+</table>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+function removeNote(noteId) {
+    $.ajax({
+        type: "POST",
+        url: "/notes/" + noteId + "/delete",
+        success: function() {
+            location.reload();
+        }
+    });
+}
+function removeCourse(courseId) {
+    $.ajax({
+        type: "POST",
+        url: "/courses/" + courseId + "/delete",
+        success: function() {
+            location.reload();
+        }
+    });
+}
+function removeComment(commentId) {
+    $.ajax({
+        type: "POST",
+        url: "/comments/" + commentId + "/delete",
+        success: function() {
+            location.reload();
+        }
+    });
+}
+$("#addCourseForm").submit(function(e) {
+    $.ajax({
+        url: "/courses/addCourse",
+        type: "POST",
+        data: $("#addCourseForm").serialize(),
+        success: function() {
+            location.reload();
+        }
+    });
+    e.preventDefault();
+    return false;
+});
+</script>
+
+</body>
+</html>
