@@ -29,11 +29,16 @@
 <button formaction="/admin/reset" formmethod="post" type="submit">Remove All Courses</button><br><br>
 </form>
 <table>
+    <tr>
+        <th>Course</th>
+        <th>Actions</th>
+    </tr>
+
     {{#courseList}}
-        <tr>
-            <td><a href="/courses/{{ id }}/notes/"> {{ name }} </a></td>
-            <td><button onclick="removeCourse({{id}});">Delete</button></td>
-        </tr>
+    <tr>
+        <td><a href="/courses/{{id}}/notes/">{{name}}</a></td>
+        <td><button onclick="removeCourse({{id}});">Delete</button></td>
+    </tr>
     {{/courseList}}
 </table>
 <br>
@@ -48,11 +53,20 @@ Add:
 <button formaction="/admin/resetNotes" formmethod="post" type="submit">Remove All Notes</button><br><br>
 </form>
 <table>
+    <tr>
+        <th>Course</th>
+        <th>Note</th>
+        <th>Author</th>
+        <th>Actions</th>
+    </tr>
+
     {{#noteList}}
-        <tr>
-            <td><a href="/courses/{{ courseId }}/notes/{{ id }}/"> {{ title }} </a></td>
-            <td><button onclick="removeNote({{id}});">Delete</button></td>
-        </tr>
+    <tr>
+        <td><a href="/courses/{{courseId}}/notes">{{courseName}}</a></td>
+        <td><a href="/courses/{{courseId}}/notes/{{noteId}}/">{{noteName}}</a></td>
+        <td>{{author}}</td>
+        <td><button onclick="removeNote({{noteId}});">Delete</button></td>
+    </tr>
     {{/noteList}}
 </table>
 
@@ -61,11 +75,22 @@ Add:
 <button formaction="/admin/resetComments" formmethod="post" type="submit">Remove All Comments</button><br><br>
 </form>
 <table>
+    <tr>
+        <th>Course</th>
+        <th>Note</th>
+        <th>Comment</th>
+        <th>Author</th>
+        <th>Actions</th>
+    </tr>
+
     {{#commentList}}
-        <tr>
-            <td>{{text}}</td>
-            <td><button onclick="removeComment({{id}});">Delete</button></td>
-        </tr>
+    <tr>
+        <td><a href="/courses/{{courseId}}/notes">{{courseName}}</a></td>
+        <td><a href="/courses/{{courseId}}/notes/{{noteId}}">{{noteName}}</a></td>
+        <td><a href="/courses/{{courseId}}/notes/{{noteId}}#comment{{commentId}}">{{text}}</a></td>
+        <td>{{author}}</td>
+        <td><button onclick="removeComment({{commentId}});">Delete</button></td>
+    </tr>
     {{/commentList}}
 </table>
 

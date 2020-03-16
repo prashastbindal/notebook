@@ -74,13 +74,51 @@ public class AdminController extends Controller {
         List<Course> courseList = this.courseDao.findAll();
         List<Note> noteList = this.noteDao.findAll();
         List<Comment> commentList = this.commentDao.findAll();
-        
+
+        class NoteInfo {
+            int noteId, courseId;
+            String noteName, courseName, author;
+            public NoteInfo(Note n) {
+                this.noteId = n.getId();
+                this.courseId = n.getCourseId();
+                this.noteName = n.getTitle();
+                this.author = n.getCreator();
+                this.courseName = courseDao.findCourse(n.getCourseId()).getName();
+            }
+        }
+
+        class CommentInfo {
+            int commentId, noteId, courseId;
+            String text, noteName, courseName, author;
+            public CommentInfo(Comment c) {
+                this.commentId = c.getId();
+                this.noteId = c.getNoteId();
+                this.text = c.getText();
+                if (this.text.length() > 25) {
+                    this.text = this.text.substring(0, 25) + "...";
+                }
+                this.author = c.getCreator();
+                Note n = noteDao.findNote(c.getNoteId());
+                this.noteName = n.getTitle();
+                Course course = courseDao.findCourse(n.getCourseId());
+                this.courseId = course.getId();
+                this.courseName = course.getName();
+            }
+        }
+
+        List<NoteInfo> noteInfoList = noteList.stream()
+                .map(n -> new NoteInfo(n))
+                .collect(Collectors.toList());
+        List<CommentInfo> commentInfoList = commentList.stream()
+                .map(c -> new CommentInfo(c))
+                .collect(Collectors.toList());
+
         ctx.render(
             "/admin.mustache",
             TemplateUtil.model(
                 "courseList", courseList,
-                "noteList", noteList,
-                "commentList", commentList
+                "noteList", noteInfoList,
+                "commentList", commentInfoList
             )
         );
     }
