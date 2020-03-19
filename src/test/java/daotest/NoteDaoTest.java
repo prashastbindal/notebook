@@ -11,6 +11,8 @@ import org.junit.Test;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class NoteDaoTest {
@@ -52,4 +54,22 @@ public class NoteDaoTest {
         assertEquals(n1, n2);
     }
 
+    @Test
+    public void findNoteWithCourseIdWorks() {
+        Note n1 = new Note(1, "Note1", "User1", "txt");
+        noteDao.add(n1);
+        Note n2 = new Note(1, "Note2", "User2", "txt");
+        noteDao.add(n2);
+        List<Note> l1 = noteDao.findNoteWithCourseId(1);
+        assertEquals(2, l1.size());
+    }
+
+    @Test
+    public void removeNoteWorks() {
+        Note n1 = new Note(1, "Note1", "User1", "txt");
+        noteDao.add(n1);
+        noteDao.remove(n1);
+        List<Note> l1 = noteDao.findNoteWithCourseId(n1.getCourseId());
+        assertTrue(l1.isEmpty());
+    }
 }
