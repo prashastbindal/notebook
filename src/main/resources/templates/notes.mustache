@@ -1,0 +1,56 @@
+{{> header}}
+<link href="/css/simple-sidebar.css" rel="stylesheet">
+{{> navbar}}
+
+<div class="d-flex" id="wrapper">
+    <!-- Sidebar -->
+    <div class="bg-light border-right" id="sidebar-wrapper">
+        <div class="sidebar-heading">{{ courseName }}
+        <form class="form-inline my-2 my-lg-0" action="../addNote">
+            <button class="btn btn-outline-primary my-2 my-sm-0"
+                    type="submit" id="submit">Add Note</button>
+        </form>
+        </div>
+        <div class="dropdown show mx-auto sidebar-heading">
+            <form class="form-inline form-navbar my-2 my-lg-0"
+                  action="/notes">
+                <input class="form-control" name="s" type="text"
+                       placeholder="Search Notes">
+            </form>
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                     Sort By
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="#">Popularity</a>
+                <a class="dropdown-item" href="#">Date</a>
+                <a class="dropdown-item" href="#">Relevance</a>
+            </div>
+        </div>
+        <div class="list-group list-group-flush">
+            {{#noteList}}
+                <a href="{{ id }} " class="list-group-item list-group-item-action bg-light"> {{ title }} by {{ creator }} </a>
+            {{/noteList}}
+        </div>
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <p>NYI, add a preview of the note here, could even eventually
+                replace the separate page for each note with a good preview.
+            </p>
+        </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+
+</div>
+
+<!-- optional script if we want to make the sidebar toggleable -->
+<!--<script>-->
+<!--    $("#menu-toggle").click(function(e) {-->
+<!--        e.preventDefault();-->
+<!--        $("#wrapper").toggleClass("toggled");-->
+<!--    });-->
+<!--</script>-->
+{{> footer}}

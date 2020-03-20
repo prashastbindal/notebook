@@ -1,0 +1,28 @@
+{{> header}}
+
+{{> navbar}}
+
+<div class="mx-auto">
+    <div class="dropdown show mx-auto row">
+        <form class="form-inline form-navbar my-2 my-lg-0"
+              action="/notes">
+            <input class="form-control" name="s" type="text"
+                   placeholder="Search Notes">
+        </form>
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Sort By
+        </a>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" href="#">Popularity</a>
+            <a class="dropdown-item" href="#">Date</a>
+            <a class="dropdown-item" href="#">Relevance</a>
+        </div>
+    </div>
+    <ul class="list-group">
+        {{#courseList}}
+            <li class="list-group-item"><a href="/courses/{{ id }}/notes/"> {{ name }} </a></li>
+        {{/courseList}}
+    </ul>
+</div>
+
+{{> footer}}

@@ -66,7 +66,7 @@ public class ApiServer {
 
     app.get("/home", ctx -> {
       ctx.render(
-              "/home.mustache"
+              "/templates/home.mustache"
       );
     });
 
@@ -80,7 +80,7 @@ public class ApiServer {
 
     app.get("/courses", ctx -> {
       ctx.render(
-              "/courses.mustache",
+              "/templates/courses.mustache",
         TemplateUtil.model("courseList", courseDao.findAll())
       );
     });
@@ -131,7 +131,7 @@ public class ApiServer {
         int cId = Integer.parseInt(courseId);
         Course course = courseDao.findCourse(cId);
         ctx.render(
-          "/addNote.mustache",
+                "/templates/addNote.mustache",
           TemplateUtil.model(
             "courseName", course.getName()
           )
@@ -151,7 +151,7 @@ public class ApiServer {
           ctx.json("Error 404 not found");
         } else {
           ctx.render(
-            "/notes.mustache",
+                  "/templates/notes.mustache",
             TemplateUtil.model(
               "courseName", course.getName(),
               "noteList", notes
@@ -168,28 +168,30 @@ public class ApiServer {
       try {
         int cId = Integer.parseInt(courseId);
         Note note = new Note(
-          cId,
-          ctx.formParam("title"),
-          ctx.formParam("creator"),
-          ctx.formParam("filetype"));
+                cId,
+                ctx.formParam("title"),
+                ctx.formParam("creator"),
+                ctx.formParam("filetype"));
         noteDao.add(note);
 
         UploadedFile file = ctx.uploadedFile("file");
+
         if (note.getFiletype().equals("pdf")) {
           fileServer.upload(file.getContent(), note);
-        } else if (note.getFiletype().equals("html")) {
-          String text = ctx.formParam("text");
-          InputStream textstream = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
-          fileServer.upload(textstream, note);
+          ctx.redirect("/courses/".concat(courseId).concat("/notes/"));
         }
-
-        ctx.redirect("/courses/".concat(courseId).concat("/notes/"));
+        //gonna move this to a separate page I think
+//        else if (note.getFiletype().equals("html")) {
+//          String text = ctx.formParam("text");
+//          InputStream textstream = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
+//          fileServer.upload(textstream, note);
+//        }
+//
+//
       } catch (NumberFormatException e) {
         ctx.json("Error 404 not found");
       }
-    });
-
-    app.delete("/courses/:id/notes", ctx -> {
+    }).delete("/courses/:id/notes", ctx -> {
       Note note = ctx.bodyAsClass(Note.class);
       System.out.println(note.getId());
       noteDao.remove(note);
@@ -213,7 +215,7 @@ public class ApiServer {
           String filepath = fileServer.getURL(note);
           Boolean showfile = (filepath != null);
           ctx.render(
-            "/note.mustache",
+                  "/templates/note.mustache",
             TemplateUtil.model(
               "courseName", course.getName(),
               "noteName", note.getTitle(),
@@ -245,6 +247,24 @@ public class ApiServer {
         ctx.json("Error 404 not found");
       }
     });
+
+    app.get("/signup", ctx -> {
+      ctx.render(
+              "/templates/signup.mustache"
+      );
+    });
+
+    app.get("/aboutUs", ctx -> {
+      ctx.render(
+              "/templates/aboutUs.mustache"
+      );
+    });
+
+    app.get("/contact", ctx -> {
+      ctx.render(
+              "/templates/contact.mustache"
+      );
+    });
   }
 
     private static Javalin createJavalinServer() {
@@ -257,6 +277,7 @@ public class ApiServer {
     }
     return Javalin.create(config -> {
       config.addStaticFiles("static/", Location.EXTERNAL);
+      config.addStaticFiles("/public");
     }).start(PORT);
   }
 
