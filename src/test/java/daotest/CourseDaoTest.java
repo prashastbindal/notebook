@@ -6,8 +6,11 @@ import model.Course;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.internal.runners.model.EachTestNotifier;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -43,6 +46,25 @@ public class CourseDaoTest {
         courseDao.add(c1);
         Course c2 = courseDao.findCourse(c1.getId());
         assertEquals(c1, c2);
+    }
+
+    @Test
+    public void findAllCourseWorks() {
+        Course c1 = new Course("CourseName1");
+        courseDao.add(c1);
+        Course c2 = new Course("CourseName2");
+        courseDao.add(c2);
+        List<Course> l1 = courseDao.findAll();
+        assertEquals(2, l1.size());
+    }
+
+    @Test
+    public void removeCourseWorks() {
+        Course c1 = new Course("CourseName1");
+        courseDao.add(c1);
+        courseDao.remove(c1);
+        List<Course> l1 = courseDao.findAll();
+        assertTrue(l1.isEmpty());
     }
 
 }

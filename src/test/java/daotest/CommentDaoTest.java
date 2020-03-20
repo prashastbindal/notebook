@@ -12,6 +12,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sql2o.Sql2o;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class CommentDaoTest {
@@ -48,11 +50,38 @@ public class CommentDaoTest {
     }
 
     @Test
+    public void addCommentChangesId() {
+        Comment c1 = new Comment(1, "This is some comment.", "User1");
+        assertEquals(0, c1.getId());
+        commentDao.add(c1);
+        assertNotEquals(0, c1.getId());
+    }
+
+    @Test
     public void readCommentWorks() {
         Comment c1 = new Comment(1, "This is some comment.", "User1");
         commentDao.add(c1);
         Comment c2 = commentDao.findComment(c1.getId());
         assertEquals(c1, c2);
+    }
+
+    @Test
+    public void findCommentbyNoteIdWorks() {
+        Comment c1 = new Comment(1, "This is some comment.", "User1");
+        commentDao.add(c1);
+        Comment c2 = new Comment(1, "This is a different comment.", "User2");
+        commentDao.add(c2);
+        List<Comment> l1 = commentDao.findCommentWithNoteId(c1.getNoteId());
+        assertEquals(2, l1.size());
+    }
+
+    @Test
+    public void removeCommentWorks() {
+        Comment c1 = new Comment(1, "This is some comment.", "User1");
+        commentDao.add(c1);
+        commentDao.remove(c1);
+        List<Comment> l1 = commentDao.findCommentWithNoteId(c1.getNoteId());
+        assertTrue(l1.isEmpty());
     }
 
 }
