@@ -12,15 +12,14 @@ import dao.NoteDao;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.plugin.json.JavalinJson;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.sql2o.Sql2o;
 import java.io.File;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -37,7 +36,7 @@ public class HomePageTest {
         DBBuilder.createTestDatabase("commentdaotestdb");
         Sql2o sql2o = DBBuilder.getTestDatabaseConnection("commentdaotestdb");
         DBBuilder.createTables(sql2o, true);
-        DBBuilder.createTestData(sql2o);
+        DBBuilder.createTestData(sql2o, true);
 
         this.courseDao = new CourseDao(sql2o);
         this.noteDao = new NoteDao(sql2o);
@@ -74,6 +73,24 @@ public class HomePageTest {
     public void correctPage() {
         driver.get("http://localhost:7000/courses");
         assertEquals("NoteBook", driver.getTitle());
+    }
+
+    @Test
+    public void coursesAreListed() {
+        driver.get("http://localhost:7000/courses");
+        WebElement list = driver.findElement(By.tagName("ul"));
+        List<WebElement> links = driver.findElements(By.tagName("li"));
+        WebElement exampleCourseOne = links.get(0);
+        assertEquals("Example Course 1", exampleCourseOne.getText());
+    }
+
+    @Test
+    public void courseLinkWorks() {
+        driver.get("http://localhost:7000/courses");
+        List<WebElement> links = driver.findElements(By.tagName("a"));
+        WebElement exampleCourseOneLink = links.get(0);
+        exampleCourseOneLink.click();
+        assertEquals("http://localhost:7000/courses/1/notes/", driver.getCurrentUrl());
     }
 
 }
