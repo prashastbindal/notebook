@@ -24,7 +24,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 
-public class HomePageTest {
+public class CoursePageTest {
     private NoteDao noteDao;
     private CourseDao courseDao;
     private CommentDao commentDao;
@@ -33,8 +33,8 @@ public class HomePageTest {
     @Before
     public void setup() throws Exception {
 
-        DBBuilder.createTestDatabase("homepagetestdb");
-        Sql2o sql2o = DBBuilder.getTestDatabaseConnection("homepagetestdb");
+        DBBuilder.createTestDatabase("coursepagetestdb");
+        Sql2o sql2o = DBBuilder.getTestDatabaseConnection("coursepagetestdb");
         DBBuilder.createTables(sql2o, true);
         DBBuilder.createTestData(sql2o, true);
 
@@ -66,31 +66,46 @@ public class HomePageTest {
 
     @After
     public void tearDown() throws Exception {
-        DBBuilder.deleteTestDatabase("homepagetestdb");
+        DBBuilder.deleteTestDatabase("coursepagetestdb");
     }
 
     @Test
     public void correctPage() {
-        driver.get("http://localhost:7000/courses");
-        assertEquals("NoteBook", driver.getTitle());
+        driver.get("http://localhost:7000/courses/1/notes/");
+        WebElement h2 = driver.findElement(By.tagName("h2"));
+        assertEquals("Example Course 1", h2.getText());
     }
 
     @Test
-    public void coursesAreListed() {
-        driver.get("http://localhost:7000/courses");
-        WebElement list = driver.findElement(By.tagName("ul"));
-        List<WebElement> links = driver.findElements(By.tagName("li"));
-        WebElement exampleCourseOne = links.get(0);
-        assertEquals("Example Course 1", exampleCourseOne.getText());
+    public void addNoteExists() {
+        driver.get("http://localhost:7000/courses/1/notes/");
+        WebElement addNote = driver.findElement(By.linkText("Add Note"));
+        assertEquals("Add Note", addNote.getText());
     }
 
     @Test
-    public void courseLinkWorks() {
-        driver.get("http://localhost:7000/courses");
+    public void addNoteLinkWorks() {
+        driver.get("http://localhost:7000/courses/1/notes/");
+        WebElement addNote = driver.findElement(By.linkText("Add Note"));
+        addNote.click();
+        assertEquals("http://localhost:7000/courses/1/addNote/", driver.getCurrentUrl());
+    }
+
+    @Test
+    public void notesAreListed() {
+        driver.get("http://localhost:7000/courses/1/notes/");
         List<WebElement> links = driver.findElements(By.tagName("a"));
-        WebElement exampleCourseOneLink = links.get(0);
-        exampleCourseOneLink.click();
-        assertEquals("http://localhost:7000/courses/1/notes/", driver.getCurrentUrl());
+        WebElement note1 = links.get(1);
+        assertEquals("Note1 by student1", note1.getText());
+    }
+
+    @Test
+    public void notesLinksWork() {
+        driver.get("http://localhost:7000/courses/1/notes/");
+        List<WebElement> links = driver.findElements(By.tagName("a"));
+        WebElement note1 = links.get(1);
+        note1.click();
+        assertEquals("http://localhost:7000/courses/1/notes/1/", driver.getCurrentUrl());
     }
 
 }
