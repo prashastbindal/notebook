@@ -5,16 +5,12 @@ import dao.NoteDao;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.NotFoundResponse;
-import io.javalin.http.UploadedFile;
 import io.javalin.plugin.rendering.template.TemplateUtil;
 import model.Course;
 import model.Note;
 import org.sql2o.Sql2o;
 import static io.javalin.apibuilder.ApiBuilder.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
