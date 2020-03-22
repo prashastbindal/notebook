@@ -2,6 +2,9 @@ package model;
 
 import java.util.Objects;
 
+/**
+ * Note.
+ */
 public class Note {
     private int id;
     private int courseId;
@@ -9,6 +12,14 @@ public class Note {
     private String creator;
     private String filetype;
 
+    /**
+     * Instantiates a new note.
+     *
+     * @param courseId course ID
+     * @param title    note title
+     * @param creator  note creator name
+     * @param filetype note file extension
+     */
     public Note(int courseId, String title, String creator, String filetype) {
         this.courseId = courseId;
         this.title = title;
@@ -16,42 +27,92 @@ public class Note {
         this.filetype = filetype;
     }
 
+    /**
+     * Gets the note ID.
+     *
+     * @return note ID
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Sets the note ID.
+     *
+     * @param id note ID
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * Gets the ID of the course this note belongs to.
+     *
+     * @return course ID
+     */
     public int getCourseId() {
         return courseId;
     }
 
+    /**
+     * Sets the course this note belongs to.
+     *
+     * @param courseId course ID
+     */
     public void setCourseId(int courseId) {
         this.courseId = courseId;
     }
 
+    /**
+     * Gets the note title.
+     *
+     * @return note title
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Sets the note title.
+     *
+     * @param title note title
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * Gets the note creator name.
+     *
+     * @return the creator
+     */
     public String getCreator() {
         return creator;
     }
 
+    /**
+     * Sets the note creator name.
+     *
+     * @param creator note creator name
+     */
     public void setCreator(String creator) {
         this.creator = creator;
     }
 
+    /**
+     * Gets the filetype for the associated file.
+     *
+     * @return file extension
+     */
     public String getFiletype() {
         return filetype;
     }
 
+    /**
+     * Sets the filetype for the associated file.
+     *
+     * @param filetype file extension
+     */
     public void setFiletype(String filetype) {
         this.filetype = filetype;
     }

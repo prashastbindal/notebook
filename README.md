@@ -16,6 +16,7 @@ On MacOS, run these commands to install and setup the database:
 brew install postgresql                                         # install postgres
 pg_ctl -D /usr/local/var/postgres start                         # start the postgres server
 psql postgres -c "CREATE USER dbuser WITH PASSWORD 'dbpasswd'"; # add a postgres user
+psql postgres -c "ALTER ROLE dbuser WITH CREATEDB;"             # enable dbuser to make databases
 psql postgres -c "CREATE DATABASE notebookdb;"                  # create the database
 ```
 

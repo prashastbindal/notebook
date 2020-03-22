@@ -8,34 +8,44 @@ import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import io.javalin.Javalin;
+import kotlin.NotImplementedError;
 import model.Note;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+/**
+ * File server that hosts files on AWS S3.
+ */
 public class S3FileServer implements FileServer {
 
     private String bucketName;
     private AmazonS3 s3Client;
 
+    /**
+     * Instantiates a new S3 file server.
+     */
     public S3FileServer() {
         bucketName = System.getenv("AWS_S3_BUCKET");
 
         AWSCredentialsProvider awsCredentials = new EnvironmentVariableCredentialsProvider();
         s3Client = AmazonS3ClientBuilder.standard()
-                .withCredentials(awsCredentials)
-                .withRegion(Regions.US_EAST_1)
-                .build();
+                                        .withCredentials(awsCredentials)
+                                        .withRegion(Regions.US_EAST_1)
+                                        .build();
     }
 
+    /**
+     * Upload a file to the file server.
+     *
+     * @param file file to upload
+     * @param note note that the file belongs to
+     */
     public void upload(InputStream file, Note note) {
         String filepath = note.getCourseId() + "/" + note.getId() + "." + note.getFiletype();
 
@@ -47,7 +57,12 @@ public class S3FileServer implements FileServer {
                 return;
             }
 
-            PutObjectRequest uploadRequest = new PutObjectRequest(this.bucketName, filepath, file, new ObjectMetadata());
+            PutObjectRequest uploadRequest = new PutObjectRequest(
+                this.bucketName,
+                filepath,
+                file,
+                new ObjectMetadata()
+            );
 
             ObjectMetadata metadata = new ObjectMetadata();
             if (note.getFiletype().equals("pdf")) {
@@ -65,6 +80,12 @@ public class S3FileServer implements FileServer {
         }
     }
 
+    /**
+     * Get the URL of the file associated with a note.
+     *
+     * @param note the note
+     * @return URL of the file
+     */
     public String getURL(Note note) {
         if (note.getFiletype().equals("none")) {
             return null;
@@ -97,6 +118,38 @@ public class S3FileServer implements FileServer {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * Remove the file associated with a note.
+     *
+     * @param note the note
+     */
+    @Override
+    public void remove(Note note) {
+        if (note.getFiletype().equals("none")) {
+            return;
+        }
+
+        String objectKey = note.getCourseId() + "/" + note.getId() + "." + note.getFiletype();
+        s3Client.deleteObject(this.bucketName, objectKey);
+    }
+
+    /**
+     * Remove all files in the file server.
+     */
+    @Override
+    public void reset() {
+        List<DeleteObjectsRequest.KeyVersion> keys = new ArrayList<DeleteObjectsRequest.KeyVersion>();
+
+        ObjectListing objects = s3Client.listObjects(this.bucketName);
+        for (S3ObjectSummary objectSummary : objects.getObjectSummaries()) {
+            keys.add(new DeleteObjectsRequest.KeyVersion(objectSummary.getKey()));
+        }
+
+        DeleteObjectsRequest req = new DeleteObjectsRequest(this.bucketName);
+        req.setKeys(keys);
+        s3Client.deleteObjects(req);
     }
 
 }

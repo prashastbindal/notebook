@@ -1,4 +1,26 @@
 {{> header}}
+<script>
+function validateComment() {
+    var comment = document.getElementById("comment-field").value;
+    if (comment.length < 1) {
+        alert("Comment cannot be empty!");
+        return false;
+    } else if (comment.length > 1000) {
+        alert("Comment too long!");
+        return false;
+    }
+
+    var user = document.getElementById("creator-field").value;
+    if (user.length < 1) {
+        alert("Username cannot be empty!");
+        return false;
+    } else if (user.length > 30) {
+        alert("Username too long!");
+        return false;
+    }
+    return true;
+}
+</script>
 {{> navbar}}
 
 <h2>{{ courseName }} - {{ noteName }}</h2>
@@ -15,17 +37,18 @@
 <h3>Comments</h3>
 <ul>
     {{#commentList}}
-        <li>{{ creator }}: {{ text }}</li>
+        <li id="comment{{ id }}">
+            <h4>{{ creator }}:</h4>
+            <p>{{ text }}</p>
+        </li>
     {{/commentList}}
 </ul>
 <!-- TODO style -->
 
 <h3>Add a comment:</h3>
-<form id="comment-form" action="./addComment" method="post" enctype="multipart/form-data">
-    <textarea id="textarea" name="text"></textarea>
-    <div id="texteditor"></div>
+<form id="comment-form" onsubmit="return validateComment();" action="./addComment" method="post" enctype="multipart/form-data">
+    <textarea id="comment-field" name="text" placeholder="Add a comment..."></textarea><br>
     <input type="text" id="creator-field" name="creator" placeholder="User"><br>
-
 <button id="submit">Submit</button>
 </form>
 <!--- TODO style -->
