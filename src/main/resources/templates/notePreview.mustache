@@ -20,8 +20,10 @@
 </ul>
 
 <h3>Add a comment:</h3>
-<form id="comment-form" onsubmit="return validateComment();" action="./addComment" method="post" enctype="multipart/form-data">
+<form id="comment-form" onsubmit="return validateComment();" action="/courses/{{courseId}}/notes/{{noteId}}/comment" method="post">
     <textarea id="comment-field" name="text" placeholder="Add a comment..."></textarea><br>
     <input type="text" id="creator-field" name="creator" placeholder="User"><br>
     <button id="submit">Submit</button>
 </form>
+
+<script src="/js/validateComment.js"></script>
