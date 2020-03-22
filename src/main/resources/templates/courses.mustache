@@ -5,14 +5,13 @@
     {{> header}}
 </head>
 <body>
+<main>
 {{> navbar}}
 
 <div class="mx-auto">
     <div class="dropdown show mx-auto row">
-        <form class="form-inline form-navbar my-2 my-lg-0"
-              action="/notes">
-            <input class="form-control" name="s" type="text"
-                   placeholder="Search Notes">
+        <form class="form-inline my-2 my-lg-0" action="/search/courses">
+            <input class="form-control" name="search-courses" type="text" placeholder="Search Courses">
         </form>
         <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Sort By
@@ -30,6 +29,7 @@
     </ul>
 </div>
 
+</main>
 {{> footer}}
 
 </body>
