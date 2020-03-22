@@ -63,6 +63,7 @@ public class CourseController extends Controller {
         ctx.render(
             "/templates/notes.mustache",
             TemplateUtil.model(
+                "courseId", course.getId(),
                 "courseName", course.getName(),
                 "noteList", notes
             )

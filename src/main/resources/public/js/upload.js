@@ -1,75 +1,55 @@
-+ function($) {
-    'use strict';
+var dropZone = document.getElementById('drop-zone');
+var uploadForm = document.getElementById('note-form');
+var selectForm = document.getElementById("file-field")
+var uploadFiles;
 
-
-    var dropZone = document.getElementById('drop-zone');
-    var uploadForm = document.getElementById('note-form');
-    var selectForm = document.getElementById("file-field")
-    var uploadFiles;
-
-    var startUpload = function(files, title, creator) {
-        var formData = new FormData();
-        formData.append('title', title);
-        formData.append('creator', creator);
-        // can only upload 1 file at a time right now, can change in future
-        formData.append('file', files[0]);
-        // for now until we have validation
-        formData.append('filetype', 'pdf');
-
-        $.ajax({
-            url: "../notes",
-            data: formData,
-            type: 'POST',
-            processData: false,
-            contentType: false})
+var filetypeSelect = document.getElementById("filetype-field");
+filetypeSelect.addEventListener("change", function() {
+    if (filetypeSelect.value == "pdf") {
+        $('#texteditor').trumbowyg('destroy');
+        $('#texteditor').hide();
+        $('#file-area').show();
+    } else {
+        $('#texteditor').show();
+        $('#texteditor').trumbowyg({
+            resetCss: true,
+            removeformatPasted: true
+        });
+        $('#file-area').hide();
     }
+});
+$('#note-form').submit(function() {
+    document.getElementById("textarea").innerHTML = $('#texteditor').trumbowyg('html');
+});
 
-    var addFileName = function(name) {
-        // Create a new div so we know upload was successful
-        var newDiv = document.createElement("div");
-        newDiv.className = "js-upload-finished text-center";
-        newDiv.appendChild(document.createTextNode(name));
+var addFileName = function(name) {
+    // Create a new div so we know drag-drop was successful
+    var newDiv = document.createElement("div");
+    newDiv.className = "js-upload-finished text-center";
+    newDiv.appendChild(document.createTextNode(name));
 
-        var currentDiv = document.getElementById("div-next");
-        var parent = document.getElementById("div-upload")
-        parent.insertBefore(newDiv, currentDiv);
+    var currentDiv = document.getElementById("div-next");
+    var parent = document.getElementById("div-upload")
+    parent.insertBefore(newDiv, currentDiv);
+}
 
-    }
+selectForm.addEventListener('change', function(e) {
+    addFileName(document.getElementById('file-field').files[0].name);
+});
 
-    uploadForm.addEventListener('submit', function(e) {
-        e.preventDefault()
-        // If we select a file, overwrite any dragged ones for now.
-        if (document.getElementById('file-field').files.length != 0) {
-            uploadFiles = document.getElementById('file-field').files;
-        }
-        var title = document.getElementById('title-field').value;
-        var creator = document.getElementById('creator-field').value;
+dropZone.ondrop = function(e) {
+    e.preventDefault();
+    this.className = 'upload-drop-zone';
+    addFileName(e.dataTransfer.files[0].name);
+    selectForm.files = e.dataTransfer.files;
+};
 
-        startUpload(uploadFiles, title, creator)
-    })
+dropZone.ondragover = function() {
+    this.className = 'upload-drop-zone drop';
+    return false;
+};
 
-    selectForm.addEventListener('change', function(e) {
-        e.preventDefault();
-        addFileName(document.getElementById('file-field').files[0].name);
-    })
-
-
-
-    dropZone.ondrop = function(e) {
-        e.preventDefault();
-        this.className = 'upload-drop-zone';
-        addFileName(e.dataTransfer.files[0].name);
-        uploadFiles = e.dataTransfer.files;
-    };
-
-    dropZone.ondragover = function() {
-        this.className = 'upload-drop-zone drop';
-        return false;
-    };
-
-    dropZone.ondragleave = function() {
-        this.className = 'upload-drop-zone';
-        return false;
-    };
-
-}(jQuery);
+dropZone.ondragleave = function() {
+    this.className = 'upload-drop-zone';
+    return false;
+};

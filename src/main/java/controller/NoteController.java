@@ -87,6 +87,8 @@ public class NoteController extends Controller {
         ctx.render(
             "/templates/note.mustache",
             TemplateUtil.model(
+                "courseId", course.getId(),
+                "noteId", note.getId(),
                 "courseName", course.getName(),
                 "noteName", note.getTitle(),
                 "creatorName", note.getCreator(),
@@ -114,6 +116,8 @@ public class NoteController extends Controller {
         ctx.render(
             "/templates/notePreview.mustache",
             TemplateUtil.model(
+                "courseId", course.getId(),
+                "noteId", note.getId(),
                 "courseName", course.getName(),
                 "noteName", note.getTitle(),
                 "creatorName", note.getCreator(),
