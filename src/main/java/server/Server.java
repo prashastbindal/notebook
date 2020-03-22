@@ -24,7 +24,7 @@ public class Server {
 
         // open and setup connection with database
         Sql2o sql2o = DBBuilder.getDatabaseConnection();
-        DBBuilder.createTables(sql2o, false);
+        DBBuilder.createTables(sql2o, true);
         DBBuilder.createTestData(sql2o, true);
 
         // start server
