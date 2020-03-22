@@ -57,6 +57,7 @@ public class NoteController extends Controller {
                 post("comment", this::addComment);
                 post("delete", this::deleteNote);
             });
+            get("/courses/:courseId/notes-preview/:noteId", this::getNotePreview);
             path("/courses/:courseId/notes", () -> {
                 post(this::addNote);
             });
@@ -85,6 +86,33 @@ public class NoteController extends Controller {
 
         ctx.render(
             "/templates/note.mustache",
+            TemplateUtil.model(
+                "courseName", course.getName(),
+                "noteName", note.getTitle(),
+                "creatorName", note.getCreator(),
+                "filepath", filepath,
+                "showContent", fileExists,
+                "commentList", comments
+            )
+        );
+    }
+
+    /**
+     * Handler for note preview page.
+     *
+     * @param ctx request context
+     */
+    public void getNotePreview(Context ctx) {
+        Course course = this.findCourse(ctx);
+        Note note = this.findNote(ctx);
+
+        List<Comment> comments = commentDao.findCommentWithNoteId(note.getId());
+
+        String filepath = fileServer.getURL(note);
+        Boolean fileExists = (filepath != null);
+
+        ctx.render(
+            "/templates/notePreview.mustache",
             TemplateUtil.model(
                 "courseName", course.getName(),
                 "noteName", note.getTitle(),

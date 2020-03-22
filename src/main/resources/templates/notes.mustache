@@ -7,6 +7,7 @@
     <link href="/css/simple-sidebar.css" rel="stylesheet">
 </head>
 <body>
+<main>
 {{> navbar}}
 
 <div class="d-flex" id="wrapper">
@@ -19,10 +20,8 @@
         </form>
         </div>
         <div class="dropdown show mx-auto sidebar-heading">
-            <form class="form-inline form-navbar my-2 my-lg-0"
-                  action="/notes">
-                <input class="form-control" name="s" type="text"
-                       placeholder="Search Notes">
+            <form class="form-inline my-2 my-lg-0" action="/search/notes">
+                <input class="form-control" name="search-notes" type="text" placeholder="Search Notes">
             </form>
             <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                      Sort By
@@ -33,9 +32,9 @@
                 <a class="dropdown-item" href="#">Relevance</a>
             </div>
         </div>
-        <div class="list-group list-group-flush">
+        <div class="list-group list-group-flush" id="note-list">
             {{#noteList}}
-                <a href="/courses/{{ courseId }}/notes/{{ id }}/" class="list-group-item list-group-item-action bg-light"> {{ title }} by {{ creator }} </a>
+                <a data-courseId="{{courseId}}" data-noteId="{{id}}" class="note-select list-group-item list-group-item-action">{{ title }} by {{ creator }}</a>
             {{/noteList}}
         </div>
     </div>
@@ -43,15 +42,37 @@
 
     <!-- Page Content -->
     <div id="page-content-wrapper">
-        <div class="container-fluid">
-            <p>NYI, add a preview of the note here, could even eventually
-                replace the separate page for each note with a good preview.
-            </p>
+        <div class="container-fluid" id="note-frame-container">
+            <iframe id="note-frame" src=""></iframe>
         </div>
     </div>
     <!-- /#page-content-wrapper -->
 
 </div>
+
+<style>
+    #note-frame-container {
+        height: 100%;
+    }
+    #note-frame {
+        border: none;
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script>
+$(function(){
+    $(".note-select").click(function(e) {
+        $('#note-list .active').removeClass('active');
+        $(this).addClass('active');
+
+        e.preventDefault();
+        $("#note-frame").attr("src", "".concat("/courses/", e.target.dataset.courseid, "/notes-preview/", e.target.dataset.noteid));
+    });
+});
+</script>
 
 <!-- optional script if we want to make the sidebar toggleable -->
 <!--<script>-->
@@ -61,6 +82,7 @@
 <!--    });-->
 <!--</script>-->
 
+</main>
 {{> footer}}
 
 </body>
