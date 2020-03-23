@@ -14,8 +14,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.service.DriverService;
 import org.sql2o.Sql2o;
 import java.io.File;
+import java.io.IOException;
+import java.sql.Driver;
 import java.util.List;
 
 import static org.apache.commons.lang3.SystemUtils.*;
@@ -27,22 +33,37 @@ public class CoursesListPageTest {
     private CourseDao courseDao;
     private CommentDao commentDao;
 
+    private static DriverService service;
     private WebDriver driver;
     private Javalin app;
 
-    @Before
-    public void setupDriver() {
+    @BeforeClass
+    public static void setupService() throws IOException {
+        String chromeDriverPath;
         if (IS_OS_MAC) {
-            System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver/chromedriver_mac");
+            chromeDriverPath = "src/test/resources/chromedriver/chromedriver_mac";
         } else if (IS_OS_LINUX) {
-            System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver/chromedriver_linux");
+            chromeDriverPath = "src/test/resources/chromedriver/chromedriver_linux";
         } else if (IS_OS_WINDOWS) {
-            System.setProperty("webdriver.chrome.driver", "src\\test\\resources\\chromedriver\\chromedriver.exe");
+            chromeDriverPath = "src\\test\\resources\\chromedriver\\chromedriver.exe";
         } else {
             throw new IllegalStateException("Unsupported OS");
         }
 
-        driver = new ChromeDriver();
+        service = new ChromeDriverService.Builder()
+                .usingDriverExecutable(new File(chromeDriverPath))
+                .build();
+        service.start();
+    }
+
+    @AfterClass
+    public static void destroyService() {
+        service.stop();
+    }
+
+    @Before
+    public void setupDriver() {
+        driver = new ChromeDriver((ChromeDriverService) service, new ChromeOptions().setHeadless(true));
     }
 
     @Before
