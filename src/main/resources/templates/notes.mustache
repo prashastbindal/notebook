@@ -108,7 +108,7 @@ $(function(){
     function sortcallback(){
         console.log("sort button clicked")
         var mylist = $('#note-list');
-        var listitems = mylist.children('li').get();
+        var listitems = mylist.children('a').get();
         listitems.sort(function(a, b) {
            return $(a).text().toUpperCase().localeCompare($(b).text().toUpperCase());
         })
