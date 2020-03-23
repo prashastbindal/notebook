@@ -5,6 +5,12 @@
     {{> header}}
 
     <link href="/css/simple-sidebar.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
 </head>
 <body>
 <main>
@@ -20,16 +26,13 @@
         </form>
         </div>
         <div class="dropdown show mx-auto sidebar-heading">
-            <form class="form-inline my-2 my-lg-0" action="/search/notes">
-                <input class="form-control" name="search-notes" type="text" placeholder="Search Notes">
+            <form id="search-form" class="form-inline my-2 my-lg-0">
+                <input class="form-control" name="search-notes" type="text" id="searchbar" placeholder="Search Notes">
+                <button id="searchbutton" onclick="searchcallback({{courseId}})">Search</button>
             </form>
-            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                     Sort By
-            </a>
+            <button id="sortbutton" onclick="sortcallback()">Sort</button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="#">Popularity</a>
-                <a class="dropdown-item" href="#">Date</a>
-                <a class="dropdown-item" href="#">Relevance</a>
+                <a class="dropdown-item" href="#">Name</a>
             </div>
         </div>
         <div class="list-group list-group-flush" id="note-list">
@@ -61,7 +64,6 @@
     }
 </style>
 
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script>
 $(function(){
     $(".note-select").click(function(e) {
@@ -72,6 +74,49 @@ $(function(){
         $("#note-frame").attr("src", "".concat("/courses/", e.target.dataset.courseid, "/notes-preview/", e.target.dataset.noteid));
     });
 });
+
+    $('#search-form').submit(function(ev) {
+        ev.preventDefault();
+        // ajax stuff...
+    });
+
+    function searchcallback(courseId){
+        console.log("search button clicked")
+        var searchKey = $("#searchbar").val();
+        console.log(searchKey)
+        $.ajax({
+             type: "GET",
+             url: "search/"+ searchKey,
+             contentType: "application/json",
+             success: function (data, status, jqXHR) {
+                $("#note-list").empty();
+
+                data.map(function(note){
+                    $("#note-list").append('<a data-courseId="' + note.courseId + '" data-noteId="' + note.id + '" class="note-select list-group-item' +
+                    ' list-group-item-action">' + note.title + ' by ' + note.creator + '</a>')
+                })
+             },
+
+             error: function (jqXHR, status) {
+                 // error handler
+                 console.log(jqXHR);
+                 alert('fail' + status.code);
+             }
+         });
+
+    }
+
+    function sortcallback(){
+        console.log("sort button clicked")
+        var mylist = $('#note-list');
+        var listitems = mylist.children('li').get();
+        listitems.sort(function(a, b) {
+           return $(a).text().toUpperCase().localeCompare($(b).text().toUpperCase());
+        })
+        $.each(listitems, function(idx, itm) { mylist.append(itm); });
+
+    };
+
 </script>
 
 <!-- optional script if we want to make the sidebar toggleable -->
