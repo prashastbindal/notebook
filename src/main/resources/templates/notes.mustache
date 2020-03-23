@@ -90,7 +90,15 @@ $(function(){
                 data.map(function(note){
                     $("#note-list").append('<a data-courseId="' + note.courseId + '" data-noteId="' + note.id + '" class="note-select list-group-item' +
                     ' list-group-item-action">' + note.title + ' by ' + note.creator + '</a>')
-                })
+                });
+
+                $(".note-select").click(function(e) {
+                        $('#note-list .active').removeClass('active');
+                        $(this).addClass('active');
+
+                        e.preventDefault();
+                        $("#note-frame").attr("src", "".concat("/courses/", e.target.dataset.courseid, "/notes-preview/", e.target.dataset.noteid));
+                    });
              },
 
              error: function (jqXHR, status) {
