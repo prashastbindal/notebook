@@ -41,6 +41,7 @@ public class CourseListController extends Controller {
             path("/courses", () -> {
                 get(this::getCourses);
                 get("json", this::getCoursesJSON);
+                get("search/:key", this::searchCoursesJSON);
             });
         });
 
@@ -65,6 +66,14 @@ public class CourseListController extends Controller {
      */
     public void getCoursesJSON(Context ctx) {
         List<Course> courses = this.courseDao.findAll();
+        ctx.json(courses);
+        ctx.status(200);
+        ctx.contentType("application/json");
+    }
+
+    public void searchCoursesJSON(Context ctx){
+        String searchKey = ctx.pathParam("key");
+        List<Course> courses = courseDao.searchCoursesWithName(searchKey);
         ctx.json(courses);
         ctx.status(200);
         ctx.contentType("application/json");
