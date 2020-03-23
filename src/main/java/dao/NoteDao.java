@@ -120,4 +120,12 @@ public class NoteDao {
         }
     }
 
+    public List<Note> searchNotesWithName(String searchKey, int courseId) {
+        String sql = "SELECT * FROM Notes WHERE title LIKE :noteName and courseid = :courseId;";
+        try(Connection conn = sql2o.open()){
+            return conn.createQuery(sql).addParameter("noteName", "%" + searchKey + "%")
+                    .addParameter("courseId", courseId).executeAndFetch(Note.class);
+        }
+    }
+
 }

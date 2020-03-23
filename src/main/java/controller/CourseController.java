@@ -5,16 +5,12 @@ import dao.NoteDao;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.NotFoundResponse;
-import io.javalin.http.UploadedFile;
 import io.javalin.plugin.rendering.template.TemplateUtil;
 import model.Course;
 import model.Note;
 import org.sql2o.Sql2o;
 import static io.javalin.apibuilder.ApiBuilder.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -51,6 +47,7 @@ public class CourseController extends Controller {
             });
             post("courses/:courseId/delete", this::deleteCourse);
             post("courses/addCourse", this::addCourse);
+            get("courses/:id/notes/search/:key", this::searchNotesJSON);
         });
 
     }
@@ -65,8 +62,9 @@ public class CourseController extends Controller {
         List<Note> notes = noteDao.findNoteWithCourseId(course.getId());
 
         ctx.render(
-            "/notes.mustache",
+            "/templates/notes.mustache",
             TemplateUtil.model(
+                "courseId", course.getId(),
                 "courseName", course.getName(),
                 "noteList", notes
             )
@@ -128,6 +126,16 @@ public class CourseController extends Controller {
         }
 
         return course;
+    }
+
+    public void  searchNotesJSON(Context ctx) {
+        int courseId = Integer.parseInt(ctx.pathParam("id"));
+
+        String searchKey = ctx.pathParam("key");
+        List<Note> notes = noteDao.searchNotesWithName(searchKey, courseId);
+        ctx.json(notes);
+        ctx.status(200);
+        ctx.contentType("application/json");
     }
 
 }

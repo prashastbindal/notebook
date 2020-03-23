@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+    <title>NoteBook</title>
+    {{> header}}
+
+    <script src="/js/validateComment.js"></script>
+</head>
+<body>
+<main>
+{{> navbar}}
+
+<h2>{{ courseName }} - {{ noteName }}</h2>
+<h3>{{ creatorName }}</h3>
+
+{{#showContent}}
+<embed src="{{ filepath }}" width="500" height="375">
+{{/showContent}}
+
+{{^showContent}}
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PDF_file_icon.svg/1024px-PDF_file_icon.svg.png", height="200px">
+{{/showContent}}
+
+<h3>Comments</h3>
+<ul>
+    {{#commentList}}
+        <li id="comment{{ id }}">
+            <h4>{{ creator }}:</h4>
+            <p>{{ text }}</p>
+        </li>
+    {{/commentList}}
+</ul>
+
+<h3>Add a comment:</h3>
+<form id="comment-form" onsubmit="return validateComment();" action="/courses/{{courseId}}/notes/{{noteId}}/comment" method="post">
+    <textarea id="comment-field" name="text" placeholder="Add a comment..."></textarea><br>
+    <input type="text" id="creator-field" name="creator" placeholder="User"><br>
+    <button id="submit">Submit</button>
+</form>
+
+</main>
+{{> footer}}
+
+</body>
+</html>

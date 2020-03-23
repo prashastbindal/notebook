@@ -30,11 +30,9 @@ public class Server {
         // start server
         Javalin app = startServer();
 
-        // set the home page
-        app.get("/", ctx -> ctx.redirect("/courses"));
-
         // setup all request handlers
-        Controller coursesPageHandler = new MainController(app, sql2o);
+        Controller staticPagesHandler = new StaticController(app, sql2o);
+        Controller coursesPageHandler = new CourseListController(app, sql2o);
         Controller coursePageHandler  = new CourseController(app, sql2o);
         Controller notePageHandler    = new NoteController(app, sql2o);
         Controller adminPageHandler   = new AdminController(app, sql2o);
@@ -57,6 +55,7 @@ public class Server {
 
         return Javalin.create(config -> {
             config.addStaticFiles("static/", Location.EXTERNAL);
+            config.addStaticFiles("public/");
         }).start(PORT);
     }
 

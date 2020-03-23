@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+<head>
+    <title>NoteBook</title>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<script src="https://kit.fontawesome.com/b11b4e7df6.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
+</head>
+<body>
+<main>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/home">NoteBook</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/courses">Course List</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav mr-2">
+        </ul>
+        <form class="form-inline my-2 my-lg-0" action="/signup">
+            <button class="btn btn-outline-primary my-2 my-sm-0"
+                    type="submit" id="submit">Sign In</button>
+        </form>
+    </div>
+</nav>
+
+<div class="mx-auto">
+    <div class="dropdown show mx-auto row">
+        <form id="search-form" class="form-inline my-2 my-lg-0" >
+            <input class="form-control" id="searchbar" type="text" placeholder="Search Courses">
+            <button id="searchbutton" onclick="searchcallback()">Search</button>
+        </form>
+        <button id="sortbutton" onclick="sortcallback()">Sort</button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" href="#">Name</a>
+        </div>
+    </div>
+    <ul class="list-group" id="courses-list">
+        <li class="list-group-item course-list-item"><a href="/courses/1/notes/"> Example Course 1 </a></li>
+        <li class="list-group-item course-list-item"><a href="/courses/2/notes/"> Example Course 2 </a></li>
+    </ul>
+</div>
+
+</main>
+<!--<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<style>
+    html, body {
+        height: 100%;
+    }
+    main {
+        min-height: calc(100vh - 50px);
+    }
+    .footer {
+        height: 50px;
+    }
+</style>
+
+<script type="text/javascript">
+    $('#search-form').submit(function(ev) {
+        ev.preventDefault();
+        // ajax stuff...
+    });
+
+    function searchcallback(){
+        console.log("search button clicked")
+        var searchKey = $("#searchbar").val();
+        console.log(searchKey)
+        $.ajax({
+             type: "GET",
+             url: "/courses/search/"+ searchKey,
+             contentType: "application/json",
+             success: function (data, status, jqXHR) {
+                $("#courses-list").empty();
+
+                data.map(function(course){
+                    $("#courses-list").append('<li class="list-group-item course-list-item"><a href="/courses/' + course.id +'/notes/">' + course.name+ '</a></li>')
+                })
+             },
+
+             error: function (jqXHR, status) {
+                 // error handler
+                 console.log(jqXHR);
+                 alert('fail' + status.code);
+             }
+         });
+
+    }
+
+    function sortcallback(){
+        console.log("sort button clicked")
+        var mylist = $('#courses-list');
+        var listitems = mylist.children('li').get();
+        listitems.sort(function(a, b) {
+           return $(a).text().toUpperCase().localeCompare($(b).text().toUpperCase());
+        })
+        $.each(listitems, function(idx, itm) { mylist.append(itm); });
+
+    };
+
+ </script>
+
+<footer class="footer bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
+                <ul class="list-inline mb-2">
+                    <li class="list-inline-item">
+                        <a href="/aboutUs">About</a>
+                    </li>
+                    <li class="list-inline-item">&sdot;</li>
+                    <li class="list-inline-item">
+                        <a href="/contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
+                <p class="text-muted small mb-4 mb-lg-0">
+                    &copy; NoteBook 2020. All Rights Reserved.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+</body>
+</html>

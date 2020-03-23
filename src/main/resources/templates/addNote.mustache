@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+    <title>NoteBook</title>
+    {{> header}}
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.20.0/ui/trumbowyg.min.css">
+    <link rel="stylesheet" href="/css/upload.css">
+</head>
+<body>
+<main>
+{{> navbar}}
+
+<section>
+    <div class="container p-5">
+        <!-- For demo purpose -->
+        <div class="row mb-5 text-center">
+            <div class="col-lg-10 mx-auto">
+                <h1 class="display-4">Upload note to {{ courseName }} </h1>
+                <p class="lead">Or, write your note in our text editor
+                <a href="/textnote"
+                   class="text-white"><bold>here</bold></a></p>
+            </div>
+        </div>
+        <!-- End -->
+
+
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+<!--                <div class="p-5 bg-white shadow rounded-lg"><img src="https://res.cloudinary.com/mhmd/image/upload/v1557366994/img_epm3iz.png" alt="" width="200" class="d-block mx-auto mb-4 rounded-pill">-->
+                    <form id="note-form" action="/courses/{{courseId}}/addNote" method="post" enctype="multipart/form-data">
+                        <div class="input-group overflow-hidden mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Title</span>
+                            </div>
+                            <input id="title-field" name="title" type="text"
+                                   class="form-control form-rounded">
+                        </div>
+
+                        <div class="input-group overflow-hidden mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Creator</span>
+                            </div>
+                            <input id="creator-field" type="text" name="creator"
+                                   class="form-control form-rounded">
+                        </div>
+
+                        <div class="input-group overflow-hidden mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">File Type</span>
+                            </div>
+                            <select id="filetype-field" name="filetype" class="form-control form-rounded">
+                                <option value="pdf">PDF</option>
+                                <option value="html">Text</option>
+                            </select>
+                        </div>
+
+                        <div id="file-area">
+                            <div class="text-center">
+                                <div class="upload-drop-zone" id="drop-zone">
+                                    Drag and drop files here
+                                </div>
+                            </div>
+                            <div id="div-upload">
+                                <div class="text-center" id="div-next">
+                                    <label for="file-field" class="file-upload btn btn-primary
+                                    btn-block rounded-pill shadow"><i class="fa
+                                    fa-upload mr-2"></i>Or browse for file ...
+                                        <input id="file-field" type="file" name="file" accept="application/pdf">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <textarea id="textarea" name="text" hidden></textarea>
+                        <div id="texteditor"></div>
+
+                    <!-- End -->
+                        <div class="text-center">
+                            <button id="submit-button" class="btn btn-outline-primary my-2 my-sm-0" name="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.20.0/trumbowyg.min.js"></script>
+<script src="/js/upload.js"></script>
+
+</main>
+{{> footer}}
+
+</body>
+</html>

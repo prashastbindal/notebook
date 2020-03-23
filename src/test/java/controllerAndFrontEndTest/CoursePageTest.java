@@ -63,10 +63,12 @@ public class CoursePageTest {
 
         final int PORT = 7000;
 
-        app = Javalin.create(config -> {}).start(PORT);
+        app = Javalin.create(config -> {
+            config.addStaticFiles("public/");
+        }).start(PORT);
 
-        app.get("/", ctx -> ctx.redirect("/courses"));
-        Controller coursesPageHandler = new MainController(app, sql2o);
+        Controller staticPagesHandler = new StaticController(app, sql2o);
+        Controller coursesPageHandler = new CourseListController(app, sql2o);
         Controller coursePageHandler  = new CourseController(app, sql2o);
         Controller notePageHandler    = new NoteController(app, sql2o);
         Controller adminPageHandler   = new AdminController(app, sql2o);
@@ -82,40 +84,42 @@ public class CoursePageTest {
     @Test
     public void correctPage() {
         driver.get("http://localhost:7000/courses/1/notes/");
-        WebElement h2 = driver.findElement(By.tagName("h2"));
+        WebElement h2 = driver.findElement(By.id("course-name-header"));
         assertEquals("Example Course 1", h2.getText());
     }
 
     @Test
     public void addNoteExists() {
         driver.get("http://localhost:7000/courses/1/notes/");
-        WebElement addNote = driver.findElement(By.linkText("Add Note"));
+        WebElement addNote = driver.findElement(By.id("add-note-button"));
+        assertNotNull(addNote);
         assertEquals("Add Note", addNote.getText());
     }
 
     @Test
     public void addNoteLinkWorks() {
         driver.get("http://localhost:7000/courses/1/notes/");
-        WebElement addNote = driver.findElement(By.linkText("Add Note"));
+        WebElement addNote = driver.findElement(By.id("add-note-button"));
         addNote.click();
-        assertEquals("http://localhost:7000/courses/1/addNote/", driver.getCurrentUrl());
+        assertEquals("http://localhost:7000/courses/1/addNote", driver.getCurrentUrl());
     }
 
     @Test
     public void notesAreListed() {
         driver.get("http://localhost:7000/courses/1/notes/");
-        List<WebElement> links = driver.findElements(By.tagName("a"));
-        WebElement note1 = links.get(1);
+        List<WebElement> links = driver.findElements(By.className("note-select"));
+        WebElement note1 = links.get(0);
         assertEquals("Note1 by student1", note1.getText());
     }
 
     @Test
     public void notesLinksWork() {
         driver.get("http://localhost:7000/courses/1/notes/");
-        List<WebElement> links = driver.findElements(By.tagName("a"));
-        WebElement note1 = links.get(1);
+        List<WebElement> links = driver.findElements(By.className("note-select"));
+        WebElement note1 = links.get(0);
         note1.click();
-        assertEquals("http://localhost:7000/courses/1/notes/1/", driver.getCurrentUrl());
+        WebElement frame = driver.findElement(By.id("note-frame"));
+        assertEquals("http://localhost:7000/courses/1/notes-preview/1", frame.getAttribute("src"));
     }
 
 }

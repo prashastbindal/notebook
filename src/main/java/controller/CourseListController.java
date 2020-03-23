@@ -13,9 +13,9 @@ import static io.javalin.apibuilder.ApiBuilder.get;
 import static io.javalin.apibuilder.ApiBuilder.path;
 
 /**
- * Controller for the homepage (list of courses).
+ * Controller for the list of courses.
  */
-public class MainController extends Controller {
+public class CourseListController extends Controller {
 
     CourseDao courseDao;
 
@@ -25,7 +25,7 @@ public class MainController extends Controller {
      * @param app   Javalin connection
      * @param sql2o database connection
      */
-    public MainController(Javalin app, Sql2o sql2o) {
+    public CourseListController(Javalin app, Sql2o sql2o) {
         super(app, sql2o);
     }
 
@@ -41,19 +41,20 @@ public class MainController extends Controller {
             path("/courses", () -> {
                 get(this::getCourses);
                 get("json", this::getCoursesJSON);
+                get("search/:key", this::searchCoursesJSON);
             });
         });
 
     }
 
     /**
-     * Handler for homepage.
+     * Handler for course list page.
      *
      * @param ctx request context
      */
     public void getCourses(Context ctx) {
         ctx.render(
-            "/courses.mustache",
+            "/templates/courses.mustache",
             TemplateUtil.model("courseList", this.courseDao.findAll())
         );
     }
@@ -65,6 +66,14 @@ public class MainController extends Controller {
      */
     public void getCoursesJSON(Context ctx) {
         List<Course> courses = this.courseDao.findAll();
+        ctx.json(courses);
+        ctx.status(200);
+        ctx.contentType("application/json");
+    }
+
+    public void searchCoursesJSON(Context ctx){
+        String searchKey = ctx.pathParam("key");
+        List<Course> courses = courseDao.searchCoursesWithName(searchKey);
         ctx.json(courses);
         ctx.status(200);
         ctx.contentType("application/json");

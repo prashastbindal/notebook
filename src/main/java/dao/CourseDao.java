@@ -100,4 +100,11 @@ public class CourseDao {
             return null;
         }
     }
+
+    public List<Course> searchCoursesWithName(String searchKey) {
+        String sql = "SELECT * FROM Courses WHERE name LIKE :courseName;";
+        try(Connection conn = sql2o.open()){
+            return conn.createQuery(sql).addParameter("courseName", "%" + searchKey + "%").executeAndFetch(Course.class);
+        }
+    }
 }

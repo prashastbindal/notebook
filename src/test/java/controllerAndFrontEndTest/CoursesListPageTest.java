@@ -22,7 +22,7 @@ import static org.apache.commons.lang3.SystemUtils.*;
 import static org.junit.Assert.*;
 
 
-public class HomePageTest {
+public class CoursesListPageTest {
     private NoteDao noteDao;
     private CourseDao courseDao;
     private CommentDao commentDao;
@@ -63,10 +63,12 @@ public class HomePageTest {
 
         final int PORT = 7000;
 
-        app = Javalin.create(config -> {}).start(PORT);
+        app = Javalin.create(config -> {
+            config.addStaticFiles("public/");
+        }).start(PORT);
 
-        app.get("/", ctx -> ctx.redirect("/courses"));
-        Controller coursesPageHandler = new MainController(app, sql2o);
+        Controller staticPagesHandler = new StaticController(app, sql2o);
+        Controller coursesPageHandler = new CourseListController(app, sql2o);
         Controller coursePageHandler  = new CourseController(app, sql2o);
         Controller notePageHandler    = new NoteController(app, sql2o);
         Controller adminPageHandler   = new AdminController(app, sql2o);
@@ -88,8 +90,7 @@ public class HomePageTest {
     @Test
     public void coursesAreListed() {
         driver.get("http://localhost:7000/courses");
-        WebElement list = driver.findElement(By.tagName("ul"));
-        List<WebElement> links = driver.findElements(By.tagName("li"));
+        List<WebElement> links = driver.findElements(By.className("course-list-item"));
         WebElement exampleCourseOne = links.get(0);
         assertEquals("Example Course 1", exampleCourseOne.getText());
     }
@@ -97,7 +98,8 @@ public class HomePageTest {
     @Test
     public void courseLinkWorks() {
         driver.get("http://localhost:7000/courses");
-        List<WebElement> links = driver.findElements(By.tagName("a"));
+        WebElement listItem = driver.findElement(By.className("course-list-item"));
+        List<WebElement> links = listItem.findElements(By.tagName("a"));
         WebElement exampleCourseOneLink = links.get(0);
         exampleCourseOneLink.click();
         assertEquals("http://localhost:7000/courses/1/notes/", driver.getCurrentUrl());

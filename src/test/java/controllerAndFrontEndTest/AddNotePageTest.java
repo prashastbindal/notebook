@@ -70,10 +70,11 @@ public class AddNotePageTest {
 
         app = Javalin.create(config -> {
             config.addStaticFiles("static/", Location.EXTERNAL);
+            config.addStaticFiles("public/");
         }).start(PORT);
 
-        app.get("/", ctx -> ctx.redirect("/courses"));
-        Controller coursesPageHandler = new MainController(app, sql2o);
+        Controller staticPagesHandler = new StaticController(app, sql2o);
+        Controller coursesPageHandler = new CourseListController(app, sql2o);
         Controller coursePageHandler  = new CourseController(app, sql2o);
         Controller notePageHandler    = new NoteController(app, sql2o);
         Controller adminPageHandler   = new AdminController(app, sql2o);
@@ -116,34 +117,45 @@ public class AddNotePageTest {
     @Test
     public void addNoteWithTextTest() {
         driver.get("http://localhost:7000/courses/1/addNote/");
-        List<WebElement> inputs = driver.findElements(By.tagName("input"));
-        WebElement inputTitle = inputs.get(0);
-        WebElement inputName = inputs.get(1);
+
+        WebElement inputTitle = driver.findElement(By.id("title-field"));
+        WebElement inputName = driver.findElement(By.id("creator-field"));
+
         inputTitle.sendKeys("Good Notes");
         inputName.sendKeys("Student 1");
-        Select select = new Select(driver.findElement(By.tagName("select")));
+
+        Select select = new Select(driver.findElement(By.id("filetype-field")));
         select.selectByVisibleText("Text");
-        WebElement submitKey = driver.findElement(By.id("submit"));
+
+        WebElement inputTextfield = driver.findElement(By.id("texteditor"));
+        inputTextfield.sendKeys("Note content HTML");
+
+        WebElement submitKey = driver.findElement(By.id("submit-button"));
         submitKey.click();
-        List<WebElement> courses = driver.findElements(By.tagName("li"));
-        WebElement newCourse = courses.get(2);
-        assertEquals("Good Notes by Student 1", newCourse.getText());
+
+        List<WebElement> notes = driver.findElements(By.className("note-select"));
+        WebElement newNote = notes.get(2);
+        assertEquals("Good Notes by Student 1", newNote.getText());
     }
 
     @Test
     public void addNoteWithPDFTest() {
         driver.get("http://localhost:7000/courses/1/addNote/");
-        List<WebElement> inputs = driver.findElements(By.tagName("input"));
-        WebElement inputTitle = inputs.get(0);
-        WebElement inputName = inputs.get(1);
+
+        WebElement inputTitle = driver.findElement(By.id("title-field"));
+        WebElement inputName = driver.findElement(By.id("creator-field"));
+
         inputTitle.sendKeys("Good Notes");
         inputName.sendKeys("Student 1");
-        Select select = new Select(driver.findElement(By.tagName("select")));
+
+        Select select = new Select(driver.findElement(By.id("filetype-field")));
         select.selectByVisibleText("PDF");
-        WebElement submitKey = driver.findElement(By.tagName("button"));
+
+        WebElement submitKey = driver.findElement(By.id("submit-button"));
         submitKey.click();
-        List<WebElement> courses = driver.findElements(By.tagName("li"));
-        WebElement newCourse = courses.get(2);
-        assertEquals("Good Notes by Student 1", newCourse.getText());
+
+        List<WebElement> notes = driver.findElements(By.className("note-select"));
+        WebElement newNote = notes.get(2);
+        assertEquals("Good Notes by Student 1", newNote.getText());
     }
 }

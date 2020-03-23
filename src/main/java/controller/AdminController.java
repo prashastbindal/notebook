@@ -114,7 +114,7 @@ public class AdminController extends Controller {
                 .collect(Collectors.toList());
 
         ctx.render(
-            "/admin.mustache",
+            "/templates/admin.mustache",
             TemplateUtil.model(
                 "courseList", courseList,
                 "noteList", noteInfoList,

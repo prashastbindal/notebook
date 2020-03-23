@@ -57,11 +57,10 @@ public class NoteController extends Controller {
                 post("comment", this::addComment);
                 post("delete", this::deleteNote);
             });
-            path("/courses/:courseId/notes", () -> {
-                post(this::addNote);
-            });
+            get("/courses/:courseId/notes-preview/:noteId", this::getNotePreview);
             path("/courses/:courseId/addNote", () -> {
                 get(this::addNoteForm);
+                post(this::addNote);
             });
             post("/notes/:noteId/delete", this::deleteNote);
             post("/comments/:commentId/delete", this::deleteComment);
@@ -84,8 +83,39 @@ public class NoteController extends Controller {
         Boolean fileExists = (filepath != null);
 
         ctx.render(
-            "/note.mustache",
+            "/templates/note.mustache",
             TemplateUtil.model(
+                "courseId", course.getId(),
+                "noteId", note.getId(),
+                "courseName", course.getName(),
+                "noteName", note.getTitle(),
+                "creatorName", note.getCreator(),
+                "filepath", filepath,
+                "showContent", fileExists,
+                "commentList", comments
+            )
+        );
+    }
+
+    /**
+     * Handler for note preview page.
+     *
+     * @param ctx request context
+     */
+    public void getNotePreview(Context ctx) {
+        Course course = this.findCourse(ctx);
+        Note note = this.findNote(ctx);
+
+        List<Comment> comments = commentDao.findCommentWithNoteId(note.getId());
+
+        String filepath = fileServer.getURL(note);
+        Boolean fileExists = (filepath != null);
+
+        ctx.render(
+            "/templates/notePreview.mustache",
+            TemplateUtil.model(
+                "courseId", course.getId(),
+                "noteId", note.getId(),
                 "courseName", course.getName(),
                 "noteName", note.getTitle(),
                 "creatorName", note.getCreator(),
@@ -175,8 +205,9 @@ public class NoteController extends Controller {
     public void addNoteForm(Context ctx) {
         Course course = this.findCourse(ctx);
         ctx.render(
-            "/addNote.mustache",
+            "/templates/addNote.mustache",
             TemplateUtil.model(
+                "courseId", course.getId(),
                 "courseName", course.getName()
             )
         );
