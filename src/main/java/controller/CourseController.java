@@ -47,6 +47,7 @@ public class CourseController extends Controller {
             });
             post("courses/:courseId/delete", this::deleteCourse);
             post("courses/addCourse", this::addCourse);
+            get("courses/:id/notes/search/:key", this::searchNotesJSON);
         });
 
     }
@@ -125,6 +126,16 @@ public class CourseController extends Controller {
         }
 
         return course;
+    }
+
+    public void  searchNotesJSON(Context ctx) {
+        int courseId = Integer.parseInt(ctx.pathParam("id"));
+
+        String searchKey = ctx.pathParam("key");
+        List<Note> notes = noteDao.searchNotesWithName(searchKey, courseId);
+        ctx.json(notes);
+        ctx.status(200);
+        ctx.contentType("application/json");
     }
 
 }
