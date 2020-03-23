@@ -1,10 +1,7 @@
 package controllerAndFrontEndTest;
 
 import com.google.gson.Gson;
-import controller.Controller;
-import controller.CourseController;
-import controller.MainController;
-import controller.NoteController;
+import controller.*;
 import dao.CommentDao;
 import dao.CourseDao;
 import dao.DBBuilder;
@@ -22,6 +19,7 @@ import org.sql2o.Sql2o;
 import java.io.File;
 import java.util.List;
 
+import static org.apache.commons.lang3.SystemUtils.*;
 import static org.junit.Assert.*;
 
 
@@ -29,7 +27,24 @@ public class AddNotePageTest {
     private NoteDao noteDao;
     private CourseDao courseDao;
     private CommentDao commentDao;
+
     private WebDriver driver;
+    private Javalin app;
+
+    @Before
+    public void setupDriver() {
+        if (IS_OS_MAC) {
+            System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver/chromedriver_mac");
+        } else if (IS_OS_LINUX) {
+            System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver/chromedriver_linux");
+        } else if (IS_OS_WINDOWS) {
+            System.setProperty("webdriver.chrome.driver", "src\\test\\resources\\chromedriver\\chromedriver.exe");
+        } else {
+            throw new IllegalStateException("Unsupported OS");
+        }
+
+        driver = new ChromeDriver();
+    }
 
     @Before
     public void setup() throws Exception {
@@ -42,32 +57,33 @@ public class AddNotePageTest {
         this.courseDao = new CourseDao(sql2o);
         this.noteDao = new NoteDao(sql2o);
         this.commentDao = new CommentDao(sql2o);
+
         Gson gson = new Gson();
         JavalinJson.setToJsonMapper(gson::toJson);
         JavalinJson.setFromJsonMapper(gson::fromJson);
 
-        final int PORT = Integer.parseInt(System.getenv("PORT"));
+        final int PORT = 7000;
 
-        if (!new File("static/").exists()) {
+        if (! new File("static/").exists()) {
             new File("static/").mkdirs();
         }
 
-        Javalin app = Javalin.create(config -> {
+        app = Javalin.create(config -> {
             config.addStaticFiles("static/", Location.EXTERNAL);
         }).start(PORT);
 
         app.get("/", ctx -> ctx.redirect("/courses"));
-
         Controller coursesPageHandler = new MainController(app, sql2o);
-        Controller coursePageHandler = new CourseController(app, sql2o);
-        Controller notePageHandler = new NoteController(app, sql2o);
-        System.setProperty("webdriver.chrome.driver", "src\\test\\java\\controllerAndFrontEndTest\\chromedriver.exe");
-        driver = new ChromeDriver();
+        Controller coursePageHandler  = new CourseController(app, sql2o);
+        Controller notePageHandler    = new NoteController(app, sql2o);
+        Controller adminPageHandler   = new AdminController(app, sql2o);
     }
 
     @After
     public void tearDown() throws Exception {
         DBBuilder.deleteTestDatabase("addnotepagetest");
+        app.stop();
+        driver.close();
     }
 
     @Test
