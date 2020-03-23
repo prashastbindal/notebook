@@ -15,11 +15,11 @@
             <button id="searchbutton" onclick="searchcallback()">Search</button>
         </form>
         <button id="sortbutton" onclick="sortcallback()">Sort</button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <a class="dropdown-item" href="#">Name</a>
-        </div>
     </div>
     <ul class="list-group" id="courses-list">
+        {{#courseList}}
+            <li class="list-group-item"><a href="/courses/{{ id }}/notes/"> {{ name }} </a></li>
+        {{/courseList}}
     </ul>
 </div>
 

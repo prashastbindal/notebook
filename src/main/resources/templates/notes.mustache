@@ -23,9 +23,6 @@
                 <button id="searchbutton" onclick="searchcallback({{courseId}})">Search</button>
             </form>
             <button id="sortbutton" onclick="sortcallback()">Sort</button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="#">Name</a>
-            </div>
         </div>
         <div class="list-group list-group-flush" id="note-list">
             {{#noteList}}
@@ -86,7 +83,15 @@ $(function(){
                 data.map(function(note){
                     $("#note-list").append('<a data-courseId="' + note.courseId + '" data-noteId="' + note.id + '" class="note-select list-group-item' +
                     ' list-group-item-action">' + note.title + ' by ' + note.creator + '</a>')
-                })
+                });
+
+                $(".note-select").click(function(e) {
+                        $('#note-list .active').removeClass('active');
+                        $(this).addClass('active');
+
+                        e.preventDefault();
+                        $("#note-frame").attr("src", "".concat("/courses/", e.target.dataset.courseid, "/notes-preview/", e.target.dataset.noteid));
+                    });
              },
 
              error: function (jqXHR, status) {
@@ -101,7 +106,7 @@ $(function(){
     function sortcallback(){
         console.log("sort button clicked")
         var mylist = $('#note-list');
-        var listitems = mylist.children('li').get();
+        var listitems = mylist.children('a').get();
         listitems.sort(function(a, b) {
            return $(a).text().toUpperCase().localeCompare($(b).text().toUpperCase());
         })
