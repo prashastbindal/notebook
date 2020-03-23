@@ -1,5 +1,7 @@
 # [NoteBook](https://notebook-oose.herokuapp.com/)
 
+[![Actions Status](https://github.com/jhu-oose/2020-spring-group-NoteBook/workflows/Build%20and%20Test/badge.svg)](https://github.com/jhu-oose/2020-spring-group-NoteBook/actions)
+
 Felix Parker \
 Matt Chodaczek \
 Nico Ivanov \
@@ -18,6 +20,8 @@ removing notes/comments, and adding courses.
 As in iteration 1, the site may be found [here](https://notebook-oose.herokuapp.com/).
 The best way to build/run the site locally is by running `./heroku_local.sh`, or using IntelliJ with the environment
 variables listed below. Tests can be run through IntelliJ or by running `./gradlew test`.
+
+Tests are also automatically run through GitHub CI and can be seen [here](https://github.com/jhu-oose/2020-spring-group-NoteBook/actions).
 
 We have started using PostgreSQL as our database, which needs to be setup for the app to work locally.
 Instructions for installing PostgreSQL can be found [here](https://www.postgresql.org/download/).
