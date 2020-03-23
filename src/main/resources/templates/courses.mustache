@@ -45,8 +45,9 @@
         <button id="sortbutton" onclick="sortcallback()">Sort</button>
     </div>
     <ul class="list-group" id="courses-list">
-            <li class="list-group-item"><a href="/courses/1/notes/"> Example Course 1 </a></li>
-            <li class="list-group-item"><a href="/courses/2/notes/"> Example Course 2 </a></li>
+             {{#courseList}}
+                 <li class="list-group-item"><a href="/courses/{{ id }}/notes/"> {{ name }} </a></li>
+             {{/courseList}}
     </ul>
 </div>
 
