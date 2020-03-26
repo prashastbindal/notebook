@@ -5,7 +5,7 @@
 
 ### Wireframe Diagram
 
-![wire](wire2.png)
+![wire](wire3.png)
 
 ### Iteration Backlog
 * As a student I want to be able to search all notes for a course for mentions of specific topics so I can easily find information.
