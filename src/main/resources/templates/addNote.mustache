@@ -17,9 +17,6 @@
         <div class="row mb-5 text-center">
             <div class="col-lg-10 mx-auto">
                 <h1 class="display-4">Upload note to {{ courseName }} </h1>
-                <p class="lead">Or, write your note in our text editor
-                <a href="/textnote"
-                   class="text-white"><bold>here</bold></a></p>
             </div>
         </div>
         <!-- End -->
@@ -27,8 +24,7 @@
 
         <div class="row">
             <div class="col-lg-10 mx-auto">
-<!--                <div class="p-5 bg-white shadow rounded-lg"><img src="https://res.cloudinary.com/mhmd/image/upload/v1557366994/img_epm3iz.png" alt="" width="200" class="d-block mx-auto mb-4 rounded-pill">-->
-                    <form id="note-form" action="/courses/{{courseId}}/addNote" method="post" enctype="multipart/form-data">
+                <form id="note-form" action="/courses/{{courseId}}/addNote" method="post" enctype="multipart/form-data">
                         <div class="input-group overflow-hidden mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Title</span>
@@ -87,7 +83,6 @@
 </section>
 
 
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.20.0/trumbowyg.min.js"></script>
 <script src="/js/upload.js"></script>
 

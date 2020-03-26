@@ -13,16 +13,36 @@
 <div class="d-flex" id="wrapper">
     <!-- Sidebar -->
     <div class="bg-light border-right" id="sidebar-wrapper">
-        <div class="sidebar-heading"><div id="course-name-header">{{ courseName }}</div>
-            <a class="btn btn-outline-primary my-2 my-sm-0"
-                    id="add-note-button" href="/courses/{{courseId}}/addNote">Add Note</a>
+        <div class="sidebar-heading">
+            <div id="course-name-header">{{ courseName }}</div>
         </div>
-        <div class="dropdown show mx-auto sidebar-heading">
-            <form id="search-form" class="form-inline my-2 my-lg-0">
-                <input class="form-control" name="search-notes" type="text" id="searchbar" placeholder="Search Notes">
-                <button id="searchbutton" onclick="searchcallback({{courseId}})">Search</button>
+        <div class="show sidebar-heading">
+            <form id="search-form">
+                <div class="input-group mb-3">
+                    <input class="form-control" name="search-notes" type="text" id="searchbar" placeholder="Search Notes">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-primary my-2 my-sm-0"
+                        id="searchbutton" onclick="searchcallback({{courseId}})">Search</button>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Sort By
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <!-- this is just for alphabetical search, add for
+                            different searches later -->
+                        <button class="dropdown-item" type="button"
+                            id="sortbutton" onclick="sortcallback()">Views</button>
+                        <button class="dropdown-item" type="button">Date
+                            Added</button>
+                        <button class="dropdown-item" type="button">Upvotes</button>
+                    </div>
+                    <a class="btn btn-outline-primary my-2 my-sm-0"
+                       id="add-note-button"
+                       href="/courses/{{courseId}}/addNote">Add a Note</a>
+                </div>
             </form>
-            <button id="sortbutton" onclick="sortcallback()">Sort</button>
         </div>
         <div class="list-group list-group-flush" id="note-list">
             {{#noteList}}
