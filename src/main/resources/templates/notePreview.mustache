@@ -19,8 +19,10 @@
         </li>
     {{/commentList}}
 </ul>
-<h3>Upvotes: {{numberOfUpvotes}}</h3>
-<button id ="upvote">Upvote</button>
+<form id="upvote-form" action="/courses/{{courseId}}/notes/{{noteId}}/upvote" method="post">
+    <h3>Upvotes: {{numberOfUpvotes}}</h3>
+    <button id ="upvote">Upvote</button>
+</form>
 <h3>Add a comment:</h3>
 <form id="comment-form" onsubmit="return validateComment();" action="/courses/{{courseId}}/notes/{{noteId}}/comment" method="post">
     <textarea id="comment-field" name="text" placeholder="Add a comment..."></textarea><br>

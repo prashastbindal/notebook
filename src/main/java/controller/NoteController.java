@@ -54,6 +54,7 @@ public class NoteController extends Controller {
             path("/courses/:courseId/notes/:noteId", () -> {
                 get(this::getNote);
                 get("json", this::getNoteJSON);
+                post("upvote", this::upvoteNote);
                 post("comment", this::addComment);
                 post("delete", this::deleteNote);
             });
@@ -158,6 +159,18 @@ public class NoteController extends Controller {
         );
         commentDao.add(comment);
 
+        ctx.redirect("/courses/" + note.getCourseId() + "/notes/" + note.getId());
+    }
+
+    /**
+     * Handler for the upvote form.
+     *
+     * @param ctx request context
+     */
+    public void upvoteNote(Context ctx) {
+        Note note = this.findNote(ctx);
+        note.upvote();
+        noteDao.upvote(note);
         ctx.redirect("/courses/" + note.getCourseId() + "/notes/" + note.getId());
     }
 

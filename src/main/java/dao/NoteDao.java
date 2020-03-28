@@ -109,6 +109,23 @@ public class NoteDao {
     }
 
     /**
+     * Updates the Note's upvotes.
+     *
+     * @param note to update
+     */
+    public void upvote(Note note) {
+        String sql = "update Notes set upvotes = :upvotes where id = :noteId;";
+        try(Connection conn = sql2o.open()) {
+            conn.createQuery(sql)
+                    .addParameter("upvotes", note.getUpvotes())
+                    .addParameter("noteId", note.getId())
+                    .executeUpdate();
+        } catch (Exception e) {
+            throw new DaoException("Unable to update upvotes", e);
+        }
+    }
+
+    /**
      * List all notes.
      *
      * @return list of all notes in the database
