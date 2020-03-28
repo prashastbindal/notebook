@@ -150,12 +150,15 @@ public class NoteController extends Controller {
      * @param ctx request context
      */
     public void addComment(Context ctx) {
+        if (this.getUsername(ctx) == null) {
+            ctx.redirect("/signup");
+        }
         Note note = this.findNote(ctx);
 
         Comment comment = new Comment(
             note.getId(),
             ctx.formParam("text"),
-            ctx.formParam("creator")
+            this.getUsername(ctx)
         );
         commentDao.add(comment);
 
@@ -190,12 +193,17 @@ public class NoteController extends Controller {
      * @param ctx request context
      */
     public void addNote(Context ctx) {
+        if (this.getUsername(ctx) == null) {
+            ctx.redirect("/signup");
+            return;
+        }
+
         Course course = this.findCourse(ctx);
 
         Note note = new Note(
             course.getId(),
             ctx.formParam("title"),
-            ctx.formParam("creator"),
+            this.getUsername(ctx),
             ctx.formParam("filetype")
         );
         noteDao.add(note);
@@ -220,6 +228,10 @@ public class NoteController extends Controller {
      * @param ctx request context
      */
     public void addNoteForm(Context ctx) {
+        if (this.getUsername(ctx) == null) {
+            ctx.redirect("/signup");
+            return;
+        }
         Course course = this.findCourse(ctx);
         ctx.render(
             "/templates/addNote.mustache",
@@ -307,6 +319,10 @@ public class NoteController extends Controller {
         }
 
         return comment;
+    }
+
+    private String getUsername(Context ctx) {
+        return ctx.cookie("username");
     }
 
 }
