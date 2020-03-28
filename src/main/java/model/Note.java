@@ -15,6 +15,7 @@ public class Note {
     private String creator;
     private String filetype;
     private String date;
+    private int upvotes;
 
     /**
      * Instantiates a new note.
@@ -32,6 +33,7 @@ public class Note {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         Date date = new Date();
         this.date = dateFormat.format(date);
+        this.upvotes = 0;
     }
 
     /**
@@ -141,6 +143,30 @@ public class Note {
     public void setDate(String date) {
         this.date = date;
     }
+
+    /**
+     * Gets the upvotes for the associated note.
+     *
+     * @return upvotes of the note
+     */
+    public int getUpvotes() {
+        return this.upvotes;
+    }
+
+    /**
+     * Sets the upvotes for the associated note.
+     *
+     * @param upvotes of the note
+     */
+    public void setUpvotes(int upvotes) {
+        this.upvotes = upvotes;
+    }
+
+    /**
+     * Increases the number of upvotes by 1
+     *
+     */
+    public void upvote() {this.upvotes++;}
 
     @Override
     public boolean equals(Object o) {
