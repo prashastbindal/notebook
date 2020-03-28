@@ -1,6 +1,9 @@
 package model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Objects;
+import java.util.Date;
 
 /**
  * Note.
@@ -11,6 +14,7 @@ public class Note {
     private String title;
     private String creator;
     private String filetype;
+    private String date;
 
     /**
      * Instantiates a new note.
@@ -25,6 +29,9 @@ public class Note {
         this.title = title;
         this.creator = creator;
         this.filetype = filetype;
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = new Date();
+        this.date = dateFormat.format(date);
     }
 
     /**
@@ -115,6 +122,24 @@ public class Note {
      */
     public void setFiletype(String filetype) {
         this.filetype = filetype;
+    }
+
+    /**
+     * Gets the date for the associated note.
+     *
+     * @return date of the note
+     */
+    public String getDate() {
+        return this.date;
+    }
+
+    /**
+     * Sets the date for the associated note.
+     *
+     * @param date of the note
+     */
+    public void setDate(String date) {
+        this.date = date;
     }
 
     @Override
