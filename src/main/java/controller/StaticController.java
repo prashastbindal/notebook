@@ -38,5 +38,11 @@ public class StaticController extends Controller {
         app.get("/contact", ctx -> {
             ctx.render("/templates/contact.mustache");
         });
+
+        app.post("/signup/submit", ctx -> {
+            String username = ctx.formParam("email").split("@")[0];
+            ctx.cookie("username", username);
+            ctx.redirect("/home");
+        });
     }
 }
