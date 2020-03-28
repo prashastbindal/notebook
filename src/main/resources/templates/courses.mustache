@@ -15,20 +15,6 @@
             <button id="searchbutton" class="btn btn-outline-primary my-2
             my-sm-0" onclick="searchcallback()">Search</button>
         </form>
-        <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Sort By
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                <!-- this is just for alphabetical search, add for
-                        different searches later -->
-                <button class="dropdown-item" type="button"
-                        id="sortbutton" onclick="sortcallback()">Views</button>
-                <button class="dropdown-item" type="button">Date
-                    Added</button>
-                <button class="dropdown-item" type="button">Upvotes</button>
-            </div>
-        </div>
     </div>
     <ul class="list-group" id="courses-list">
         {{#courseList}}

@@ -92,7 +92,9 @@ public class NoteController extends Controller {
                 "creatorName", note.getCreator(),
                 "filepath", filepath,
                 "showContent", fileExists,
-                "commentList", comments
+                "commentList", comments,
+                "dateCreated", note.getDate(),
+                "numberOfUpvotes", note.getUpvotes()
             )
         );
     }
@@ -121,7 +123,9 @@ public class NoteController extends Controller {
                 "creatorName", note.getCreator(),
                 "filepath", filepath,
                 "showContent", fileExists,
-                "commentList", comments
+                "commentList", comments,
+                "dateCreated", note.getDate(),
+                "numberOfUpvotes", note.getUpvotes()
             )
         );
     }

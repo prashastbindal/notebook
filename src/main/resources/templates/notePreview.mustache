@@ -1,5 +1,6 @@
 <h2>{{ courseName }} - {{ noteName }}</h2>
-<h3>{{ creatorName }}</h3>
+<h3>Made by {{ creatorName }} on {{dateCreated}}</h3>
+
 
 {{#showContent}}
     <embed src="{{ filepath }}" width="500" height="375">
@@ -18,7 +19,8 @@
         </li>
     {{/commentList}}
 </ul>
-
+<h3>Upvotes: {{numberOfUpvotes}}</h3>
+<button id ="upvote">Upvote</button>
 <h3>Add a comment:</h3>
 <form id="comment-form" onsubmit="return validateComment();" action="/courses/{{courseId}}/notes/{{noteId}}/comment" method="post">
     <textarea id="comment-field" name="text" placeholder="Add a comment..."></textarea><br>

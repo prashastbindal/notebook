@@ -46,7 +46,7 @@
         </div>
         <div class="list-group list-group-flush" id="note-list">
             {{#noteList}}
-                <a data-courseId="{{courseId}}" data-noteId="{{id}}" class="note-select list-group-item list-group-item-action">{{ title }} by {{ creator }}</a>
+                <a data-courseId="{{courseId}}" data-noteId="{{id}}" class="note-select list-group-item list-group-item-action">{{ title }} by {{ creator }}     {{date}} Upvotes: {{upvotes}}</a>
             {{/noteList}}
         </div>
     </div>

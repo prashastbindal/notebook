@@ -30,7 +30,7 @@ public class Note {
         this.title = title;
         this.creator = creator;
         this.filetype = filetype;
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/YYYY");
         Date date = new Date();
         this.date = dateFormat.format(date);
         this.upvotes = 0;
@@ -176,12 +176,14 @@ public class Note {
         return id == note.id &&
                 courseId == note.courseId &&
                 title.equals(note.title) &&
-                creator.equals(note.creator);
+                creator.equals(note.creator) &&
+                date.equals(note.date) &&
+                upvotes == note.upvotes;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, courseId, title, creator);
+        return Objects.hash(id, courseId, title, creator, date, upvotes);
     }
 
     @Override
@@ -191,6 +193,8 @@ public class Note {
                 ", courseId='" + courseId + '\'' +
                 ", title='" + title + '\'' +
                 ", creator='" + creator + '\'' +
+                ", date='" + date + '\'' +
+                ", upvotes='" + upvotes + '\'' +
                 '}';
     }
 }

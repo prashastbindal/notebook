@@ -1,6 +1,5 @@
 package dao;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import model.Comment;
 import model.Course;
 import model.Note;
@@ -103,7 +102,9 @@ public final class DBBuilder {
                     "courseId INTEGER NOT NULL REFERENCES Courses(id)," +
                     "title VARCHAR(30) NOT NULL," +
                     "creator VARCHAR(30)," +
-                    "filetype VARCHAR(30)" +
+                    "filetype VARCHAR(30)," +
+                    "date VARCHAR(10)," +
+                    "upvotes INTEGER" +
                 ");";
         String sqlCreateCommentsTable =
                 "CREATE TABLE IF NOT EXISTS Comments(" +

@@ -36,8 +36,8 @@ public class NoteDao {
      * @throws DaoException if failed to add note to the database
      */
     public void add(Note note) throws DaoException {
-        String sql = "INSERT INTO Notes(courseId, title, creator, filetype)" +
-                     "VALUES(:courseId, :title, :creator, :filetype);";
+        String sql = "INSERT INTO Notes(courseId, title, creator, filetype, date, upvotes)" +
+                     "VALUES(:courseId, :title, :creator, :filetype, :date, :upvotes);";
         try(Connection conn = sql2o.open()){
             int id = (int) conn.createQuery(sql, true)
                                .bind(Note.class)
