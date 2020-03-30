@@ -28,7 +28,12 @@ public class StaticController extends Controller {
         });
 
         app.get("/signup", ctx -> {
-            ctx.render("/templates/signup.mustache");
+            if (ctx.cookie("username") != null) {
+                ctx.removeCookie("username");
+                ctx.redirect("/home");
+            } else {
+                ctx.render("/templates/signup.mustache");
+            }
         });
 
         app.get("/aboutUs", ctx -> {
