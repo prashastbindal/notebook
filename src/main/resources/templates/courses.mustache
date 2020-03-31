@@ -14,8 +14,17 @@
             <input class="form-control" id="searchbar" type="text" placeholder="Search Courses">
             <button id="searchbutton" class="btn btn-outline-primary my-2
             my-sm-0" onclick="searchcallback()">Search</button>
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Sort By
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <button class="dropdown-item" type="button" onclick="sortcallback()">Title</button>
+                </div>
+            </div>
         </form>
     </div>
+
     <ul class="list-group" id="courses-list">
         {{#courseList}}
             <li class="list-group-item"><a href="/courses/{{ id }}/notes/"> {{ name }} </a></li>
