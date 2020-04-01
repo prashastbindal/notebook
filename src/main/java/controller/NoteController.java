@@ -156,11 +156,14 @@ public class NoteController extends Controller {
         Note note = this.findNote(ctx);
 
         Comment comment = new Comment(
+            Integer.parseInt(ctx.formParam("parent-id")),
             note.getId(),
             ctx.formParam("text"),
             this.getUsername(ctx)
         );
-        commentDao.add(comment);
+        if (comment.getParentId() == 0 || commentDao.findComment(comment.getParentId()).getNoteId() == note.getId()) {
+            commentDao.add(comment);
+        }
 
         ctx.redirect("/courses/" + note.getCourseId() + "/notes/" + note.getId());
     }

@@ -7,6 +7,7 @@ import java.util.Objects;
  */
 public class Comment {
     private int id;
+    private int parentId;
     private int noteId;
     private String text;
     private String creator;
@@ -14,11 +15,13 @@ public class Comment {
     /**
      * Instantiates a new comment.
      *
-     * @param noteId  the note id
-     * @param text    the text
-     * @param creator the creator
+     * @param parentId  the parent comment's id
+     * @param noteId    the note id
+     * @param text      the text
+     * @param creator   the creator
      */
-    public Comment(int noteId, String text, String creator) {
+    public Comment(int parentId, int noteId, String text, String creator) {
+        this.parentId = parentId;
         this.noteId = noteId;
         this.text = text;
         this.creator = creator;
@@ -40,6 +43,24 @@ public class Comment {
      */
     public void setId(int id) {
         this.id = id;
+    }
+
+    /**
+     * Gets the parent ID.
+     *
+     * @return parent ID
+     */
+    public int getParentId() {
+        return parentId;
+    }
+
+    /**
+     * Sets the parent ID.
+     *
+     * @param parentId parent ID
+     */
+    public void setParentId(int parentId) {
+        this.parentId = parentId;
     }
 
     /**
@@ -102,6 +123,7 @@ public class Comment {
         if (o == null || getClass() != o.getClass()) return false;
         Comment comment = (Comment) o;
         return id == comment.id &&
+                parentId == comment.parentId &&
                 noteId == comment.noteId &&
                 text.equals(comment.text) &&
                 creator.equals(comment.creator);
@@ -109,14 +131,15 @@ public class Comment {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, noteId, text, creator);
+        return Objects.hash(id, parentId, noteId, text, creator);
     }
 
     @Override
     public String toString() {
         return "Comment{" +
                 "id=" + id +
-                ", noteId='" + noteId + '\'' +
+                ", parentId=" + parentId +
+                ", noteId=" + noteId +
                 ", text='" + text + '\'' +
                 ", creator='" + creator + '\'' +
                 '}';

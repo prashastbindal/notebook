@@ -109,6 +109,7 @@ public final class DBBuilder {
         String sqlCreateCommentsTable =
                 "CREATE TABLE IF NOT EXISTS Comments(" +
                     "id SERIAL PRIMARY KEY," +
+                    "parentId SERIAL," +
                     "noteId INTEGER NOT NULL REFERENCES Notes(id)," +
                     "text TEXT NOT NULL," +
                     "creator VARCHAR(30)" +
@@ -162,11 +163,11 @@ public final class DBBuilder {
             noteDao.add(n2);
             noteDao.add(n3);
 
-            Comment cmt1 = new Comment(n1.getId(), "this is a comment", "student 1");
-            Comment cmt2 = new Comment(n1.getId(), "this is also one!", "student 2");
-            Comment cmt3 = new Comment(n2.getId(), "test data comment. Hello!", "Matt");
+            Comment cmt1 = new Comment(0, n1.getId(), "this is a comment", "student 1");
+            Comment cmt2 = new Comment(0, n2.getId(), "this is also one!", "student 2");
             commentDao.add(cmt1);
             commentDao.add(cmt2);
+            Comment cmt3 = new Comment(cmt1.getId(), n1.getId(), "test comment reply. Hello!", "Matt");
             commentDao.add(cmt3);
         }
     }

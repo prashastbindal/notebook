@@ -5,6 +5,7 @@
     {{> header}}
 
     <script src="/js/validateComment.js"></script>
+    <script src="/js/setReplyId.js"></script>
 </head>
 <body>
 <main>
@@ -25,8 +26,10 @@
 <ul>
     {{#commentList}}
         <li id="comment{{ id }}">
-            <h4>{{ creator }}:</h4>
+            <h4 id="creator-of-comment-{{id}}">{{ creator }}:</h4>
+            <p class="replying-to">{{ parentId }}</p>
             <p>{{ text }}</p>
+            <button onclick="setReplyId({{ id }})">Reply</button>
         </li>
     {{/commentList}}
 </ul>
@@ -36,10 +39,11 @@
 </form>
 <h3>Add a comment:</h3>
 <form id="comment-form" onsubmit="return validateComment();" action="/courses/{{courseId}}/notes/{{noteId}}/comment" method="post">
+    <input type="hidden" id="reply-id-field" name="parent-id" value="0">
     <textarea id="comment-field" name="text" placeholder="Add a comment..."></textarea><br>
     <button id="submit">Submit</button>
 </form>
-
+<script src="/js/populateReplyingTo.js"></script>
 </main>
 {{> footer}}
 
