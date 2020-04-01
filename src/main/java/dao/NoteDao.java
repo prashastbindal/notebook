@@ -36,8 +36,8 @@ public class NoteDao {
      * @throws DaoException if failed to add note to the database
      */
     public void add(Note note) throws DaoException {
-        String sql = "INSERT INTO Notes(courseId, title, creator, filetype, date, upvotes)" +
-                     "VALUES(:courseId, :title, :creator, :filetype, :date, :upvotes);";
+        String sql = "INSERT INTO Notes(courseId, title, creator, filetype, date, upvotes, fulltext)" +
+                     "VALUES(:courseId, :title, :creator, :filetype, :date, :upvotes, :fulltext);";
         try(Connection conn = sql2o.open()){
             int id = (int) conn.createQuery(sql, true)
                                .bind(Note.class)
@@ -122,6 +122,23 @@ public class NoteDao {
                     .executeUpdate();
         } catch (Exception e) {
             throw new DaoException("Unable to update upvotes", e);
+        }
+    }
+
+    /**
+     * Updates the Note's fulltext.
+     *
+     * @param note note to update
+     */
+    public void updateFulltext(Note note) {
+        String sql = "UPDATE Notes SET fulltext = :fulltext where id = :noteId;";
+        try(Connection conn = sql2o.open()) {
+            conn.createQuery(sql)
+                    .addParameter("fulltext", note.getFulltext())
+                    .addParameter("noteId", note.getId())
+                    .executeUpdate();
+        } catch (Exception e) {
+            throw new DaoException("Unable to update fulltext.", e);
         }
     }
 
