@@ -17,6 +17,7 @@ dependencies {
     compile 'io.javalin:javalin:3.7.0';
     compile 'com.github.spullara.mustache.java:compiler:0.9.5'
     compile 'org.sql2o:sql2o:1.5.4'
+    compile group: 'net.sourceforge.tess4j', name: 'tess4j', version: '4.5.1'
     compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.730'
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.10'
     compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'

@@ -28,6 +28,14 @@ public interface FileServer {
     String getURL(Note note);
 
     /**
+     * Get the path to a local copy of the file associated with a note.
+     *
+     * @param note the note
+     * @return path to the file
+     */
+    String getTempFile(Note note);
+
+    /**
      * Remove the file associated with a note.
      *
      * @param note the note
