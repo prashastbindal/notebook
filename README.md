@@ -9,6 +9,10 @@ Alex Hepp \
 Anirudh Sharma \
 Prashast Bindal
 
+## Iteration 3
+This iteration we mostly cleaned up and improved upon the features we implemented in iteration 2, such as adding the option to upvote notes, giving the user more options for sorting and searching the notes, and implementing replies to comments.
+
+Our build process, tests, and site remain the same as they were in iteration 1.
 
 ## Iteration 2
 In this iteration we added key features including the ability to comment on notes, searching for courses and notes,

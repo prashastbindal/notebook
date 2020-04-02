@@ -31,8 +31,8 @@ public class CommentDao {
      * @throws DaoException if failed to add comment to database
      */
     public void add(Comment comment) throws DaoException {
-        String sql = "INSERT INTO Comments(noteId, text, creator)" +
-                     "VALUES(:noteId, :text, :creator);";
+        String sql = "INSERT INTO Comments(parentId, noteId, text, creator)" +
+                     "VALUES(:parentId, :noteId, :text, :creator);";
         try(Connection conn = sql2o.open()){
             int id = (int) conn.createQuery(sql, true)
                                .bind(Comment.class)
