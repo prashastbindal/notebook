@@ -152,6 +152,7 @@ public class NoteController extends Controller {
     public void addComment(Context ctx) {
         if (this.getUsername(ctx) == null) {
             ctx.redirect("/signup");
+            return;
         }
         Note note = this.findNote(ctx);
 
