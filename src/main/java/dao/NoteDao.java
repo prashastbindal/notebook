@@ -109,6 +109,23 @@ public class NoteDao {
     }
 
     /**
+     * Search for notes by fulltext.
+     *
+     * @param query search query
+     * @return list of matching notes
+     */
+    public List<Note> search(String query) {
+        String sql = "SELECT * FROM NOTES WHERE fulltext @@ :query;";
+        try(Connection conn = sql2o.open()) {
+            return conn.createQuery(sql)
+                    .addParameter("query", query)
+                    .executeAndFetch(Note.class);
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+    }
+
+    /**
      * Updates the Note's upvotes.
      *
      * @param note to update
