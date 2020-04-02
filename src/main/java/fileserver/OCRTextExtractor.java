@@ -10,7 +10,7 @@ import javax.imageio.ImageReader;
 import java.io.File;
 import java.util.Iterator;
 
-import com.github.jaiimageio.*;
+import com.github.jaiimageio.plugins.tiff.TIFFImageReadParam;
 
 public class OCRTextExtractor {
 
