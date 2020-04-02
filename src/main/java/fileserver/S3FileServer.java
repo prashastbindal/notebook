@@ -147,6 +147,7 @@ public class S3FileServer implements FileServer {
             tempFilePath = Files.createTempFile(
                 "c" + note.getCourseId() + "n" + note.getId() + "-", "." + note.getFiletype()
             ).toString();
+            Javalin.log.info("S3 temp file: " + tempFilePath);
         } catch (IOException e) {
             e.printStackTrace();
             return null;

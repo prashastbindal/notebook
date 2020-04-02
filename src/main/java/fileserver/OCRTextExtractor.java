@@ -18,6 +18,7 @@ public class OCRTextExtractor {
     }
 
     public String extractText(String fn) {
+        Javalin.log.info("PDF fn: " + fn);
         File pdf = new File(fn);
         try {
             String fulltext = instance.doOCR(pdf);
