@@ -13,8 +13,12 @@ import io.javalin.Javalin;
 import kotlin.NotImplementedError;
 import model.Note;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -118,6 +122,40 @@ public class S3FileServer implements FileServer {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * Get the path to a local copy of the file associated with a note.
+     *
+     * @param note the note
+     * @return path to the file
+     */
+    @Override
+    public String getLocalFile(Note note) {
+        if (note.getFiletype().equals("none")) {
+            return null;
+        }
+
+        String objectKey = note.getCourseId() + "/" + note.getId() + "." + note.getFiletype();
+        if (!s3Client.doesObjectExist(this.bucketName, objectKey)) {
+            Javalin.log.info("Could not find " + objectKey + " in S3 fileserver.");
+            return null;
+        }
+
+        String tempFilePath = null;
+        try {
+            tempFilePath = Files.createTempFile(
+                "c" + note.getCourseId() + "n" + note.getId() + "-", "." + note.getFiletype()
+            ).toString();
+            Javalin.log.info("S3 temp file: " + tempFilePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        File tempFile = new File(tempFilePath);
+        s3Client.getObject(new GetObjectRequest(this.bucketName, objectKey), tempFile);
+        return tempFilePath;
     }
 
     /**

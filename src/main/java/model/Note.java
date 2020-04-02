@@ -16,6 +16,7 @@ public class Note {
     private String filetype;
     private String date;
     private int upvotes;
+    private String fulltext;
 
     /**
      * Instantiates a new note.
@@ -34,6 +35,7 @@ public class Note {
         Date date = new Date();
         this.date = dateFormat.format(date);
         this.upvotes = 0;
+        this.fulltext = "";
     }
 
     /**
@@ -124,6 +126,24 @@ public class Note {
      */
     public void setFiletype(String filetype) {
         this.filetype = filetype;
+    }
+
+    /**
+     * Gets fulltext.
+     *
+     * @return the fulltext
+     */
+    public String getFulltext() {
+        return fulltext;
+    }
+
+    /**
+     * Sets fulltext.
+     *
+     * @param fulltext the fulltext
+     */
+    public void setFulltext(String fulltext) {
+        this.fulltext = fulltext;
     }
 
     /**

@@ -104,7 +104,8 @@ public final class DBBuilder {
                     "creator VARCHAR(30)," +
                     "filetype VARCHAR(30)," +
                     "date VARCHAR(10)," +
-                    "upvotes INTEGER" +
+                    "upvotes INTEGER," +
+                    "fulltext TEXT" +
                 ");";
         String sqlCreateCommentsTable =
                 "CREATE TABLE IF NOT EXISTS Comments(" +

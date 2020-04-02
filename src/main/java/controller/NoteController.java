@@ -2,6 +2,7 @@ package controller;
 
 import dao.*;
 import fileserver.FileServer;
+import fileserver.OCRTextExtractor;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.NotFoundResponse;
@@ -28,6 +29,7 @@ public class NoteController extends Controller {
     NoteDao noteDao;
     CommentDao commentDao;
     FileServer fileServer;
+    OCRTextExtractor textExtractor;
 
     /**
      * Instantiates a new controller.
@@ -45,6 +47,7 @@ public class NoteController extends Controller {
         this.noteDao = new NoteDao(sql2o);
         this.commentDao = new CommentDao(sql2o);
         this.fileServer = FileServer.getFileServer();
+        this.textExtractor = new OCRTextExtractor();
     }
 
     @Override
@@ -216,6 +219,16 @@ public class NoteController extends Controller {
         if (note.getFiletype().equals("pdf")) {
             assert file != null;
             fileServer.upload(file.getContent(), note);
+
+            Thread thread = new Thread(() -> {
+                String path = fileServer.getLocalFile(note);
+                String fulltext = textExtractor.extractText(path);
+                if (fulltext != null) {
+                    note.setFulltext(fulltext);
+                    noteDao.updateFulltext(note);
+                }
+            });
+            thread.start();
         } else if (note.getFiletype().equals("html")) {
             String text = ctx.formParam("text");
             assert text != null;

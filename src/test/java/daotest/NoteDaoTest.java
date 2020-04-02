@@ -72,4 +72,19 @@ public class NoteDaoTest {
         List<Note> l1 = noteDao.findNoteWithCourseId(n1.getCourseId());
         assertTrue(l1.isEmpty());
     }
+
+    @Test
+    public void searchWorks() {
+        Note n1 = new Note(1, "Note1", "User1", "txt");
+        n1.setFulltext("This is some example text for Note1 created by User1.");
+        noteDao.add(n1);
+
+        Note n2 = new Note(1, "Note2", "User1", "txt");
+        n2.setFulltext("This is some example text for Note2 created by User1.");
+        noteDao.add(n2);
+
+        List<Note> found = noteDao.search("text for Note2");
+        assertEquals(1, found.size());
+        assertEquals(n2, found.get(0));
+    }
 }
