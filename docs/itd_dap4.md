@@ -11,8 +11,12 @@
 * User stories here
 
 ### Tasks
-* Expand user login system to accept usernames and passwords.
-* Integrate user login system with Google accounds.
 * Modify the note text submission area to accept Markdown and LaTeX.
-* Add user-editable tags to notes.
-* Add a search-by option to the search bar so users can choose to search by title, tags, or text.
+* Actually implement log-in system.
+* Integrate Google log-in
+* Make the notes sidebar collapsable.
+* Style the comments hierarchically.
+* Add "search by" filters for notes.
+* Pop-up the signin page instead of redirecting the user when they try to add a comment or note without logging in.
+* Improve OCR for handwritten notes.
+* Make the app reactive for mobile devices.
