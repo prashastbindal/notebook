@@ -3,3 +3,5 @@ libtesseract-dev
 tesseract-ocr-eng
 tesseract-ocr-script-latn
 ghostscript
+libtiff-dev
+tiff-tools
