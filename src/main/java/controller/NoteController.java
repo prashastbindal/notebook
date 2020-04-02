@@ -84,7 +84,7 @@ public class NoteController extends Controller {
         Boolean fileExists = (filepath != null);
 
         ctx.render(
-            "/templates/note.mustache",
+                "/templates/notePreview.mustache",
             TemplateUtil.model(
                 "courseId", course.getId(),
                 "noteId", note.getId(),

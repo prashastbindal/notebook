@@ -1,37 +1,62 @@
-<h2>{{ courseName }} - {{ noteName }}</h2>
-<h3>Made by {{ creatorName }} on {{dateCreated}}</h3>
+<!doctype html>
+<html>
+<head>
+    <title>NoteBook</title>
+    {{> header}}
+
+    <script src="/js/validateComment.js"></script>
+</head>
+<body>
+<main>
 
 
-{{#showContent}}
-    <embed src="{{ filepath }}" width="500" height="375">
-{{/showContent}}
+    <div class="row mx-auto">
+        <h2>{{ courseName }} - {{ noteName }}</h2>
+    </div>
+    <div class="row mx-auto">
+    <h4>Made by {{ creatorName }} on {{dateCreated}}</h4>
+    </div>
+    <form id="upvote-form" action="/courses/{{courseId}}/notes/{{noteId}}/upvote" method="post">
+        <div class="row mx-auto">
+            <button class="btn btn-primary my-2 my-lg-0"  id="upvote">Upvote: {{numberOfUpvotes}}</button>
+        </div>
+    </form>
+    {{#showContent}}
+    <div class="embed-responsive embed-responsive-4by3">
+        <embed class="embed-responsive-item" src="{{ filepath }}">
+    </div>
+    {{/showContent}}
 
-{{^showContent}}
+    {{^showContent}}
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PDF_file_icon.svg/1024px-PDF_file_icon.svg.png", height="200px">
-{{/showContent}}
-
-<h3>Comments</h3>
-<ul>
-    {{#commentList}}
-        <li id="comment{{ id }}">
-            <h4 id="creator-of-comment-{{id}}">{{ creator }}:</h4>
-            <p class="replying-to">{{ parentId }}</p>
-            <p>{{ text }}</p>
-            <button onclick="setReplyId({{id}})">Reply</button>
-        </li>
+    {{/showContent}}
+    <div class="col b-2">
+    </div>
+    <h3> Comments </h3>
+    <ul class="list-group">
+        {{#commentList}}
+            <li class="" id="comment{{ id }}">
+                <p class="navbar-brand">{{creator}} </p>
+                <br>
+                <div class="col mx-auto">
+                    <p class="">{{ text }}</p>
+                </div>
+            </li>
     {{/commentList}}
 </ul>
-<form id="upvote-form" action="/courses/{{courseId}}/notes/{{noteId}}/upvote" method="post">
-    <h3>Upvotes: {{numberOfUpvotes}}</h3>
-    <button id ="upvote">Upvote</button>
-</form>
-<h3>Add a comment:</h3>
-<form id="comment-form" onsubmit="return validateComment();" action="/courses/{{courseId}}/notes/{{noteId}}/comment" method="post">
-    <input type="hidden" id="reply-id-field" name="parent-id" value="0">
-    <textarea id="comment-field" name="text" placeholder="Add a comment..."></textarea><br>
-    <button id="submit">Submit</button>
-</form>
+    <h3>Add a comment:</h3>
+    <div class="form-group">
+        <form id="comment-form" onsubmit="return validateComment();" action="/courses/{{courseId}}/notes/{{noteId}}/comment" method="post">
+            <textarea class="form-control" id="comment-field" name="text"
+                  placeholder="Add a comment..."></textarea><br>
+            <button class="btn btn-primary" id="submit">Submit</button>
+        </form>
+    </div>
+</div>
+    <div class="col">
+    </div>
+</main>
+{{> footer}}
 
-<script src="/js/validateComment.js"></script>
-<script src="/js/setReplyId.js"></script>
-<script src="/js/populateReplyingTo.js"></script>
+</body>
+</html>

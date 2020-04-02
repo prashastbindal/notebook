@@ -30,8 +30,6 @@
                     Sort By
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                    <!-- this is just for alphabetical search, add for
-                            different searches later -->
                         <button class="dropdown-item" type="button"
                             id="sortbutton" onclick="sortcallback()">Views</button>
                         <button class="dropdown-item" type="button">Date
@@ -46,7 +44,11 @@
         </div>
         <div class="list-group list-group-flush" id="note-list">
             {{#noteList}}
-                <a data-courseId="{{courseId}}" data-noteId="{{id}}" class="note-select list-group-item list-group-item-action">{{ title }} by {{ creator }}     {{date}} Upvotes: {{upvotes}}</a>
+                <a data-courseId="{{courseId}}" data-noteId="{{id}}"
+                   class="note-select list-group-item
+                   list-group-item-action">{{ title }} by {{ creator }}
+                        <br> Upvotes: {{upvotes}} </a>
+
             {{/noteList}}
         </div>
     </div>
