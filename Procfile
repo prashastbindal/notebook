@@ -1,1 +1,1 @@
-web: java -jar build/libs/notebook-0.2.jar
+web: java -jar build/libs/notebook-0.3.jar
