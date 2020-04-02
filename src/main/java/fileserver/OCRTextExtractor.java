@@ -24,14 +24,22 @@ public class OCRTextExtractor {
         try {
             Class.forName("com.github.jaiimageio.plugins.tiff.TIFFImageReadParam");
         } catch (ClassNotFoundException e) {}
+
+        ImageIO.scanForPlugins();
     }
 
     public String extractText(String fn) {
 
         Javalin.log.info("Readers");
         Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName("tiff");
-        ImageReader reader = readers.next();
-        Javalin.log.info(reader.toString());
+
+        try {
+            ImageReader reader = readers.next();
+            Javalin.log.info(reader.toString());
+        } catch (Exception e) {
+            Javalin.log.info("Failed to find...");
+            e.printStackTrace();
+        }
 
         Javalin.log.info("PDF fn: " + fn);
         File pdf = new File(fn);
