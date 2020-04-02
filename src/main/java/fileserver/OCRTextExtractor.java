@@ -10,6 +10,8 @@ import javax.imageio.ImageReader;
 import java.io.File;
 import java.util.Iterator;
 
+import com.github.jaiimageio.*;
+
 public class OCRTextExtractor {
 
     private ITesseract instance;
@@ -18,6 +20,10 @@ public class OCRTextExtractor {
         instance = new Tesseract();
         instance.setDatapath("src/main/resources/tessdata_min/");
         instance.setLanguage("eng+equ");
+
+        try {
+            Class.forName("com.github.jaiimageio.plugins.tiff.TIFFImageReadParam");
+        } catch (ClassNotFoundException e) {}
     }
 
     public String extractText(String fn) {
