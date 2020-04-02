@@ -51,7 +51,7 @@ public class CommentDaoTest {
 
     @Test
     public void addCommentChangesId() {
-        Comment c1 = new Comment(1, "This is some comment.", "User1");
+        Comment c1 = new Comment(0, 1, "This is some comment.", "User1");
         assertEquals(0, c1.getId());
         commentDao.add(c1);
         assertNotEquals(0, c1.getId());
@@ -59,7 +59,7 @@ public class CommentDaoTest {
 
     @Test
     public void readCommentWorks() {
-        Comment c1 = new Comment(1, "This is some comment.", "User1");
+        Comment c1 = new Comment(0, 1, "This is some comment.", "User1");
         commentDao.add(c1);
         Comment c2 = commentDao.findComment(c1.getId());
         assertEquals(c1, c2);
@@ -67,9 +67,9 @@ public class CommentDaoTest {
 
     @Test
     public void findCommentbyNoteIdWorks() {
-        Comment c1 = new Comment(1, "This is some comment.", "User1");
+        Comment c1 = new Comment(0, 1, "This is some comment.", "User1");
         commentDao.add(c1);
-        Comment c2 = new Comment(1, "This is a different comment.", "User2");
+        Comment c2 = new Comment(0, 1, "This is a different comment.", "User2");
         commentDao.add(c2);
         List<Comment> l1 = commentDao.findCommentWithNoteId(c1.getNoteId());
         assertEquals(2, l1.size());
@@ -77,7 +77,7 @@ public class CommentDaoTest {
 
     @Test
     public void removeCommentWorks() {
-        Comment c1 = new Comment(1, "This is some comment.", "User1");
+        Comment c1 = new Comment(0, 1, "This is some comment.", "User1");
         commentDao.add(c1);
         commentDao.remove(c1);
         List<Comment> l1 = commentDao.findCommentWithNoteId(c1.getNoteId());
