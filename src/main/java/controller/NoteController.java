@@ -217,7 +217,7 @@ public class NoteController extends Controller {
             fileServer.upload(file.getContent(), note);
 
             Thread thread = new Thread(() -> {
-                String path = fileServer.getTempFile(note);
+                String path = fileServer.getLocalFile(note);
                 String fulltext = textExtractor.extractText(path);
                 if (fulltext != null) {
                     note.setFulltext(fulltext);

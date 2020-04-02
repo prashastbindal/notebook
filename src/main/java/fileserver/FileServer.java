@@ -33,7 +33,7 @@ public interface FileServer {
      * @param note the note
      * @return path to the file
      */
-    String getTempFile(Note note);
+    String getLocalFile(Note note);
 
     /**
      * Remove the file associated with a note.

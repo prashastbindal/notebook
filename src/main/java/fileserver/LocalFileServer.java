@@ -69,7 +69,7 @@ public class LocalFileServer implements FileServer {
      * @return path to the file
      */
     @Override
-    public String getTempFile(Note note) {
+    public String getLocalFile(Note note) {
         if (note.getFiletype().equals("none")) {
             return null;
         }

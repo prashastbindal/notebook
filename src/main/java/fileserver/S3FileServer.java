@@ -131,7 +131,7 @@ public class S3FileServer implements FileServer {
      * @return path to the file
      */
     @Override
-    public String getTempFile(Note note) {
+    public String getLocalFile(Note note) {
         if (note.getFiletype().equals("none")) {
             return null;
         }
@@ -145,7 +145,7 @@ public class S3FileServer implements FileServer {
         String tempFilePath = null;
         try {
             tempFilePath = Files.createTempFile(
-                note.getCourseId() + "/" + note.getId(), note.getFiletype()
+                "c" + note.getCourseId() + "n" + note.getId() + "-", "." + note.getFiletype()
             ).toString();
         } catch (IOException e) {
             e.printStackTrace();
