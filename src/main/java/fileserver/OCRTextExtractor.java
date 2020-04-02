@@ -5,7 +5,10 @@ import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
 import java.io.File;
+import java.util.Iterator;
 
 public class OCRTextExtractor {
 
@@ -18,6 +21,12 @@ public class OCRTextExtractor {
     }
 
     public String extractText(String fn) {
+
+        Javalin.log.info("Readers");
+        Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName("tiff");
+        ImageReader reader = readers.next();
+        Javalin.log.info(reader.toString());
+
         Javalin.log.info("PDF fn: " + fn);
         File pdf = new File(fn);
         try {
