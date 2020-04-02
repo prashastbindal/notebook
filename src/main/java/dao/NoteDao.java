@@ -114,11 +114,12 @@ public class NoteDao {
      * @param query search query
      * @return list of matching notes
      */
-    public List<Note> search(String query) {
-        String sql = "SELECT * FROM NOTES WHERE fulltext @@ :query;";
+    public List<Note> search(String query, int courseId) {
+        String sql = "SELECT * FROM NOTES WHERE fulltext @@ :query AND courseid = :courseId;";
         try(Connection conn = sql2o.open()) {
             return conn.createQuery(sql)
                     .addParameter("query", query)
+                    .addParameter("courseId", courseId)
                     .executeAndFetch(Note.class);
         } catch (NoSuchElementException e) {
             return null;
