@@ -31,10 +31,10 @@
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                         <button class="dropdown-item" type="button"
-                            id="sortbutton" onclick="sortcallback()">Views</button>
-                        <button class="dropdown-item" type="button">Date
+                            onclick="sortcallback('title', {{courseId}})">Title</button>
+                        <button class="dropdown-item" type="button" onclick="sortcallback('date', {{courseId}})">Date
                             Added</button>
-                        <button class="dropdown-item" type="button">Upvotes</button>
+                        <button class="dropdown-item" type="button" onclick="sortcallback('upvotes', {{courseId}})">Upvotes</button>
                     </div>
                     <a class="btn btn-outline-primary my-2 my-sm-0"
                        id="add-note-button"
@@ -90,20 +90,30 @@ $(function(){
         // ajax stuff...
     });
 
+    function parse(str) {
+        var args = [].slice.call(arguments, 1),
+            i = 0;
+
+        return str.replace(/%s/g, () => args[i++]);
+    }
+    var noteItemFormat = '<a data-courseId=%s data-noteId=%s class="note-select list-group-item' +
+                                               ' list-group-item-action">%s by %s %s  Upvotes: %s </a>'
+
+
     function searchcallback(courseId){
         console.log("search button clicked")
         var searchKey = $("#searchbar").val();
         console.log(searchKey)
         $.ajax({
              type: "GET",
-             url: "search/"+ searchKey,
+             url: "/courses/" + courseId.toString() + "/notes/search/"+ searchKey,
              contentType: "application/json",
              success: function (data, status, jqXHR) {
                 $("#note-list").empty();
 
                 data.map(function(note){
-                    $("#note-list").append('<a data-courseId="' + note.courseId + '" data-noteId="' + note.id + '" class="note-select list-group-item' +
-                    ' list-group-item-action">' + note.title + ' by ' + note.creator + '</a>')
+                    $("#note-list").append(parse(noteItemFormat, note.courseId.toString(), note.id.toString(),
+                    note.title.toString(), note.creator.toString(), note.date.toString(), note.upvotes.toString()))
                 });
 
                 $(".note-select").click(function(e) {
@@ -124,14 +134,67 @@ $(function(){
 
     }
 
-    function sortcallback(){
-        console.log("sort button clicked")
-        var mylist = $('#note-list');
-        var listitems = mylist.children('a').get();
-        listitems.sort(function(a, b) {
-           return $(a).text().toUpperCase().localeCompare($(b).text().toUpperCase());
-        })
-        $.each(listitems, function(idx, itm) { mylist.append(itm); });
+    var notes;
+    function getAllNotes(courseId, callback=null, callback_args=null){
+    //after ajax call, the callback function is executed with arguments : args...., notes
+            $.ajax({
+                 type: "GET",
+                 url: "/courses/" + courseId.toString() + "/notes/json",
+                 contentType: "application/json",
+                 success: function (data, status, jqXHR) {
+                    notes = data;
+                    if(callback!=null){
+                       callback(callback_args, notes);
+                    }
+                 },
+
+                 error: function (jqXHR, status) {
+                     // error handler
+                     console.log(jqXHR);
+                     alert('fail' + status.code);
+                 }
+             });
+
+        }
+
+    function sorter(args, notes){
+        sortBy = args[0]
+        notes.sort(function(a, b) {
+            if (sortBy == "title"){
+                return a.title.toUpperCase().localeCompare(b.title.toUpperCase());
+            }else if(sortBy == "date"){
+                // check year is greater
+                if(a.date.substring(6).toUpperCase().localeCompare(b.date.substring(6).toUpperCase()) == 0){
+                    return a.date.toUpperCase().localeCompare(b.date.toUpperCase());
+                 }else{
+                    return a.date.substring(6).toUpperCase().localeCompare(b.date.substring(6).toUpperCase())
+                 }
+            }else if(sortBy == "upvotes"){
+                return a.upvotes -  b.upvotes;
+            }else{
+                alert(sortBy + ' sort option not supported ! ')
+            }
+
+        });
+        $("#note-list").empty();
+
+        notes.map(function(note){
+            $("#note-list").append(parse(noteItemFormat, note.courseId.toString(), note.id.toString(),
+                                note.title.toString(), note.creator.toString(), note.date.toString(), note.upvotes.toString()))
+        });
+
+        $(".note-select").click(function(e) {
+                $('#note-list .active').removeClass('active');
+                $(this).addClass('active');
+
+                e.preventDefault();
+                $("#note-frame").attr("src", "".concat("/courses/", e.target.dataset.courseid, "/notes-preview/", e.target.dataset.noteid));
+            });
+    }
+
+    function sortcallback(sortBy, courseId){
+        console.log("sorting by " + sortBy);
+        getAllNotes(courseId, sorter, [sortBy]);
 
     };
 
