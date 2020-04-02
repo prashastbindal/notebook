@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.Iterator;
 
 import com.github.jaiimageio.plugins.tiff.TIFFImageReadParam;
+import com.github.jaiimageio.impl.common.ImageUtil;
 
 public class OCRTextExtractor {
 
@@ -31,8 +32,8 @@ public class OCRTextExtractor {
     public String extractText(String fn) {
 
         Javalin.log.info("Readers");
+        ImageIO.scanForPlugins();
         Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName("tiff");
-
         try {
             ImageReader reader = readers.next();
             Javalin.log.info(reader.toString());
@@ -44,6 +45,7 @@ public class OCRTextExtractor {
         Javalin.log.info("PDF fn: " + fn);
         File pdf = new File(fn);
         try {
+            ImageIO.scanForPlugins();
             String fulltext = instance.doOCR(pdf);
             Javalin.log.info("Completed OCR.");
             Javalin.log.info(fulltext.substring(0, 10) + "...");
