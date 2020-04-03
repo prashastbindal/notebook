@@ -186,4 +186,22 @@ public class NoteDao {
         }
     }
 
+    /**
+     * Search for notes by creator.
+     *
+     * @param query search query
+     * @return list of matching notes
+     */
+    public List<Note> searchNotesByCreator(String query, int courseId) {
+        String sql = "SELECT * FROM NOTES WHERE creator LIKE :query AND courseid = :courseId;";
+        try(Connection conn = sql2o.open()) {
+            return conn.createQuery(sql)
+                    .addParameter("query", "%" + query + "%")
+                    .addParameter("courseId", courseId)
+                    .executeAndFetch(Note.class);
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+    }
+
 }

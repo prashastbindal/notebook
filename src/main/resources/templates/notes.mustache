@@ -30,6 +30,8 @@
                                 onclick="searchcallback('title', {{courseId}})">Title</button>
                             <button class="dropdown-item" type="button"
                                 onclick="searchcallback('body', {{courseId}})">Body</button>
+                            <button class="dropdown-item" type="button"
+                                onclick="searchcallback('creator', {{courseId}})">Creator</button>
                         </div>
                     </div>
                 </div>
@@ -212,7 +214,9 @@ $(function(){
             url = "/courses/" + courseId.toString() + "/notes/searchName/"+ searchKey;
         } else if (searchBy == "body") {
             url = "/courses/" + courseId.toString() + "/notes/searchContent/"+ searchKey;
-        }
+        } else if (searchBy == "creator") {
+            url = "/courses/" + courseId.toString() + "/notes/searchCreator/"+ searchKey;
+         }
         searcher(courseId, searchKey, url);
     };
 
