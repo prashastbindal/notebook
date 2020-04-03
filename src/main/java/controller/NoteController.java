@@ -233,6 +233,11 @@ public class NoteController extends Controller {
             String text = ctx.formParam("text");
             assert text != null;
             InputStream textstream = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
+
+            text = text.replaceAll("\\<.*?\\>", "");
+            note.setFulltext(text);
+            noteDao.updateFulltext(note);
+
             fileServer.upload(textstream, note);
         }
 
