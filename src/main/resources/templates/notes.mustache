@@ -21,8 +21,16 @@
                 <div class="input-group mb-3">
                     <input class="form-control" name="search-notes" type="text" id="searchbar" placeholder="Search Notes">
                     <div class="input-group-append">
-                        <button class="btn btn-outline-primary my-2 my-sm-0"
-                        id="searchbutton" onclick="searchcallback({{courseId}})">Search</button>
+                        <button class="btn btn-primary dropdown-toggle" type="button"
+                        id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Search By
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <button class="dropdown-item" type="button"
+                                onclick="searchcallback('title', {{courseId}})">Title</button>
+                            <button class="dropdown-item" type="button"
+                                onclick="searchcallback('body', {{courseId}})">Body</button>
+                        </div>
                     </div>
                 </div>
                 <div class="dropdown">
@@ -100,13 +108,12 @@ $(function(){
                                                ' list-group-item-action">%s by %s %s  Upvotes: %s </a>'
 
 
-    function searchcallback(courseId){
+    function searcher(courseId, searchKey, newUrl){
         console.log("search button clicked")
-        var searchKey = $("#searchbar").val();
         console.log(searchKey)
         $.ajax({
              type: "GET",
-             url: "/courses/" + courseId.toString() + "/notes/search/"+ searchKey,
+             url: newUrl,
              contentType: "application/json",
              success: function (data, status, jqXHR) {
                 $("#note-list").empty();
@@ -196,6 +203,17 @@ $(function(){
         console.log("sorting by " + sortBy);
         getAllNotes(courseId, sorter, [sortBy]);
 
+    };
+
+    function searchcallback(searchBy, courseId) {
+        var searchKey = $("#searchbar").val();
+        var url = "";
+        if (searchBy == "title") {
+            url = "/courses/" + courseId.toString() + "/notes/searchName/"+ searchKey;
+        } else if (searchBy == "body") {
+            url = "/courses/" + courseId.toString() + "/notes/searchContent/"+ searchKey;
+        }
+        searcher(courseId, searchKey, url);
     };
 
 </script>

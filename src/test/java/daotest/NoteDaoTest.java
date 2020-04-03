@@ -83,7 +83,7 @@ public class NoteDaoTest {
         n2.setFulltext("This is some example text for Note2 created by User1.");
         noteDao.add(n2);
 
-        List<Note> found = noteDao.search("text for Note2");
+        List<Note> found = noteDao.search("text for Note2", 1);
         assertEquals(1, found.size());
         assertEquals(n2, found.get(0));
     }

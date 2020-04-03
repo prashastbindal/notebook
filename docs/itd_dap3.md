@@ -4,7 +4,6 @@
 ![uml](uml2.png)
 
 ### Wireframe Diagram
-
 ![wire](wire3.png)
 
 ### Iteration Backlog
@@ -19,3 +18,6 @@
 * Add the ability to upvote a note.
 * Style note view, increase pdf viewer size/zoom, and style comments.
 * Add simple user functionality to app via cookies.
+
+### Retrospective
+Iteration 3 went quite well as we delivered just about all that we had planned, however we did run into a few speed bumps due to timing issues (starting on the iteration a bit late). Even with these, we managed to deliver everything we set out to do; the notes are now searchable and sortable by metadata, notes can be upvoted, users have some basic authentication, and the program now automatically attempts to convert text in a pdf document to searchable text. This was especially challenging, but we believe it is critcal to set our app apart from others out there. This iteration, we will try to manage our time a little better and coordinate projects among the team in a little more organized manner. 

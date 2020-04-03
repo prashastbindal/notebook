@@ -1,21 +1,23 @@
-# Iteration 3 Design and Planning Document
+# Iteration 4 Design and Planning Document
 
 ### UML Diagram
-![uml](uml2.png)
+![uml](uml4.png)
 
 ### Wireframe Diagram
-
-![wire](wire3.png)
+![wire](wire4.png)
 
 ### Iteration Backlog
-* As a student I want to be able to search all notes for a course for mentions of specific topics so I can easily find information.
-* As a student I want to be able to sort notes using additional criteria such as date, popularity, rating, etc.
-* As a student I want to upvote notes that I think are useful so other students will find them.
+Note that both of these stories are in the "Nice to have" section of our RSD. We're still doing a lot of work on our "Must have" stories in this iteration, but most of them are already technically done, they just need polishing. See our Tasks list for details.
+* As a student I want to be able to edit notes in Markdown or LaTeX.
+* As a student I want there to be text recognition so I can search inside of handwritten notes.
 
 ### Tasks
-* Extend searching to include text inside of text notes, not just title.
-* Implement some sort of OCR to allow users to perform the aforementioned searches on uploaded PDFs.
-* Extend sorting to allow sorting by metadata (upvotes, date, ...) that shows up in additional columns like in a filesystem.
-* Add the ability to upvote a note.
-* Style note view, increase pdf viewer size/zoom, and style comments.
-* Add simple user functionality to app via cookies.
+* Modify the note text submission area to accept Markdown and LaTeX.
+* Actually implement log-in system.
+* Integrate Google log-in
+* Make the notes sidebar collapsable.
+* Style the comments hierarchically.
+* Add "search by" filters for notes.
+* Pop-up the signin page instead of redirecting the user when they try to add a comment or note without logging in.
+* Improve OCR for handwritten notes.
+* Make the app reactive for mobile devices.
