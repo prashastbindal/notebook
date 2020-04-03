@@ -21,8 +21,16 @@
                 <div class="input-group mb-3">
                     <input class="form-control" name="search-notes" type="text" id="searchbar" placeholder="Search Notes">
                     <div class="input-group-append">
-                        <button class="btn btn-outline-primary my-2 my-sm-0"
-                        id="searchbutton" onclick="searchcallback({{courseId}})">Search</button>
+                        <button class="btn btn-primary dropdown-toggle" type="button"
+                        id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Search By
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <button class="dropdown-item" type="button"
+                                onclick="searchcallback({{courseId}})">Title</button>
+                            <button class="dropdown-item" type="button"
+                                onclick="searchcallback({{courseId}})">Body</button>
+                        </div>
                     </div>
                 </div>
                 <div class="dropdown">
