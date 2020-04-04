@@ -48,9 +48,14 @@
                             Added</button>
                         <button class="dropdown-item" type="button" onclick="sortcallback('upvotes', {{courseId}})">Upvotes</button>
                     </div>
+                    <button class="btn btn-outline-primary my-2 my-sm-0"
+                        id="reset-button" onClick="history.go(0);">
+                        Reset filters</button>
+                </div>
+                <div>
                     <a class="btn btn-outline-primary my-2 my-sm-0"
-                       id="add-note-button"
-                       href="/courses/{{courseId}}/addNote">Add a Note</a>
+                        id="add-note-button"
+                        href="/courses/{{courseId}}/addNote">Add a Note</a>
                 </div>
             </form>
         </div>
