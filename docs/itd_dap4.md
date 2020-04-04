@@ -1,7 +1,7 @@
 # Iteration 4 Design and Planning Document
 
 ### UML Diagram
-![uml](uml4.png)
+![uml](uml4.jpg)
 
 ### Wireframe Diagram
 ![wire](wire4.png)
