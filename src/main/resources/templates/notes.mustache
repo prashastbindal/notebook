@@ -30,6 +30,10 @@
                                 onclick="searchcallback('title', {{courseId}})">Title</button>
                             <button class="dropdown-item" type="button"
                                 onclick="searchcallback('body', {{courseId}})">Body</button>
+                            <button class="dropdown-item" type="button"
+                                onclick="searchcallback('creator', {{courseId}})">Creator</button>
+                            <button class="dropdown-item" type="button"
+                                onclick="searchcallback('date', {{courseId}})">Date</button>
                         </div>
                     </div>
                 </div>
@@ -44,9 +48,14 @@
                             Added</button>
                         <button class="dropdown-item" type="button" onclick="sortcallback('upvotes', {{courseId}})">Upvotes</button>
                     </div>
+                    <button class="btn btn-outline-primary my-2 my-sm-0"
+                        id="reset-button" onClick="history.go(0);">
+                        Reset filters</button>
+                </div>
+                <div>
                     <a class="btn btn-outline-primary my-2 my-sm-0"
-                       id="add-note-button"
-                       href="/courses/{{courseId}}/addNote">Add a Note</a>
+                        id="add-note-button"
+                        href="/courses/{{courseId}}/addNote">Add a Note</a>
                 </div>
             </form>
         </div>
@@ -135,7 +144,7 @@ $(function(){
              error: function (jqXHR, status) {
                  // error handler
                  console.log(jqXHR);
-                 alert('fail' + status.code);
+                 alert("Empty or invalid search input");
              }
          });
 
@@ -212,6 +221,11 @@ $(function(){
             url = "/courses/" + courseId.toString() + "/notes/searchName/"+ searchKey;
         } else if (searchBy == "body") {
             url = "/courses/" + courseId.toString() + "/notes/searchContent/"+ searchKey;
+        } else if (searchBy == "creator") {
+            url = "/courses/" + courseId.toString() + "/notes/searchCreator/"+ searchKey;
+        } else if (searchBy == "date") {
+            searchKey = searchKey.replace("/", "").replace("/", "");
+            url = "/courses/" + courseId.toString() + "/notes/searchDate/"+ searchKey;
         }
         searcher(courseId, searchKey, url);
     };

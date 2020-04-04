@@ -50,6 +50,8 @@ public class CourseController extends Controller {
             get("courses/:courseId/notes/search/:key", this::searchNotesJSON);
             get("courses/:courseId/notes/searchName/:key", this::searchNotesNameJSON);
             get("courses/:courseId/notes/searchContent/:key", this::searchNotesContentJSON);
+            get("courses/:courseId/notes/searchCreator/:key", this::searchNotesCreatorJSON);
+            get("courses/:courseId/notes/searchDate/:key", this::searchNotesDateJSON);
         });
 
     }
@@ -157,6 +159,26 @@ public class CourseController extends Controller {
 
         String searchKey = ctx.pathParam("key");
         List<Note> notes = noteDao.search(searchKey, courseId);
+        ctx.json(notes);
+        ctx.status(200);
+        ctx.contentType("application/json");
+    }
+
+    public void searchNotesCreatorJSON(Context ctx) {
+        int courseId = Integer.parseInt(ctx.pathParam("courseId"));
+
+        String searchKey = ctx.pathParam("key");
+        List<Note> notes = noteDao.searchNotesByCreator(searchKey, courseId);
+        ctx.json(notes);
+        ctx.status(200);
+        ctx.contentType("application/json");
+    }
+
+    public void searchNotesDateJSON(Context ctx) {
+        int courseId = Integer.parseInt(ctx.pathParam("courseId"));
+
+        String searchKey = ctx.pathParam("key");
+        List<Note> notes = noteDao.searchNotesByDate(searchKey, courseId);
         ctx.json(notes);
         ctx.status(200);
         ctx.contentType("application/json");

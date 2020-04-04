@@ -186,4 +186,43 @@ public class NoteDao {
         }
     }
 
+    /**
+     * Search for notes by creator.
+     *
+     * @param query search query
+     * @return list of matching notes
+     */
+    public List<Note> searchNotesByCreator(String query, int courseId) {
+        String sql = "SELECT * FROM NOTES WHERE creator LIKE :query AND courseid = :courseId;";
+        try(Connection conn = sql2o.open()) {
+            return conn.createQuery(sql)
+                    .addParameter("query", "%" + query + "%")
+                    .addParameter("courseId", courseId)
+                    .executeAndFetch(Note.class);
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Search for notes by date.
+     *
+     * @param query search query
+     * @return list of matching notes
+     */
+    public List<Note> searchNotesByDate(String query, int courseId) {
+        if (query.length() == 8) {
+            query = query.substring(0, 2) + "/" + query.substring(2, 4) + "/" + query.substring(4);
+        }
+        String sql = "SELECT * FROM NOTES WHERE date LIKE :query AND courseid = :courseId;";
+        try(Connection conn = sql2o.open()) {
+            return conn.createQuery(sql)
+                    .addParameter("query", query)
+                    .addParameter("courseId", courseId)
+                    .executeAndFetch(Note.class);
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+    }
+
 }
