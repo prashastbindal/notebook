@@ -200,11 +200,6 @@ public class NoteController extends Controller {
      * @param ctx request context
      */
     public void addNote(Context ctx) {
-        if (this.getUsername(ctx) == null) {
-            ctx.redirect("/signup");
-            return;
-        }
-
         Course course = this.findCourse(ctx);
 
         Note note = new Note(
@@ -250,10 +245,6 @@ public class NoteController extends Controller {
      * @param ctx request context
      */
     public void addNoteForm(Context ctx) {
-        if (this.getUsername(ctx) == null) {
-            ctx.redirect("/signup");
-            return;
-        }
         Course course = this.findCourse(ctx);
         ctx.render(
             "/templates/addNote.mustache",

@@ -46,4 +46,13 @@ body {
   #wrapper.toggled #sidebar-wrapper {
     margin-left: -15rem;
   }
+
+ #note-frame-container {
+   height: 100%;
+ }
+  #note-frame {
+    border: none;
+    width: 100%;
+    height: 100%;
+  }
 }
