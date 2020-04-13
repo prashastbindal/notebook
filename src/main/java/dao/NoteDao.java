@@ -113,7 +113,7 @@ public class NoteDao {
      *
      * @param note to update
      */
-    public void upvote(Note note) {
+    public void updateUpvotes(Note note) {
         String sql = "update Notes set upvotes = :upvotes where id = :noteId;";
         try(Connection conn = sql2o.open()) {
             conn.createQuery(sql)

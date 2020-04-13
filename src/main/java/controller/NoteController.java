@@ -179,8 +179,16 @@ public class NoteController extends Controller {
      */
     public void upvoteNote(Context ctx) {
         Note note = this.findNote(ctx);
-        note.upvote();
-        noteDao.upvote(note);
+        String username = ctx.cookie("username");
+        String noteCookieKey = username + "." + note.getCourseId() + "." + note.getId();
+        if (ctx.cookieStore(noteCookieKey) == null || ctx.cookieStore(noteCookieKey).equals("False")) {
+            ctx.cookieStore(noteCookieKey, "True");
+            note.upvote();
+        } else {
+            ctx.cookieStore(noteCookieKey, "False");
+            note.unvote();
+        }
+        noteDao.updateUpvotes(note);
         ctx.redirect("/courses/" + note.getCourseId() + "/notes/" + note.getId());
     }
 
