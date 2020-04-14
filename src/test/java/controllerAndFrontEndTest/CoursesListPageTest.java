@@ -111,15 +111,23 @@ public class CoursesListPageTest {
     @Test
     public void coursesAreListed() {
         driver.get("http://localhost:7000/courses");
-        List<WebElement> links = driver.findElements(By.className("course-list-item"));
+        List<WebElement> links = driver.findElements(By.className("list-group"));
         WebElement exampleCourseOne = links.get(0);
-        assertEquals("Example Course 1", exampleCourseOne.getText());
+        String courses = exampleCourseOne.getText();
+        int count = 0;
+        while (courses.charAt(count) != '1') {
+            count++;
+        }
+        count++;
+        String courseText = courses.substring(0, count);
+        System.out.println(exampleCourseOne.getText());
+        assertEquals("Example Course 1", courseText);
     }
 
     @Test
     public void courseLinkWorks() {
         driver.get("http://localhost:7000/courses");
-        WebElement listItem = driver.findElement(By.className("course-list-item"));
+        WebElement listItem = driver.findElement(By.className("list-group"));
         List<WebElement> links = listItem.findElements(By.tagName("a"));
         WebElement exampleCourseOneLink = links.get(0);
         exampleCourseOneLink.click();
