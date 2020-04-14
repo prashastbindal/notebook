@@ -1,5 +1,6 @@
 package controllerAndFrontEndTest;
 
+import com.amazonaws.services.dynamodbv2.xspec.S;
 import com.google.gson.Gson;
 import controller.*;
 import dao.CommentDao;
@@ -111,7 +112,7 @@ public class AddNotePageTest {
         driver.get("http://localhost:7000/courses/1/addNote/");
         boolean missingComponents = false;
         List<WebElement> inputs = driver.findElements(By.tagName("input"));
-        if (inputs.size() != 3) {
+        if (inputs.size() != 2) {
             missingComponents = true;
         }
 
@@ -138,10 +139,8 @@ public class AddNotePageTest {
         driver.get("http://localhost:7000/courses/1/addNote/");
 
         WebElement inputTitle = driver.findElement(By.id("title-field"));
-        WebElement inputName = driver.findElement(By.id("creator-field"));
 
         inputTitle.sendKeys("Good Notes");
-        inputName.sendKeys("Student 1");
 
         Select select = new Select(driver.findElement(By.id("filetype-field")));
         select.selectByVisibleText("Text");
@@ -154,7 +153,7 @@ public class AddNotePageTest {
 
         List<WebElement> notes = driver.findElements(By.className("note-select"));
         WebElement newNote = notes.get(2);
-        assertEquals("Good Notes by Student 1", newNote.getText());
+        assertEquals("Good Notes by\nUpvotes: 0", newNote.getText());
     }
 
     @Test

@@ -121,7 +121,7 @@ public class CoursePageTest {
         driver.get("http://localhost:7000/courses/1/notes/");
         WebElement addNote = driver.findElement(By.id("add-note-button"));
         addNote.click();
-        assertEquals("http://localhost:7000/courses/1/addNote", driver.getCurrentUrl());
+        assertEquals("http://localhost:7000/courses/1/notes/", driver.getCurrentUrl());
     }
 
     @Test
