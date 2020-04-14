@@ -1,5 +1,6 @@
 package controllerAndFrontEndTest;
 
+import com.amazonaws.services.dynamodbv2.xspec.S;
 import com.google.gson.Gson;
 import controller.*;
 import dao.CommentDao;
@@ -112,7 +113,7 @@ public class CoursePageTest {
         driver.get("http://localhost:7000/courses/1/notes/");
         WebElement addNote = driver.findElement(By.id("add-note-button"));
         assertNotNull(addNote);
-        assertEquals("Add Note", addNote.getText());
+        assertEquals("Add a Note", addNote.getText());
     }
 
     @Test
@@ -128,7 +129,7 @@ public class CoursePageTest {
         driver.get("http://localhost:7000/courses/1/notes/");
         List<WebElement> links = driver.findElements(By.className("note-select"));
         WebElement note1 = links.get(0);
-        assertEquals("Note1 by student1", note1.getText());
+        assertEquals("Note1 by student1\nUpvotes: 0", note1.getText());
     }
 
     @Test
