@@ -161,10 +161,8 @@ public class AddNotePageTest {
         driver.get("http://localhost:7000/courses/1/addNote/");
 
         WebElement inputTitle = driver.findElement(By.id("title-field"));
-        WebElement inputName = driver.findElement(By.id("creator-field"));
 
         inputTitle.sendKeys("Good Notes");
-        inputName.sendKeys("Student 1");
 
         Select select = new Select(driver.findElement(By.id("filetype-field")));
         select.selectByVisibleText("PDF");
@@ -174,6 +172,6 @@ public class AddNotePageTest {
 
         List<WebElement> notes = driver.findElements(By.className("note-select"));
         WebElement newNote = notes.get(2);
-        assertEquals("Good Notes by Student 1", newNote.getText());
+        assertEquals("Good Notes by\nUpvotes: 0", newNote.getText());
     }
 }
