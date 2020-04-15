@@ -168,4 +168,12 @@ public class CoursePageTest {
         assertEquals("student 1\nthis is a comment\nReply",comment.getText());
     }
 
+    @Test
+    public void replyButtonExists() {
+        driver.get("http://localhost:7000/courses/1/notes/1");
+        List<WebElement> buttons = driver.findElements(By.tagName("button"));
+        WebElement replyButton = buttons.get(1);
+        assertEquals("Reply",replyButton.getText());
+    }
+
 }
