@@ -112,7 +112,7 @@ public class AddNotePageTest {
         driver.get("http://localhost:7000/courses/1/addNote/");
         boolean missingComponents = false;
         List<WebElement> inputs = driver.findElements(By.tagName("input"));
-        if (inputs.size() != 2) {
+        if (inputs.size() != 3) {
             missingComponents = true;
         }
 
