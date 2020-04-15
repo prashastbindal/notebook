@@ -4,8 +4,13 @@
     <title>NoteBook</title>
     {{> header}}
 
-<!--    <script src="/js/validateComment.js"></script>-->
+    <script src="/js/validateComment.js"></script>
     <script src="/js/setReplyId.js"></script>
+    <script>
+        gapi.load('auth2', function() {
+            gapi.auth2.init();
+        });
+    </script>
 </head>
 <body>
 <main>
@@ -49,8 +54,9 @@
     </ul>
     <h3>Add a comment:</h3>
     <div class="form-group">
-        <form id="comment-form" onsubmit="return validateComment();" action="/courses/{{courseId}}/notes/{{noteId}}/comment" method="post">
+        <form id="comment-form" onsubmit="return validateComment()" action="/courses/{{courseId}}/notes/{{noteId}}/comment" method="post">
             <input type="hidden" id="reply-id-field" name="parent-id" value="0">
+            <input type="hidden" id="username-field" name="username" value="0">
             <textarea class="form-control" id="comment-field" name="text"
                   placeholder="Add a comment..."></textarea><br>
             <button class="btn btn-primary" id="submit">Submit</button>

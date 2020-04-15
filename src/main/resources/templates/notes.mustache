@@ -7,6 +7,11 @@
     <link href="/css/simple-sidebar.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/signin.css">
     <link rel="stylesheet" href="/css/all.css">
+    <script>
+        gapi.load('auth2', function() {
+            gapi.auth2.init();
+        });
+    </script>
 </head>
 <body>
 <main>
@@ -19,7 +24,7 @@
             <div id="course-name-header">{{ courseName }}</div>
             <div>
                 <button class="btn btn-outline-primary my-2 my-sm-0"
-                   id="add-note-button" onclick="checkSignin();">Add a
+                   id="add-note-button" onclick="checkSignin({{ courseId }});">Add a
                     Note</button>
             </div>
         </div>

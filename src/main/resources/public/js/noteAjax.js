@@ -22,24 +22,15 @@ function parse(str) {
 var noteItemFormat = '<a data-courseId=%s data-noteId=%s class="note-select list-group-item' +
     ' list-group-item-action">%s by %s %s  Upvotes: %s </a>'
 
-function checkSignin() {
-    var name = "username=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            // If cookie found go to addNote
-            window.location.href = "/courses/{{ courseId }}/addNote";
-            return;
-        }
+function checkSignin(courseId) {
+    var auth2 = gapi.auth2.getAuthInstance();
+    if (!auth2.isSignedIn.get()) {
+        auth2.signIn();
+        //right now this won't update the navbar but I don't care, that's something for tomorrow
+    } else {
+        window.location.href = "/courses/" + courseId + "/addNote";
+        return;
     }
-    // If not, give a popup signin page.
-    $("#sign-in-modal").modal("toggle");
-    return;
 }
 
 function searcher(courseId, searchKey, newUrl) {
