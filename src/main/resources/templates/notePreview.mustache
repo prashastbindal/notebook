@@ -5,6 +5,7 @@
     {{> header}}
 
     <script src="/js/validateComment.js"></script>
+    <script src="/js/validateUpvote.js"></script>
     <script src="/js/setReplyId.js"></script>
     <script>
         gapi.load('auth2', function() {
@@ -21,8 +22,11 @@
     <div class="row mx-auto">
     <h4>Made by {{ creatorName }} on {{dateCreated}}</h4>
     </div>
-    <form id="upvote-form" action="/courses/{{courseId}}/notes/{{noteId}}/upvote" method="post">
+    <form id="upvote-form" onsubmit="return validateUpvote()" action="/courses/{{courseId}}/notes/{{noteId}}/upvote" method="post">
         <div class="row mx-auto">
+            <input type="hidden" id="noteId" name="noteId" value={{noteId}}>
+            <input type="hidden" id="courseId" name="courseId" value={{courseId}}>
+            <input type="hidden" id="usernameUpvote" name="usernameUpvote" value="username">
             <button class="btn btn-primary my-2 my-lg-0"  id="upvote">Upvote: {{numberOfUpvotes}}</button>
         </div>
     </form>
