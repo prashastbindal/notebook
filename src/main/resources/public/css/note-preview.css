@@ -1,0 +1,34 @@
+.section-title {
+    margin-top: 1.6rem;
+    margin-bottom: .8rem;
+}
+
+.comment {
+    margin: 6px 64px 6px 6px;
+    padding: 10px;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 75, .25);
+}
+
+.comment-author {
+    font-size: 1.25rem;
+    margin-bottom: 0;
+}
+
+.replying-to {
+    margin-bottom: 0;
+}
+
+.comment-text {
+    margin-top: .5rem;
+}
+
+.btn-reply {
+    margin: .25rem;
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+    font-size: 14px;
+}
+
+.comment-text-field {
+    margin-bottom: .75rem;
+}
