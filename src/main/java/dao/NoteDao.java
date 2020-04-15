@@ -161,7 +161,7 @@ public class NoteDao {
      * @return list of matching notes
      */
     public List<Note> search(String query, int courseId) {
-        String sql = "SELECT * FROM NOTES WHERE fulltext LIKE :query AND courseid = :courseId;";
+        String sql = "SELECT * FROM NOTES WHERE LOWER(fulltext) LIKE LOWER(:query) AND courseid = :courseId;";
         try(Connection conn = sql2o.open()) {
             return conn.createQuery(sql)
                     .addParameter("query", "%" + query + "%")
@@ -179,7 +179,7 @@ public class NoteDao {
      * @return list of matching notes
      */
     public List<Note> searchNotesWithName(String searchKey, int courseId) {
-        String sql = "SELECT * FROM Notes WHERE title LIKE :noteName and courseid = :courseId;";
+        String sql = "SELECT * FROM Notes WHERE LOWER(title) LIKE LOWER(:noteName) and courseid = :courseId;";
         try(Connection conn = sql2o.open()){
             return conn.createQuery(sql).addParameter("noteName", "%" + searchKey + "%")
                     .addParameter("courseId", courseId).executeAndFetch(Note.class);
@@ -193,7 +193,7 @@ public class NoteDao {
      * @return list of matching notes
      */
     public List<Note> searchNotesByCreator(String query, int courseId) {
-        String sql = "SELECT * FROM NOTES WHERE creator LIKE :query AND courseid = :courseId;";
+        String sql = "SELECT * FROM NOTES WHERE LOWER(creator) LIKE LOWER(:query) AND courseid = :courseId;";
         try(Connection conn = sql2o.open()) {
             return conn.createQuery(sql)
                     .addParameter("query", "%" + query + "%")
@@ -214,7 +214,7 @@ public class NoteDao {
         if (query.length() == 8) {
             query = query.substring(0, 2) + "/" + query.substring(2, 4) + "/" + query.substring(4);
         }
-        String sql = "SELECT * FROM NOTES WHERE date LIKE :query AND courseid = :courseId;";
+        String sql = "SELECT * FROM NOTES WHERE LOWER(date) LIKE LOWER(:query) AND courseid = :courseId;";
         try(Connection conn = sql2o.open()) {
             return conn.createQuery(sql)
                     .addParameter("query", query)

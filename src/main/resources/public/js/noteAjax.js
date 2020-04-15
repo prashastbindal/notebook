@@ -1,3 +1,5 @@
+var notes;
+
 $(function(){
     $(".note-select").click(function(e) {
         $('#note-list .active').removeClass('active');
@@ -43,6 +45,7 @@ function searcher(courseId, searchKey, newUrl) {
         success: function (data, status, jqXHR) {
             $("#note-list").empty();
 
+            notes = data
             data.map(function(note){
                 $("#note-list").append(parse(noteItemFormat, note.courseId.toString(), note.id.toString(),
                     note.title.toString(), note.creator.toString(), note.date.toString(), note.upvotes.toString()))
@@ -66,48 +69,7 @@ function searcher(courseId, searchKey, newUrl) {
 
 }
 
-var notes;
-function getAllNotes(courseId, callback=null, callback_args=null){
-    //after ajax call, the callback function is executed with arguments : args...., notes
-    $.ajax({
-        type: "GET",
-        url: "/courses/" + courseId.toString() + "/notes/json",
-        contentType: "application/json",
-        success: function (data, status, jqXHR) {
-            notes = data;
-            if(callback!=null){
-                callback(callback_args, notes);
-            }
-        },
-
-        error: function (jqXHR, status) {
-            // error handler
-            console.log(jqXHR);
-            alert('fail' + status.code);
-        }
-    });
-
-}
-
-function sorter(args, notes){
-    sortBy = args[0]
-    notes.sort(function(a, b) {
-        if (sortBy == "title"){
-            return a.title.toUpperCase().localeCompare(b.title.toUpperCase());
-        }else if(sortBy == "date"){
-            // check year is greater
-            if(a.date.substring(6).toUpperCase().localeCompare(b.date.substring(6).toUpperCase()) == 0){
-                return a.date.toUpperCase().localeCompare(b.date.toUpperCase());
-            }else{
-                return a.date.substring(6).toUpperCase().localeCompare(b.date.substring(6).toUpperCase())
-            }
-        }else if(sortBy == "upvotes"){
-            return a.upvotes -  b.upvotes;
-        }else{
-            alert(sortBy + ' sort option not supported ! ')
-        }
-
-    });
+function updateNoteView(notes){
     $("#note-list").empty();
 
     notes.map(function(note){
@@ -124,9 +86,109 @@ function sorter(args, notes){
     });
 }
 
+function queryAllNotes(courseId, callback=null, callback_args=null){
+    //after ajax call, the callback function is executed with arguments : args...., notes
+    $.ajax({
+        type: "GET",
+        url: "/courses/" + courseId.toString() + "/notes/json",
+        contentType: "application/json",
+        success: function (data, status, jqXHR) {
+            notes = data;
+            if(callback!=null){
+               callback(...callback_args);
+            }
+            updateNoteView(notes)
+
+        },
+
+        error: function (jqXHR, status) {
+            // error handler
+            console.log(jqXHR);
+            alert('fail' + status.code);
+        }
+    });
+
+}
+
+function sorter(sortBy, is_ascending){
+    var order;
+    notes.sort(function(a, b) {
+        if (sortBy == "title"){
+            order = a.title.toUpperCase().localeCompare(b.title.toUpperCase());
+        }else if(sortBy == "date"){
+            // check year is greater
+            if(a.date.substring(6).toUpperCase().localeCompare(b.date.substring(6).toUpperCase()) == 0){
+                order = a.date.toUpperCase().localeCompare(b.date.toUpperCase());
+            }else{
+                order = a.date.substring(6).toUpperCase().localeCompare(b.date.substring(6).toUpperCase())
+            }
+        }else if(sortBy == "upvotes"){
+            order = a.upvotes -  b.upvotes;
+        }else{
+            alert(sortBy + ' sort option not supported ! ')
+            throw "Unsupported sorting option : " + sortBy
+        }
+        if(!is_ascending){
+            order = -1 * order;
+        }
+
+        return order
+
+    });
+}
+
+//function queryAllNotes(courseId){
+//
+//    $.ajax({
+//            type: "GET",
+//            url: "/courses/" + courseId.toString() + "/notes/json",
+//            contentType: "application/json",
+//            success: function (data, status, jqXHR) {
+//                notes = data;
+//
+//                $("#note-list").empty();
+//
+//                notes.map(function(note){
+//                    $("#note-list").append(parse(noteItemFormat, note.courseId.toString(), note.id.toString(),
+//                        note.title.toString(), note.creator.toString(), note.date.toString(), note.upvotes.toString()))
+//                });
+//
+//                $(".note-select").click(function(e) {
+//                    $('#note-list .active').removeClass('active');
+//                    $(this).addClass('active');
+//
+//                    e.preventDefault();
+//                    $("#note-frame").attr("src", "".concat("/courses/", e.target.dataset.courseid, "/notes-preview/", e.target.dataset.noteid));
+//                });
+//
+//            },
+//
+//            error: function (jqXHR, status) {
+//                // error handler
+//                console.log(jqXHR);
+//                alert('fail' + status.code);
+//            }
+//        });
+//
+//
+//}
+
 function sortcallback(sortBy, courseId){
     console.log("sorting by " + sortBy);
-    getAllNotes(courseId, sorter, [sortBy]);
+
+    var is_ascending = true;
+    if(sortBy == "upvotes"){
+        is_ascending = false;
+    }
+
+    if(notes == null){
+        queryAllNotes(courseId, sorter, [sortBy, is_ascending]);
+    }else{
+        sorter(sortBy, is_ascending);
+        updateNoteView(notes);
+    }
+
+
 
 };
 
@@ -150,3 +212,4 @@ $("#menu-toggle").click(function(e) {
     e.preventDefault();
     $("#wrapper").toggleClass("toggled");
 });
+
