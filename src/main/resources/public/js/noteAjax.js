@@ -28,7 +28,7 @@ function checkSignin(courseId) {
     var auth2 = gapi.auth2.getAuthInstance();
     if (!auth2.isSignedIn.get()) {
         auth2.signIn();
-        //right now this won't update the navbar but I don't care, that's something for tomorrow
+        // TODO: update the navbar on signin
     } else {
         window.location.href = "/courses/" + courseId + "/addNote";
         return;
