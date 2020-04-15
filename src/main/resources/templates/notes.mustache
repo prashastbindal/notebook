@@ -7,11 +7,62 @@
     <link href="/css/simple-sidebar.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/signin.css">
     <link rel="stylesheet" href="/css/all.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
     <script>
         gapi.load('auth2', function() {
             gapi.auth2.init();
         });
     </script>
+    <style>
+
+
+
+        /* ---------------------------------------------------
+            MEDIAQUERIES
+        ----------------------------------------------------- */
+        @media (max-width: 768px) {
+            #sidebar-wrapper {
+                margin-left: -250px;
+                position: relative;
+            }
+            #sidebar-wrapper.active {
+                margin-left: 0;
+            }
+            #page-content-wrapper {
+                width: 100%;
+            }
+            #page-content-wrapper.active {
+                width: calc(100% - 250px);
+            }
+            #sidebarCollapse span {
+                display: none;
+            }
+        }
+        #sidebar-wrapper {
+            position: relative;
+            transition: all 0.3s;
+        }
+        #sidebar-wrapper.active {
+            margin-left: -320px;
+        }
+        #page-content-wrapper.active {
+            width: 100%;
+        }
+
+        #sidebarCollapse{
+            margin-left: 5px;
+        }
+
+        #sidebarCollapse.active{
+            position: absolute;
+            right: 0;
+            padding: 0;
+            margin:0;
+            height: 20vh;
+            width:80px;
+        }
+    </style>
 </head>
 <body>
 <main>
@@ -77,6 +128,10 @@
                         <br> Upvotes: {{upvotes}} </a>
             {{/noteList}}
         </div>
+        <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn"  onclick="toggleCallback()">
+            <i class="glyphicon glyphicon-align-left"></i>
+            <span>Toggle Sidebar</span>
+        </button>
     </div>
     <!-- /#sidebar-wrapper -->
 {{> modal}}
@@ -93,5 +148,16 @@
 {{> footer}}
 
 <script src="/js/noteAjax.js"></script>
+<script type="text/javascript">
+function toggleCallback() {
+    console.log("toggle button clicked")
+    $('#sidebar-wrapper, #page-content-wrapper, #sidebarCollapse').toggleClass('active');
+    $('.collapse.in').toggleClass('in');
+    if ($("#sidebarCollapse").hasClass("active"))
+        $("#sidebarCollapse").children("span").text("")
+    else
+        $("#sidebarCollapse").children("span").text("Toggle Sidebar")
+};
+</script>
 </body>
 </html>
