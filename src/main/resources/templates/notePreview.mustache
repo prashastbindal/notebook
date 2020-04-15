@@ -44,10 +44,9 @@
     <h3> Comments </h3>
     <ul class="list-group">
         {{#commentList}}
-            <li class="" id="comment{{ id }}">
+            <li class="comment" id="comment{{ id }}">
                 <p class="navbar-brand" id="creator-of-comment-{{id}}">{{creator}} </p>
                 <p class="replying-to">{{ parentId }}</p>
-                <br>
                 <div class="col mx-auto">
                     <p class="">{{ text }}</p>
                 </div>
