@@ -149,13 +149,23 @@ public class CoursePageTest {
         assertEquals("Upvote: 0", upvoteForm.getText());
     }
 
+    /*
     @Test
     public void noteUpvoteWorks() {
         driver.get("http://localhost:7000/courses/1/notes/1");
         WebElement upvoteForm = driver.findElement(By.id("upvote-form"));
         upvoteForm.submit();
         WebElement upvoteButton = driver.findElement(By.id("upvote"));
+
+        driver.get("http://localhost:7000/courses/1/notes/1/upvote");
         assertEquals("Upvote: 1", upvoteButton.getText());
+    }  */
+
+    @Test
+    public void commentsExist() {
+        driver.get("http://localhost:7000/courses/1/notes/1");
+        WebElement comment = driver.findElement(By.id("comment1"));
+        assertEquals("student 1\nthis is a comment\nReply",comment.getText());
     }
 
 }
