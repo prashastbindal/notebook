@@ -1,7 +1,7 @@
 # Iteration 5 Design and Planning Document
 
 ### UML Diagram
-![uml](uml5.jpg)
+![uml](uml5.png)
 
 ### Wireframe Diagram
 ![wire](wire5.png)
@@ -16,3 +16,4 @@
 * Add favicon.
 * Do UI/UX styling pass.
 * Clean up DB/demo data.
+* Fix note title overflow in sidebar.
