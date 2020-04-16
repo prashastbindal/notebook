@@ -21,3 +21,5 @@ Note that both of these stories are in the "Nice to have" section of our RSD. We
 * Pop-up the signin page instead of redirecting the user when they try to add a comment or note without logging in.
 * Improve OCR for handwritten notes.
 * Make the app reactive for mobile devices.
+
+### Retrospective
