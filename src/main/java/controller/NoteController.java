@@ -153,22 +153,17 @@ public class NoteController extends Controller {
      * @param ctx request context
      */
     public void addComment(Context ctx) {
-        if (this.getUsername(ctx) == null) {
-            ctx.redirect("/signup");
-            return;
-        }
         Note note = this.findNote(ctx);
 
         Comment comment = new Comment(
             Integer.parseInt(ctx.formParam("parent-id")),
             note.getId(),
             ctx.formParam("text"),
-            this.getUsername(ctx)
+            ctx.formParam("username")
         );
         if (comment.getParentId() == 0 || commentDao.findComment(comment.getParentId()).getNoteId() == note.getId()) {
             commentDao.add(comment);
         }
-
         ctx.redirect("/courses/" + note.getCourseId() + "/notes/" + note.getId());
     }
 
@@ -179,8 +174,17 @@ public class NoteController extends Controller {
      */
     public void upvoteNote(Context ctx) {
         Note note = this.findNote(ctx);
-        note.upvote();
-        noteDao.upvote(note);
+        String usernameCookie = ctx.formParam("usernameUpvote");
+        if (!usernameCookie.equals("username")) {
+            if (ctx.cookieStore(usernameCookie) == null || ctx.cookieStore(usernameCookie).equals("False")) {
+                ctx.cookieStore(usernameCookie, "True");
+                note.upvote();
+            } else {
+                ctx.cookieStore(usernameCookie, "False");
+                note.unvote();
+            }
+        }
+        noteDao.updateUpvotes(note);
         ctx.redirect("/courses/" + note.getCourseId() + "/notes/" + note.getId());
     }
 
@@ -200,17 +204,12 @@ public class NoteController extends Controller {
      * @param ctx request context
      */
     public void addNote(Context ctx) {
-        if (this.getUsername(ctx) == null) {
-            ctx.redirect("/signup");
-            return;
-        }
-
         Course course = this.findCourse(ctx);
 
         Note note = new Note(
             course.getId(),
             ctx.formParam("title"),
-            this.getUsername(ctx),
+            ctx.formParam("username"),
             ctx.formParam("filetype")
         );
         noteDao.add(note);
@@ -233,6 +232,11 @@ public class NoteController extends Controller {
             String text = ctx.formParam("text");
             assert text != null;
             InputStream textstream = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
+
+            text = text.replaceAll("\\<.*?\\>", "");
+            note.setFulltext(text);
+            noteDao.updateFulltext(note);
+
             fileServer.upload(textstream, note);
         }
 
@@ -245,10 +249,6 @@ public class NoteController extends Controller {
      * @param ctx request context
      */
     public void addNoteForm(Context ctx) {
-        if (this.getUsername(ctx) == null) {
-            ctx.redirect("/signup");
-            return;
-        }
         Course course = this.findCourse(ctx);
         ctx.render(
             "/templates/addNote.mustache",
@@ -337,9 +337,4 @@ public class NoteController extends Controller {
 
         return comment;
     }
-
-    private String getUsername(Context ctx) {
-        return ctx.cookie("username");
-    }
-
 }

@@ -9,6 +9,9 @@ Alex Hepp \
 Anirudh Sharma \
 Prashast Bindal
 
+## Iteration 4
+This iteration we cleaned up the application's front end by styling comments, fixing upvotes, adding a "sort by" function, allowing the user to collapse the sidebar, etc. We also added Google authentication to the site and fully integrated it with our posting and commenting system.
+
 ## Iteration 3
 This iteration we mostly cleaned up and improved upon the features we implemented in iteration 2, such as adding the option to upvote notes, giving the user more options for sorting and searching the notes, and implementing replies to comments.
 

@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+
     <title>NoteBook</title>
     {{> header}}
 </head>
@@ -14,8 +15,19 @@
             <input class="form-control" id="searchbar" type="text" placeholder="Search Courses">
             <button id="searchbutton" class="btn btn-outline-primary my-2
             my-sm-0" onclick="searchcallback()">Search</button>
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Sort By
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <button class="dropdown-item" type="button" onclick="sortcallback()">Title</button>
+                </div>
+            </div>
+            <button id="resetbutton" class="btn btn-outline-primary my-2
+                        my-sm-0" onclick="queryCourses()">Reset</button>
         </form>
     </div>
+
     <ul class="list-group" id="courses-list">
         {{#courseList}}
             <li class="list-group-item"><a href="/courses/{{ id }}/notes/"> {{ name }} </a></li>
@@ -24,7 +36,7 @@
 </div>
 
 </main>
-<!--<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>-->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
@@ -82,23 +94,30 @@
 
     };
 
-    $.ajax({
-         type: "GET",
-         url: "/courses/json",
-         contentType: "application/json",
-         success: function (data, status, jqXHR) {
-            $("#courses-list").empty();
-            data.map(function(course){
-                $("#courses-list").append('<li class="list-group-item course-list-item"><a href="/courses/' + course.id +'/notes/">' + course.name+ '</a></li>')
-            })
-         },
+    function queryCourses(){
+        $.ajax({
+                 type: "GET",
+                 url: "/courses/json",
+                 contentType: "application/json",
+                 success: function (data, status, jqXHR) {
+                    $("#courses-list").empty();
+                    data.map(function(course){
+                        $("#courses-list").append('<li class="list-group-item course-list-item"><a href="/courses/' + course.id +'/notes/">' + course.name+ '</a></li>')
+                    })
+                 },
 
-         error: function (jqXHR, status) {
-             // error handler
-             console.log(jqXHR);
-             alert('fail' + status.code);
-         }
+                 error: function (jqXHR, status) {
+                     // error handler
+                     console.log(jqXHR);
+                     alert('fail' + status.code);
+                 }
+            });
+    }
+    $( document ).ready(function() {
+        queryCourses();
     });
+
+
  </script>
 
 {{> footer}}

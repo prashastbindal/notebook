@@ -6,6 +6,12 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.20.0/ui/trumbowyg.min.css">
     <link rel="stylesheet" href="/css/upload.css">
+    <script src="/js/validateNote.js"></script>
+    <script>
+        gapi.load('auth2', function() {
+            gapi.auth2.init();
+        });
+    </script>
 </head>
 <body>
 <main>
@@ -24,11 +30,12 @@
 
         <div class="row">
             <div class="col-lg-10 mx-auto">
-                <form id="note-form" action="/courses/{{courseId}}/addNote" method="post" enctype="multipart/form-data">
+                <form id="note-form" onsubmit="return validateNote()" action="/courses/{{courseId}}/addNote" method="post" enctype="multipart/form-data">
                         <div class="input-group overflow-hidden mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Title</span>
                             </div>
+                            <input type="hidden" id="username-field" name="username" value="0">
                             <input id="title-field" name="title" type="text"
                                    class="form-control form-rounded">
                         </div>

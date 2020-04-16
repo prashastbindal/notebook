@@ -188,6 +188,12 @@ public class Note {
      */
     public void upvote() {this.upvotes++;}
 
+    /**
+     * undos an upvote
+     *
+     */
+    public void unvote() {this.upvotes--;}
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

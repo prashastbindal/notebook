@@ -3,7 +3,7 @@ plugins {
     id "ua.eshepelyuk.ManifestClasspath" version "1.0.0"
 }
 
-version '0.2'
+version '0.3'
 
 sourceCompatibility = 1.8
 

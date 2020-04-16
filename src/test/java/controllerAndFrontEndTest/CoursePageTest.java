@@ -1,5 +1,6 @@
 package controllerAndFrontEndTest;
 
+import com.amazonaws.services.dynamodbv2.xspec.S;
 import com.google.gson.Gson;
 import controller.*;
 import dao.CommentDao;
@@ -112,7 +113,7 @@ public class CoursePageTest {
         driver.get("http://localhost:7000/courses/1/notes/");
         WebElement addNote = driver.findElement(By.id("add-note-button"));
         assertNotNull(addNote);
-        assertEquals("Add Note", addNote.getText());
+        assertEquals("Add a Note", addNote.getText());
     }
 
     @Test
@@ -120,7 +121,7 @@ public class CoursePageTest {
         driver.get("http://localhost:7000/courses/1/notes/");
         WebElement addNote = driver.findElement(By.id("add-note-button"));
         addNote.click();
-        assertEquals("http://localhost:7000/courses/1/addNote", driver.getCurrentUrl());
+        assertEquals("http://localhost:7000/courses/1/notes/", driver.getCurrentUrl());
     }
 
     @Test
@@ -128,7 +129,7 @@ public class CoursePageTest {
         driver.get("http://localhost:7000/courses/1/notes/");
         List<WebElement> links = driver.findElements(By.className("note-select"));
         WebElement note1 = links.get(0);
-        assertEquals("Note1 by student1", note1.getText());
+        assertEquals("Note1 by student1\nUpvotes: 0", note1.getText());
     }
 
     @Test
@@ -139,6 +140,40 @@ public class CoursePageTest {
         note1.click();
         WebElement frame = driver.findElement(By.id("note-frame"));
         assertEquals("http://localhost:7000/courses/1/notes-preview/1", frame.getAttribute("src"));
+    }
+
+    @Test
+    public void noteUpvoteExists() {
+        driver.get("http://localhost:7000/courses/1/notes/1");
+        WebElement upvoteForm = driver.findElement(By.id("upvote-form"));
+        assertEquals("Upvote: 0", upvoteForm.getText());
+    }
+
+    /*
+    @Test
+    public void noteUpvoteWorks() {
+        driver.get("http://localhost:7000/courses/1/notes/1");
+        WebElement upvoteForm = driver.findElement(By.id("upvote-form"));
+        upvoteForm.submit();
+        WebElement upvoteButton = driver.findElement(By.id("upvote"));
+
+        driver.get("http://localhost:7000/courses/1/notes/1/upvote");
+        assertEquals("Upvote: 1", upvoteButton.getText());
+    }  */
+
+    @Test
+    public void commentsExist() {
+        driver.get("http://localhost:7000/courses/1/notes/1");
+        WebElement comment = driver.findElement(By.id("comment1"));
+        assertEquals("student 1\nthis is a comment\nReply",comment.getText());
+    }
+
+    @Test
+    public void replyButtonExists() {
+        driver.get("http://localhost:7000/courses/1/notes/1");
+        List<WebElement> buttons = driver.findElements(By.tagName("button"));
+        WebElement replyButton = buttons.get(1);
+        assertEquals("Reply",replyButton.getText());
     }
 
 }

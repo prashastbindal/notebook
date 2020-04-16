@@ -1,18 +1,16 @@
-// Adapted from https://www.w3schools.com/js/js_cookies.asp
-function usernameExists() {
-    var cookieStrings = decodeURIComponent(document.cookie).split(';');
-    for(var i = 0; i <cookieStrings.length; i++) {
-        var c = cookieStrings[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf("username=") == 0) {
-            return true;
-        }
-    }
-    return false;
+function updateNavbar() {
+    gapi.load('auth2', function() {
+        auth2 = gapi.auth2.init();
+        auth2.then(function () {
+            if (auth2.isSignedIn.get()) {
+                document.getElementById("signin-btn").style.display = "none";
+                document.getElementById("signout-btn").style.display = "inline";
+            } else {
+                document.getElementById("signin-btn").style.display = "inline";
+                document.getElementById("signout-btn").style.display = "none";
+            }
+        })
+    });
 }
 
-if (usernameExists()) {
-    document.getElementById("submit").innerHTML = "Sign Out";
-}
+updateNavbar();

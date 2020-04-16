@@ -4,6 +4,7 @@ var selectForm = document.getElementById("file-field")
 var uploadFiles;
 
 var filetypeSelect = document.getElementById("filetype-field");
+
 filetypeSelect.addEventListener("change", function() {
     if (filetypeSelect.value == "pdf") {
         $('#texteditor').trumbowyg('destroy');

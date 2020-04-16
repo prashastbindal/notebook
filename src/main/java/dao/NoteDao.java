@@ -109,28 +109,11 @@ public class NoteDao {
     }
 
     /**
-     * Search for notes by fulltext.
-     *
-     * @param query search query
-     * @return list of matching notes
-     */
-    public List<Note> search(String query) {
-        String sql = "SELECT * FROM NOTES WHERE fulltext @@ :query;";
-        try(Connection conn = sql2o.open()) {
-            return conn.createQuery(sql)
-                    .addParameter("query", query)
-                    .executeAndFetch(Note.class);
-        } catch (NoSuchElementException e) {
-            return null;
-        }
-    }
-
-    /**
      * Updates the Note's upvotes.
      *
      * @param note to update
      */
-    public void upvote(Note note) {
+    public void updateUpvotes(Note note) {
         String sql = "update Notes set upvotes = :upvotes where id = :noteId;";
         try(Connection conn = sql2o.open()) {
             conn.createQuery(sql)
@@ -171,11 +154,74 @@ public class NoteDao {
         }
     }
 
+    /**
+     * Search for notes by fulltext.
+     *
+     * @param query search query
+     * @return list of matching notes
+     */
+    public List<Note> search(String query, int courseId) {
+        String sql = "SELECT * FROM NOTES WHERE LOWER(fulltext) LIKE LOWER(:query) AND courseid = :courseId;";
+        try(Connection conn = sql2o.open()) {
+            return conn.createQuery(sql)
+                    .addParameter("query", "%" + query + "%")
+                    .addParameter("courseId", courseId)
+                    .executeAndFetch(Note.class);
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Search for notes by title/name.
+     *
+     * @param searchKey search query
+     * @return list of matching notes
+     */
     public List<Note> searchNotesWithName(String searchKey, int courseId) {
-        String sql = "SELECT * FROM Notes WHERE title LIKE :noteName and courseid = :courseId;";
+        String sql = "SELECT * FROM Notes WHERE LOWER(title) LIKE LOWER(:noteName) and courseid = :courseId;";
         try(Connection conn = sql2o.open()){
             return conn.createQuery(sql).addParameter("noteName", "%" + searchKey + "%")
                     .addParameter("courseId", courseId).executeAndFetch(Note.class);
+        }
+    }
+
+    /**
+     * Search for notes by creator.
+     *
+     * @param query search query
+     * @return list of matching notes
+     */
+    public List<Note> searchNotesByCreator(String query, int courseId) {
+        String sql = "SELECT * FROM NOTES WHERE LOWER(creator) LIKE LOWER(:query) AND courseid = :courseId;";
+        try(Connection conn = sql2o.open()) {
+            return conn.createQuery(sql)
+                    .addParameter("query", "%" + query + "%")
+                    .addParameter("courseId", courseId)
+                    .executeAndFetch(Note.class);
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Search for notes by date.
+     *
+     * @param query search query
+     * @return list of matching notes
+     */
+    public List<Note> searchNotesByDate(String query, int courseId) {
+        if (query.length() == 8) {
+            query = query.substring(0, 2) + "/" + query.substring(2, 4) + "/" + query.substring(4);
+        }
+        String sql = "SELECT * FROM NOTES WHERE LOWER(date) LIKE LOWER(:query) AND courseid = :courseId;";
+        try(Connection conn = sql2o.open()) {
+            return conn.createQuery(sql)
+                    .addParameter("query", query)
+                    .addParameter("courseId", courseId)
+                    .executeAndFetch(Note.class);
+        } catch (NoSuchElementException e) {
+            return null;
         }
     }
 
