@@ -58,3 +58,36 @@ body {
     color: #222;
     border-color: #222;
 }
+
+#texteditor {
+    min-height: 250px;
+    margin-bottom: 15px;
+}
+
+.ql-font span[data-value="inconsolata"]::before {
+    font-family: "Inconsolata" !important;
+    content: "Inconsolata" !important;
+}
+
+.ql-font span[data-value="roboto"]::before {
+    font-family: "Roboto" !important;
+    content: "Roboto" !important;
+}
+
+.ql-font span[data-value="arial"]::before {
+    font-family: "Arial" !important;
+    content: "Arial" !important;
+}
+/* Set content font-families */
+
+.ql-font-inconsolata {
+    font-family: "Inconsolata";
+}
+
+.ql-font-roboto {
+    font-family: "Roboto";
+}
+
+.ql-font-arial {
+    font-family: "Arial";
+}
