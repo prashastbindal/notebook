@@ -64,6 +64,11 @@ body {
     margin-bottom: 15px;
 }
 
+#markdown-container {
+    height: 350px;
+    margin-bottom: 15px;
+}
+
 .ql-font span[data-value="inconsolata"]::before {
     font-family: "Inconsolata" !important;
     content: "Inconsolata" !important;

@@ -32,6 +32,17 @@ $(document).ready(function() {
     });
     loadFonts();
     $('#texteditor-container').hide();
+
+    var editor = editormd("markdown", {
+        path: "https://cdn.jsdelivr.net/npm/editor.md@1.5.0/lib/",
+        onload : function() {
+            $('#markdown-container').hide();
+        }
+    });
+    editormd.loadScript("https://cdn.jsdelivr.net/npm/editor.md@1/languages/en.min", function(){
+        editor.lang = editormd.defaults.lang;
+        editor.recreate();
+    })
 });
 
 function loadFonts() {
@@ -52,9 +63,15 @@ filetypeSelect.addEventListener("change", function() {
     if (filetypeSelect.value == "pdf") {
         $('#texteditor-container').hide();
         $('#file-area').show();
-    } else {
+        $('#markdown-container').hide();
+    } else if (filetypeSelect.value == "html") {
         $('#texteditor-container').show();
         $('#file-area').hide();
+        $('#markdown-container').hide();
+    } else if (filetypeSelect.value == "md") {
+        $('#texteditor-container').hide();
+        $('#file-area').hide();
+        $('#markdown-container').show();
     }
 });
 $('#note-form').submit(function() {
