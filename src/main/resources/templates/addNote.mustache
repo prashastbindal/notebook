@@ -35,9 +35,11 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Title</span>
                             </div>
-                            <input type="hidden" id="username-field" name="username" value="0">
+                            <input type="hidden" id="username-field"
+                                   name="username" value="0">
                             <input id="title-field" name="title" type="text"
-                                   class="form-control form-rounded">
+                                   class="form-control form-rounded"
+                                   maxlength="18">
                         </div>
 
                         <div class="input-group overflow-hidden mb-3">
@@ -52,19 +54,20 @@
 
                         <div id="file-area">
                             <div class="text-center">
-                                <div class="upload-drop-zone" id="drop-zone">
-                                    Drag and drop files here
-                                </div>
+                                <label for="file-field" class="file-upload btn btn-primary
+                                    btn-block rounded-pill shadow"><i class="fa
+                                    fa-upload mr-2"></i>Browse for file...
+                                    <input id="file-field" type="file" name="file" accept="application/pdf">
+                                </label>
                             </div>
                             <div id="div-upload">
                                 <div class="text-center" id="div-next">
-                                    <label for="file-field" class="file-upload btn btn-primary
-                                    btn-block rounded-pill shadow"><i class="fa
-                                    fa-upload mr-2"></i>Or browse for file ...
-                                        <input id="file-field" type="file" name="file" accept="application/pdf">
-                                    </label>
+                                    <div class="upload-drop-zone" id="drop-zone">
+                                        Drag and drop files here
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
 
                         <textarea id="textarea" name="text" hidden></textarea>
