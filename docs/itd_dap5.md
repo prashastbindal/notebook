@@ -17,3 +17,4 @@
 * Do UI/UX styling pass.
 * Clean up DB/demo data.
 * Fix note title overflow in sidebar.
+* Add ability to edit/delete comments.
