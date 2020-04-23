@@ -1,7 +1,6 @@
 var dropZone = document.getElementById('drop-zone');
-var uploadForm = document.getElementById('note-form');
-var selectForm = document.getElementById("file-field")
-var uploadFiles;
+var selectForm = document.getElementById("file-field");
+var submitForm = document.getElementById("submit-button");
 
 var filetypeSelect = document.getElementById("filetype-field");
 
@@ -24,18 +23,39 @@ $('#note-form').submit(function() {
 });
 
 var addFileName = function(name) {
-    // Create a new div so we know drag-drop was successful
+    // Create a new div so we know upload was successful
     var newDiv = document.createElement("div");
     newDiv.className = "js-upload-finished text-center";
+    newDiv.id = "name";
     newDiv.appendChild(document.createTextNode(name));
 
     var currentDiv = document.getElementById("div-next");
-    var parent = document.getElementById("div-upload")
-    parent.insertBefore(newDiv, currentDiv);
+    var parent = document.getElementById("div-upload");
+    parent.insertBefore(newDiv, currentDiv.nextSibling);
 }
 
 selectForm.addEventListener('change', function(e) {
+    // replace name if there is one already
+    var name = document.getElementById('name');
+    if (name != null && name != '') {
+        var element = document. getElementById('name');
+        element.parentNode.removeChild(element);
+    }
     addFileName(document.getElementById('file-field').files[0].name);
+});
+
+submitForm.addEventListener('click', function(e) {
+    var name = document.getElementById('name');
+    var title = document.getElementById('title-field').value;
+    if (name == null || name == '') {
+        e.preventDefault();
+        alert("Uploaded file is empty or invalid, please try again.");
+        window.location.reload();
+    }
+    if (title == null || title == '') {
+        e.preventDefault();
+        alert("Please supply a title for your note.");
+    }
 });
 
 dropZone.ondrop = function(e) {
