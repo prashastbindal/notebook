@@ -27,8 +27,10 @@ var noteItemFormat = '<a data-courseId=%s data-noteId=%s class="note-select list
 function checkSignin(courseId) {
     var auth2 = gapi.auth2.getAuthInstance();
     if (!auth2.isSignedIn.get()) {
-        auth2.signIn();
-        // TODO: update the navbar on signin
+        auth2.signIn().then(() => {
+            document.getElementById("signin-btn").style.display = "none";
+            document.getElementById("signout-btn").style.display = "inline";
+        });
     } else {
         window.location.href = "/courses/" + courseId + "/addNote";
         return;
