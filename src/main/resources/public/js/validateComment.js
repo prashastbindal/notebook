@@ -10,8 +10,10 @@ function validateComment() {
 
     var auth2 = gapi.auth2.getAuthInstance();
     if (!auth2.isSignedIn.get()) {
-        auth2.signIn();
-        // TODO: Update the navbar on signin
+        auth2.signIn().then(() => {
+            parent.document.getElementById("signin-btn").style.display = "none";
+            parent.document.getElementById("signout-btn").style.display = "inline";
+        });
         return false;
     } else {
         var username = auth2.currentUser.get().getBasicProfile().getName();
