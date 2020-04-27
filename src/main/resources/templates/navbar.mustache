@@ -1,4 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <meta name="google-signin-client_id" content="1007975177449-pldhrc1i4sabkqejrt0i62c2oppmvabf.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <link rel="stylesheet" href="/css/nav-custom.css">
     <a class="navbar-brand" href="/home">NoteBook</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -7,15 +10,29 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
+                <a class="nav-link" href="/home">Home</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="/courses">Course List</a>
             </li>
         </ul>
         <ul class="navbar-nav mr-2">
         </ul>
-        <form class="form-inline my-2 my-lg-0" action="/signup">
-            <button class="btn btn-outline-primary my-2 my-sm-0"
-                    type="submit" id="submit">Sign In</button>
-        </form>
+        <div class="g-signin2" id="signin-btn" data-onsuccess="onSignIn"></div>
+        <script>
+            function onSignIn(googleUser) {
+                updateNavbar();
+            }
+        </script>
+        <button id="signout-btn" onclick="signOut();">Sign out</button>
+        <script>
+            function signOut() {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut();
+                document.getElementById("signin-btn").style.display = "inline";
+                document.getElementById("signout-btn").style.display = "none";
+            }
+        </script>
     </div>
 </nav>
 

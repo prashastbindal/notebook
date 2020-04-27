@@ -27,27 +27,12 @@ public class StaticController extends Controller {
             ctx.render("/templates/home.mustache");
         });
 
-        app.get("/signup", ctx -> {
-            if (ctx.cookie("username") != null) {
-                ctx.removeCookie("username");
-                ctx.redirect("/home");
-            } else {
-                ctx.render("/templates/signup.mustache");
-            }
-        });
-
         app.get("/aboutUs", ctx -> {
             ctx.render("/templates/aboutUs.mustache");
         });
 
         app.get("/contact", ctx -> {
             ctx.render("/templates/contact.mustache");
-        });
-
-        app.post("/signup/submit", ctx -> {
-            String username = ctx.formParam("email").split("@")[0];
-            ctx.cookie("username", username);
-            ctx.redirect("/home");
         });
     }
 }

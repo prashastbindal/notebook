@@ -60,7 +60,7 @@ public class CourseDao {
             noteDao.remove(note);
         }
 
-        String sql = "DELETE FROM Courses WHERE id = :id;";
+        String sql = "DELETE FROM Courses WHERE id = :id CASCADE;";
         try(Connection conn = sql2o.open()) {
             System.out.println(course);
             conn.createQuery(sql)
@@ -102,9 +102,10 @@ public class CourseDao {
     }
 
     public List<Course> searchCoursesWithName(String searchKey) {
-        String sql = "SELECT * FROM Courses WHERE name LIKE :courseName;";
+        String sql = "SELECT * FROM Courses WHERE LOWER(name) LIKE LOWER(:courseName);";
         try(Connection conn = sql2o.open()){
             return conn.createQuery(sql).addParameter("courseName", "%" + searchKey + "%").executeAndFetch(Course.class);
         }
     }
+
 }

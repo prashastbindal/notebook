@@ -1,13 +1,4 @@
-function validateComment() {
-    var comment = document.getElementById("comment-field").value;
-    if (comment.length < 1) {
-        alert("Comment cannot be empty!");
-        return false;
-    } else if (comment.length > 1000) {
-        alert("Comment too long!");
-        return false;
-    }
-
+function validateUpvote() {
     var auth2 = gapi.auth2.getAuthInstance();
     if (!auth2.isSignedIn.get()) {
         auth2.signIn().then(() => {
@@ -17,7 +8,11 @@ function validateComment() {
         return false;
     } else {
         var username = auth2.currentUser.get().getBasicProfile().getName();
-        document.getElementById("username-field").value = username;
+        console.log("Name is " + username);
+        var courseId = document.getElementById("courseId").getAttribute("value");
+        var noteId = document.getElementById("noteId").getAttribute("value");
+        var cookieKey = username + "_" + courseId + "_" + noteId;
+        document.getElementById("usernameUpvote").setAttribute("value", cookieKey);
         return true;
     }
 }

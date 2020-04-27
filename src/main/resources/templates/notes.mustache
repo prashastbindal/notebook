@@ -5,243 +5,167 @@
     {{> header}}
 
     <link href="/css/simple-sidebar.css" rel="stylesheet">
+    <link href="/css/all.css" rel="stylesheet" >
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+    <script>
+        gapi.load('auth2', function() {
+            gapi.auth2.init();
+        });
+    </script>
 </head>
 <body>
 <main>
-{{> navbar}}
+    <script src="/js/updateNavbar.js"></script>
 
-<div class="d-flex" id="wrapper">
-    <!-- Sidebar -->
-    <div class="bg-light border-right" id="sidebar-wrapper">
-        <div class="sidebar-heading">
-            <div id="course-name-header">{{ courseName }}</div>
-        </div>
-        <div class="show sidebar-heading">
-            <form id="search-form">
-                <div class="input-group mb-3">
-                    <input class="form-control" name="search-notes" type="text" id="searchbar" placeholder="Search Notes">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary dropdown-toggle" type="button"
-                        id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Search By
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                            <button class="dropdown-item" type="button"
-                                onclick="searchcallback('title', {{courseId}})">Title</button>
-                            <button class="dropdown-item" type="button"
-                                onclick="searchcallback('body', {{courseId}})">Body</button>
-                            <button class="dropdown-item" type="button"
-                                onclick="searchcallback('creator', {{courseId}})">Creator</button>
-                            <button class="dropdown-item" type="button"
-                                onclick="searchcallback('date', {{courseId}})">Date</button>
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div class="bg-light border-right" id="sidebar-wrapper">
+            <div class="sidebar-heading">
+                <div id="course-name-header">{{ courseName }}</div>
+                <div>
+                    <button class="btn btn-outline-primary my-2 my-sm-0"
+                            id="add-note-button" onclick="checkSignin({{ courseId }});">Add a
+                        Note</button>
+                </div>
+            </div>
+            <div class="show sidebar-heading">
+                <form id="search-form">
+                    <div class="input-group mb-3">
+                        <input class="form-control" name="search-notes" type="text" id="searchbar" placeholder="Search Notes">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary"
+                                    type="button"
+                                    id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Search
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                <button class="dropdown-item" type="button"
+                                        onclick="searchcallback('title', {{courseId}})">Title</button>
+                                <button class="dropdown-item" type="button"
+                                        onclick="searchcallback('body', {{courseId}})">Body</button>
+                                <button class="dropdown-item" type="button"
+                                        onclick="searchcallback('creator', {{courseId}})">Creator</button>
+                                <button class="dropdown-item" type="button"
+                                        onclick="searchcallback('date', {{courseId}})">Date</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Sort By
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                        <button class="dropdown-item" type="button"
-                            onclick="sortcallback('title', {{courseId}})">Title</button>
-                        <button class="dropdown-item" type="button" onclick="sortcallback('date', {{courseId}})">Date
-                            Added</button>
-                        <button class="dropdown-item" type="button" onclick="sortcallback('upvotes', {{courseId}})">Upvotes</button>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary my-2 my-sm-0"
+                                id="reset-button" onClick="queryAllNotes({{courseId}})">
+                            Reset
+                        </button>
+                        <button class="btn btn-outline-primary dropdown-toggle"
+                                type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Sort By
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <button class="dropdown-item" type="button"
+                                    onclick="sortcallback('title', {{courseId}})">Title</button>
+                            <button class="dropdown-item" type="button" onclick="sortcallback('date', {{courseId}})">Date
+                                Added</button>
+                            <button class="dropdown-item" type="button" onclick="sortcallback('upvotes', {{courseId}})">Upvotes</button>
+                        </div>
                     </div>
-                    <button class="btn btn-outline-primary my-2 my-sm-0"
-                        id="reset-button" onClick="history.go(0);">
-                        Reset filters</button>
-                </div>
-                <div>
-                    <a class="btn btn-outline-primary my-2 my-sm-0"
-                        id="add-note-button"
-                        href="/courses/{{courseId}}/addNote">Add a Note</a>
-                </div>
-            </form>
-        </div>
-        <div class="list-group list-group-flush" id="note-list">
-            {{#noteList}}
-                <a data-courseId="{{courseId}}" data-noteId="{{id}}"
-                   class="note-select list-group-item
+                    <div class="dropdown" style="margin:10px;">
+                        <button class="btn btn-primary my-2 my-sm-0"
+                                id="subscribe-btn" onClick="subscribe({{courseId}})">
+                            Subscribe
+                        </button>
+                        <button class="btn btn-warning  my-2 my-sm-0"
+                                id="unsubscribe-btn" onClick="unsubscribe({{courseId}})">
+                            Unsubscribe
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+            <div class="list-group list-group-flush" id="note-list">
+                {{#noteList}}
+                    <a data-courseId="{{courseId}}" data-noteId="{{id}}"
+                       class="note-select list-group-item
                    list-group-item-action">{{ title }} by {{ creator }}
                         <br> Upvotes: {{upvotes}} </a>
-            {{/noteList}}
+                {{/noteList}}
+            </div>
         </div>
-    </div>
-    <!-- /#sidebar-wrapper -->
+        <!-- /#sidebar-wrapper -->
+        {{> modal}}
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <meta name="google-signin-client_id" content="1007975177449-pldhrc1i4sabkqejrt0i62c2oppmvabf.apps.googleusercontent.com">
+                <script src="https://apis.google.com/js/platform.js" async defer></script>
+                <link rel="stylesheet" href="/css/nav-custom.css">
+                <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button>
+                <!--            <a class="navbar-brand" href="/home">NoteBook</a>-->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-    <!-- Page Content -->
-    <div id="page-content-wrapper">
-        <div class="container-fluid" id="note-frame-container">
-            <iframe id="note-frame" src=""></iframe>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/courses">Course List</a>
+                        </li>
+                    </ul>
+                    <div class="g-signin2" id="signin-btn" data-onsuccess="onSignIn"></div>
+                    <script>
+                        function onSignIn(googleUser) {
+                            updateNavbar();
+                        }
+                    </script>
+                    <button id="signout-btn" onclick="signOut();">Sign
+                        out</button>
+                    <script>
+                        function signOut() {
+                            var auth2 = gapi.auth2.getAuthInstance();
+                            auth2.signOut();
+                            document.getElementById("signin-btn").style.display = "inline";
+                            document.getElementById("signout-btn").style.display = "none";
+                        }
+                    </script>
+                </div>
+            </nav>
+            <div class="container-fluid" id="note-frame-container">
+                <iframe id="note-frame" src=""></iframe>
+            </div>
+            {{> footer}}
         </div>
+        <!-- /#page-content-wrapper -->
     </div>
-    <!-- /#page-content-wrapper -->
-
-</div>
-
-<style>
-    #note-frame-container {
-        height: 100%;
-    }
-    #note-frame {
-        border: none;
-        width: 100%;
-        height: 100%;
-    }
-</style>
-
-<script>
-$(function(){
-    $(".note-select").click(function(e) {
-        $('#note-list .active').removeClass('active');
-        $(this).addClass('active');
-
-        e.preventDefault();
-        $("#note-frame").attr("src", "".concat("/courses/", e.target.dataset.courseid, "/notes-preview/", e.target.dataset.noteid));
-    });
-});
-
-    $('#search-form').submit(function(ev) {
-        ev.preventDefault();
-        // ajax stuff...
-    });
-
-    function parse(str) {
-        var args = [].slice.call(arguments, 1),
-            i = 0;
-
-        return str.replace(/%s/g, () => args[i++]);
-    }
-    var noteItemFormat = '<a data-courseId=%s data-noteId=%s class="note-select list-group-item' +
-                                               ' list-group-item-action">%s by %s %s  Upvotes: %s </a>'
-
-
-    function searcher(courseId, searchKey, newUrl){
-        console.log("search button clicked")
-        console.log(searchKey)
-        $.ajax({
-             type: "GET",
-             url: newUrl,
-             contentType: "application/json",
-             success: function (data, status, jqXHR) {
-                $("#note-list").empty();
-
-                data.map(function(note){
-                    $("#note-list").append(parse(noteItemFormat, note.courseId.toString(), note.id.toString(),
-                    note.title.toString(), note.creator.toString(), note.date.toString(), note.upvotes.toString()))
-                });
-
-                $(".note-select").click(function(e) {
-                        $('#note-list .active').removeClass('active');
-                        $(this).addClass('active');
-
-                        e.preventDefault();
-                        $("#note-frame").attr("src", "".concat("/courses/", e.target.dataset.courseid, "/notes-preview/", e.target.dataset.noteid));
-                    });
-             },
-
-             error: function (jqXHR, status) {
-                 // error handler
-                 console.log(jqXHR);
-                 alert("Empty or invalid search input");
-             }
-         });
-
-    }
-
-    var notes;
-    function getAllNotes(courseId, callback=null, callback_args=null){
-    //after ajax call, the callback function is executed with arguments : args...., notes
-            $.ajax({
-                 type: "GET",
-                 url: "/courses/" + courseId.toString() + "/notes/json",
-                 contentType: "application/json",
-                 success: function (data, status, jqXHR) {
-                    notes = data;
-                    if(callback!=null){
-                       callback(callback_args, notes);
-                    }
-                 },
-
-                 error: function (jqXHR, status) {
-                     // error handler
-                     console.log(jqXHR);
-                     alert('fail' + status.code);
-                 }
-             });
-
-        }
-
-    function sorter(args, notes){
-        sortBy = args[0]
-        notes.sort(function(a, b) {
-            if (sortBy == "title"){
-                return a.title.toUpperCase().localeCompare(b.title.toUpperCase());
-            }else if(sortBy == "date"){
-                // check year is greater
-                if(a.date.substring(6).toUpperCase().localeCompare(b.date.substring(6).toUpperCase()) == 0){
-                    return a.date.toUpperCase().localeCompare(b.date.toUpperCase());
-                 }else{
-                    return a.date.substring(6).toUpperCase().localeCompare(b.date.substring(6).toUpperCase())
-                 }
-            }else if(sortBy == "upvotes"){
-                return a.upvotes -  b.upvotes;
-            }else{
-                alert(sortBy + ' sort option not supported ! ')
-            }
-
-        });
-        $("#note-list").empty();
-
-        notes.map(function(note){
-            $("#note-list").append(parse(noteItemFormat, note.courseId.toString(), note.id.toString(),
-                                note.title.toString(), note.creator.toString(), note.date.toString(), note.upvotes.toString()))
-        });
-
-        $(".note-select").click(function(e) {
-                $('#note-list .active').removeClass('active');
-                $(this).addClass('active');
-
-                e.preventDefault();
-                $("#note-frame").attr("src", "".concat("/courses/", e.target.dataset.courseid, "/notes-preview/", e.target.dataset.noteid));
-            });
-    }
-
-    function sortcallback(sortBy, courseId){
-        console.log("sorting by " + sortBy);
-        getAllNotes(courseId, sorter, [sortBy]);
-
-    };
-
-    function searchcallback(searchBy, courseId) {
-        var searchKey = $("#searchbar").val();
-        var url = "";
-        if (searchBy == "title") {
-            url = "/courses/" + courseId.toString() + "/notes/searchName/"+ searchKey;
-        } else if (searchBy == "body") {
-            url = "/courses/" + courseId.toString() + "/notes/searchContent/"+ searchKey;
-        } else if (searchBy == "creator") {
-            url = "/courses/" + courseId.toString() + "/notes/searchCreator/"+ searchKey;
-        } else if (searchBy == "date") {
-            searchKey = searchKey.replace("/", "").replace("/", "");
-            url = "/courses/" + courseId.toString() + "/notes/searchDate/"+ searchKey;
-        }
-        searcher(courseId, searchKey, url);
-    };
-
-</script>
-
-<!-- optional script if we want to make the sidebar toggleable -->
-<!--<script>-->
-<!--    $("#menu-toggle").click(function(e) {-->
-<!--        e.preventDefault();-->
-<!--        $("#wrapper").toggleClass("toggled");-->
-<!--    });-->
-<!--</script>-->
 
 </main>
-{{> footer}}
 
+<script src="/js/noteAjax.js"></script>
+<script>
+    $("#menu-toggle").click(function(e) {
+        console.log("Toggle clicked");
+        e.preventDefault();
+        $("#wrapper").toggleClass('toggle');
+    });
+
+
+    var auth2 = gapi.auth2.getAuthInstance();
+
+    if (!auth2.isSignedIn.get()) {
+        auth2.signIn();
+        // TODO: Update the navbar on signin
+        return false;
+    } else {
+        var username = auth2.currentUser.get().getBasicProfile().getName();
+        document.getElementById("username-field").value = username;
+        return true;
+    }
+
+
+
+
+</script>
 </body>
 </html>
