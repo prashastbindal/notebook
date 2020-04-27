@@ -5,6 +5,9 @@ import model.Course;
 import model.Note;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * Static class for managing the database.
@@ -94,7 +97,7 @@ public final class DBBuilder {
         String sqlCreateCoursesTable =
                 "CREATE TABLE IF NOT EXISTS Courses(" +
                     "id SERIAL PRIMARY KEY," +
-                    "name VARCHAR(30) NOT NULL" +
+                    "name VARCHAR(100) NOT NULL" +
                 ");";
         String sqlCreateNotesTable =
                 "CREATE TABLE IF NOT EXISTS Notes(" +
@@ -181,6 +184,17 @@ public final class DBBuilder {
             commentDao.add(cmt2);
             Comment cmt3 = new Comment(cmt1.getId(), n1.getId(), "test comment reply. Hello!", "Matt");
             commentDao.add(cmt3);
+
+            try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/public/txt/CSCourses.txt"))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    //add the course to test data
+                    courseDao.add(new Course(line));
+                }
+            } catch (IOException e) {
+
+            }
+
         }
     }
 

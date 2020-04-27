@@ -1,0 +1,67 @@
+EN.601.104. Computer Ethics
+EN.601.105. M & Ms: Freshman Experience
+EN.601.220. Intermediate Programming
+EN.601.226. Data Structures
+EN.601.229. Computer System Fundamentals
+EN.601.231. Automata & Computation Theory
+EN.601.255. Introduction to Video Game Design
+EN.601.256. Introduction to Video Game Design Lab
+EN.601.290. User Interfaces and Mobile Applications
+EN.601.295. Developing Health IT Applications
+EN.601.310. Software for Resilient Communities
+EN.601.315. Databases
+EN.601.317. Distributed Systems
+EN.601.318. Operating Systems
+EN.601.320. Parallel Programming
+EN.601.325. Declarative Methods
+EN.601.328. Compilers and Interpreters
+EN.601.340. Web Security
+EN.601.350. Introduction to Genomic Research
+EN.601.355. Video Game Design Project
+EN.601.356. Seminar: Computer Integrated Surgery II
+EN.601.365. Knowledge Discovery from Text
+EN.601.382. Deep Learning Lab
+EN.601.402. Digital Health and Biomedical Informatics
+EN.601.411. Computer Science Innovation & Entrepreneurship II
+EN.601.414. Computer Networks
+EN.601.415. Databases
+EN.601.419. Cloud Computing
+EN.601.421. Object Oriented Software Engineering
+EN.601.422. Software Testing & Debugging
+EN.601.425. Declarative Methods
+EN.601.426. Principles of Programming Languages
+EN.601.427. Principles of Programming Languages II
+EN.601.430. Combinatorics & Graph Theory in Computer Science
+EN.601.433. Intro Algorithms
+EN.601.434. Randomized and Big Data Algorithms
+EN.601.435. Approximation Algorithms
+EN.601.436. Algorithmic Game Theory
+EN.601.441. Blockchains and Cryptocurrencies
+EN.601.442. Modern Cryptography
+EN.601.443. Security & Privacy in Computing
+EN.601.444. Network Security
+EN.601.445. Practical Cryptographic Systems
+EN.601.447. Computational Genomics: Sequences
+EN.601.448. Computational Genomics: Data Analysis
+EN.601.452. Computational Biomedical Research
+EN.601.454. Augmented Reality
+EN.601.455. Computer Integrated Surgery I
+EN.601.456. Computer Integrated Surgery II
+EN.601.457. Computer Graphics
+EN.601.459. Computational Geometry
+EN.601.461. Computer Vision
+EN.601.463. Algorithms for Sensor-Based Robotics
+EN.601.464. Artificial Intelligence
+EN.601.465. Natural Language Processing
+EN.601.466. Information Retrieval and Web Agents
+EN.601.467. Introduction to Human Language Technology
+EN.601.468. Machine Translation
+EN.601.475. Machine Learning
+EN.601.476. Machine Learning: Data to Models
+EN.601.477. Causal Inference
+EN.601.479. Representation Learning
+EN.601.481. Machine Learning: Optimization
+EN.601.482. Machine Learning: Deep Learning
+EN.601.485. Probabilistic Models of the Visual Cortex
+EN.601.490. Introduction to Human-Computer Interaction
+EN.601.491. Human-Robot Interaction
