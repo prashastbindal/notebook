@@ -99,7 +99,7 @@ public final class DBBuilder {
         String sqlCreateNotesTable =
                 "CREATE TABLE IF NOT EXISTS Notes(" +
                     "id SERIAL PRIMARY KEY," +
-                    "courseId INTEGER NOT NULL REFERENCES Courses(id)," +
+                    "courseId INTEGER NOT NULL REFERENCES Courses(id) ON DELETE CASCADE," +
                     "title VARCHAR(80) NOT NULL," +
                     "creator VARCHAR(80)," +
                     "filetype VARCHAR(30)," +
@@ -111,7 +111,7 @@ public final class DBBuilder {
                 "CREATE TABLE IF NOT EXISTS Comments(" +
                     "id SERIAL PRIMARY KEY," +
                     "parentId SERIAL," +
-                    "noteId INTEGER NOT NULL REFERENCES Notes(id)," +
+                    "noteId INTEGER NOT NULL REFERENCES Notes(id) ON DELETE CASCADE," +
                     "text TEXT NOT NULL," +
                     "creator VARCHAR(80)" +
                 ");";
@@ -120,7 +120,7 @@ public final class DBBuilder {
                 "CREATE TABLE IF NOT EXISTS Subscriptions(" +
                         "id SERIAL PRIMARY KEY," +
                         "userName VARCHAR(80)," +
-                        "courseId INTEGER NOT NULL REFERENCES Courses(id)," +
+                        "courseId INTEGER NOT NULL REFERENCES Courses(id) ON DELETE CASCADE," +
                         "userEmail  VARCHAR(80)" +
                         ");";
 
