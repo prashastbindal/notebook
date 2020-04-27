@@ -2,16 +2,19 @@ package controller;
 
 import dao.CourseDao;
 import dao.NoteDao;
+import dao.SubscriptionDao;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.NotFoundResponse;
 import io.javalin.plugin.rendering.template.TemplateUtil;
 import model.Course;
 import model.Note;
+import model.Subscription;
 import org.sql2o.Sql2o;
 import static io.javalin.apibuilder.ApiBuilder.*;
 
 import java.util.List;
+import java.util.Properties;
 
 /**
  * Controller for course page with list of notes.
@@ -20,6 +23,7 @@ public class CourseController extends Controller {
 
     CourseDao courseDao;
     NoteDao noteDao;
+    private SubscriptionDao subscriptionDao;
 
     /**
      * Instantiates a new controller.
@@ -35,6 +39,7 @@ public class CourseController extends Controller {
     void init() {
         this.courseDao = new CourseDao(sql2o);
         this.noteDao = new NoteDao(sql2o);
+        this.subscriptionDao = new SubscriptionDao(sql2o);
     }
 
     @Override
@@ -47,6 +52,8 @@ public class CourseController extends Controller {
             });
             post("courses/:courseId/delete", this::deleteCourse);
             post("courses/addCourse", this::addCourse);
+            post("courses/subscribe", this::subscribeCourse);
+            post("courses/unsubscribe", this::unsubscribeCourse);
             get("courses/:courseId/notes/search/:key", this::searchNotesJSON);
             get("courses/:courseId/notes/searchName/:key", this::searchNotesNameJSON);
             get("courses/:courseId/notes/searchContent/:key", this::searchNotesContentJSON);
@@ -180,6 +187,40 @@ public class CourseController extends Controller {
         String searchKey = ctx.pathParam("key");
         List<Note> notes = noteDao.searchNotesByDate(searchKey, courseId);
         ctx.json(notes);
+        ctx.status(200);
+        ctx.contentType("application/json");
+    }
+
+
+    public void subscribeCourse(Context ctx){
+
+        Subscription subscription = ctx.bodyAsClass(Subscription.class);
+        Properties properties = new Properties();
+
+        if(subscriptionDao.findSubscription(subscription) != null){
+            properties.put("preSubscribed", true);
+        }else{
+            subscriptionDao.addSubscription(subscription);
+            properties.put("preSubscribed", false);
+        }
+        ctx.json(properties);
+        ctx.status(200);
+        ctx.contentType("application/json");
+    }
+
+    public void unsubscribeCourse(Context ctx){
+
+        Subscription subscription = ctx.bodyAsClass(Subscription.class);
+        Properties properties = new Properties();
+
+        Subscription dbSubscription = subscriptionDao.findSubscription(subscription);
+        if(dbSubscription != null){
+            subscriptionDao.remove(dbSubscription);
+            properties.put("preSubscribed", true);
+        }else{
+            properties.put("preSubscribed", false);
+        }
+        ctx.json(properties);
         ctx.status(200);
         ctx.contentType("application/json");
     }

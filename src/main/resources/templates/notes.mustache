@@ -7,6 +7,7 @@
     <link href="/css/simple-sidebar.css" rel="stylesheet">
     <link href="/css/all.css" rel="stylesheet" >
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
     <script>
         gapi.load('auth2', function() {
@@ -68,6 +69,17 @@
                             <button class="dropdown-item" type="button" onclick="sortcallback('upvotes', {{courseId}})">Upvotes</button>
                         </div>
                     </div>
+                    <div class="dropdown" style="margin:10px;">
+                        <button class="btn btn-primary my-2 my-sm-0"
+                                id="subscribe-btn" onClick="subscribe({{courseId}})">
+                            Subscribe
+                        </button>
+                        <button class="btn btn-warning  my-2 my-sm-0"
+                                id="unsubscribe-btn" onClick="unsubscribe({{courseId}})">
+                            Unsubscribe
+                        </button>
+                    </div>
+
                 </form>
             </div>
             <div class="list-group list-group-flush" id="note-list">
@@ -137,6 +149,23 @@
         e.preventDefault();
         $("#wrapper").toggleClass('toggle');
     });
+
+
+    var auth2 = gapi.auth2.getAuthInstance();
+
+    if (!auth2.isSignedIn.get()) {
+        auth2.signIn();
+        // TODO: Update the navbar on signin
+        return false;
+    } else {
+        var username = auth2.currentUser.get().getBasicProfile().getName();
+        document.getElementById("username-field").value = username;
+        return true;
+    }
+
+
+
+
 </script>
 </body>
 </html>

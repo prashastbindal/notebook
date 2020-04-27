@@ -12,10 +12,8 @@ import model.Comment;
 import model.Course;
 import model.Note;
 import org.sql2o.Sql2o;
+import services.NotePublishService;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
@@ -30,6 +28,8 @@ public class NoteController extends Controller {
     CommentDao commentDao;
     FileServer fileServer;
     OCRTextExtractor textExtractor;
+    SubscriptionDao subscriptionDao;
+    NotePublishService notePublishService;
 
     /**
      * Instantiates a new controller.
@@ -48,6 +48,8 @@ public class NoteController extends Controller {
         this.commentDao = new CommentDao(sql2o);
         this.fileServer = FileServer.getFileServer();
         this.textExtractor = new OCRTextExtractor();
+        this.subscriptionDao = new SubscriptionDao(sql2o);
+        this.notePublishService = new NotePublishService(noteDao, subscriptionDao, courseDao);
     }
 
     @Override
@@ -215,30 +217,7 @@ public class NoteController extends Controller {
         noteDao.add(note);
 
         UploadedFile file = ctx.uploadedFile("file");
-        if (note.getFiletype().equals("pdf")) {
-            assert file != null;
-            fileServer.upload(file.getContent(), note);
-
-            Thread thread = new Thread(() -> {
-                String path = fileServer.getLocalFile(note);
-                String fulltext = textExtractor.extractText(path);
-                if (fulltext != null) {
-                    note.setFulltext(fulltext);
-                    noteDao.updateFulltext(note);
-                }
-            });
-            thread.start();
-        } else if (note.getFiletype().equals("html")) {
-            String text = ctx.formParam("text");
-            assert text != null;
-            InputStream textstream = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
-
-            text = text.replaceAll("\\<.*?\\>", "");
-            note.setFulltext(text);
-            noteDao.updateFulltext(note);
-
-            fileServer.upload(textstream, note);
-        }
+        notePublishService.publishNote(note, file, ctx.formParam("text"));
 
         ctx.redirect("/courses/" + course.getId() + "/notes");
     }

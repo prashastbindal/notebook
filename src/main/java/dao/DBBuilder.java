@@ -116,10 +116,19 @@ public final class DBBuilder {
                     "creator VARCHAR(80)" +
                 ");";
 
+        String sqlCreateSubscriptionsTable =
+                "CREATE TABLE IF NOT EXISTS Subscriptions(" +
+                        "id SERIAL PRIMARY KEY," +
+                        "userName VARCHAR(80)," +
+                        "courseId INTEGER NOT NULL REFERENCES Courses(id)," +
+                        "userEmail  VARCHAR(80)" +
+                        ");";
+
         Connection conn = sql2o.open();
         conn.createQuery(sqlCreateCoursesTable).executeUpdate();
         conn.createQuery(sqlCreateNotesTable).executeUpdate();
         conn.createQuery(sqlCreateCommentsTable).executeUpdate();
+        conn.createQuery(sqlCreateSubscriptionsTable).executeUpdate();
         conn.close();
     }
 
@@ -131,12 +140,14 @@ public final class DBBuilder {
     public static void dropTablesIfExist(Sql2o sql2o) {
         String sqlDropCommentsTable = "DROP TABLE IF EXISTS Comments;";
         String sqlDropNotesTable    = "DROP TABLE IF EXISTS Notes;";
-        String sqlDropCoursesTable  = "DROP TABLE IF EXISTS Courses;";
+        String sqlDropCoursesTable  = "DROP TABLE IF EXISTS Courses CASCADE;";
+        String sqlDropSubscriptionsTable  = "DROP TABLE IF EXISTS Subscriptions;";
 
         Connection conn = sql2o.open();
         conn.createQuery(sqlDropCommentsTable).executeUpdate();
         conn.createQuery(sqlDropNotesTable).executeUpdate();
         conn.createQuery(sqlDropCoursesTable).executeUpdate();
+        conn.createQuery(sqlDropSubscriptionsTable).executeUpdate();
         conn.close();
     }
 

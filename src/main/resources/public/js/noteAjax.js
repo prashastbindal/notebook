@@ -1,4 +1,6 @@
 var notes;
+//import Swal from 'sweetalert2';
+
 
 $(function(){
     $(".note-select").click(function(e) {
@@ -214,4 +216,102 @@ $("#menu-toggle").click(function(e) {
     e.preventDefault();
     $("#wrapper").toggleClass("toggled");
 });
+
+
+function subscribe(courseId){
+    gapi.load('auth2', function() {
+        auth2 = gapi.auth2.init();
+        auth2.then(function () {
+            if(auth2.isSignedIn.get()) {
+                $.ajax({
+                    type: "POST",
+                    url: "/courses/subscribe",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        "courseId": courseId,
+                        "userEmail": auth2.currentUser.get().getBasicProfile().getEmail(),
+                        "userName": auth2.currentUser.get().getBasicProfile().getName(),
+                        "id": 1
+                    }),
+                    success: function (data, status, jqXHR) {
+                        if(data['preSubscribed'] == true){
+                            Swal.fire({
+                              icon: 'info',
+                              title: 'No need !',
+                              text: 'You are already subscribed',
+                            })
+                        }else{
+                            Swal.fire({
+                              icon: 'success',
+                              title: 'Congratulations!',
+                              text: 'You have been subscribed',
+                            })
+                        }
+                    },
+
+                    error: function (jqXHR, status) {
+                        // error handler
+                        console.log(jqXHR);
+                        alert("Error with subscription");
+                    }
+                });
+            }else{
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Uh Oh!',
+                  text: 'Please sign in for any subscription activity',
+                })
+            }
+        });
+    });
+};
+
+
+function unsubscribe(courseId){
+    gapi.load('auth2', function() {
+        auth2 = gapi.auth2.init();
+        auth2.then(function () {
+            if(auth2.isSignedIn.get()) {
+                $.ajax({
+                    type: "POST",
+                    url: "/courses/unsubscribe",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        "courseId": courseId,
+                        "userEmail": auth2.currentUser.get().getBasicProfile().getEmail(),
+                        "userName": auth2.currentUser.get().getBasicProfile().getName(),
+                        "id": 1
+                    }),
+                    success: function (data, status, jqXHR) {
+                        if(data['preSubscribed'] == true){
+                            Swal.fire({
+                              icon: 'success',
+                              title: 'Success!',
+                              text: 'You have been unsubscribed',
+                            })
+                        }else{
+                            Swal.fire({
+                              icon: 'info',
+                              title: 'No need!',
+                              text: 'You were never subscribed',
+                            })
+                        }
+                    },
+
+                    error: function (jqXHR, status) {
+                        // error handler
+                        console.log(jqXHR);
+                        alert("Error with subscription");
+                    }
+                });
+            }else{
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Uh Oh!',
+                  text: 'Please sign in for any subscription activity',
+                })
+            }
+        });
+    });
+};
 

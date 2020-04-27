@@ -60,7 +60,7 @@ public class CourseDao {
             noteDao.remove(note);
         }
 
-        String sql = "DELETE FROM Courses WHERE id = :id;";
+        String sql = "DELETE FROM Courses WHERE id = :id CASCADE;";
         try(Connection conn = sql2o.open()) {
             System.out.println(course);
             conn.createQuery(sql)
@@ -107,4 +107,5 @@ public class CourseDao {
             return conn.createQuery(sql).addParameter("courseName", "%" + searchKey + "%").executeAndFetch(Course.class);
         }
     }
+
 }
