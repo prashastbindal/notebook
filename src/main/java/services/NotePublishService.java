@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.stream.Collectors;
 
-public class NotePublishService extends Observable {
+public class NotePublishService{
     private FileServer fileServer;
     private OCRTextExtractor textExtractor;
     private NoteDao noteDao;
