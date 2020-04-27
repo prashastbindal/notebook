@@ -45,7 +45,7 @@ selectForm.addEventListener('change', function(e) {
 });
 
 submitForm.addEventListener('click', function(e) {
-    var name = document.getElementById('name');
+    var name = document.getElementById('textarea');
     var title = document.getElementById('title-field').value;
     if (name == null || name == '') {
         e.preventDefault();
