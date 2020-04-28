@@ -58,6 +58,14 @@ public class NotePublishService{
             noteDao.updateFulltext(note);
 
             fileServer.upload(textstream, note);
+        } else if (note.getFiletype().equals("md")) {
+            assert text != null;
+            InputStream textstream = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
+
+            note.setFulltext(text);
+            noteDao.updateFulltext(note);
+
+            fileServer.upload(textstream, note);
         }
 
 
