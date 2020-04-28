@@ -5,6 +5,7 @@ var submitForm = document.getElementById("submit-button");
 var filetypeSelect = document.getElementById("filetype-field");
 
 var editor;
+var quill;
 
 $(document).ready(function() {
 
@@ -13,7 +14,7 @@ $(document).ready(function() {
     Font.whitelist = fonts;
     Quill.register(Font, true);
 
-    var quill = new Quill('#texteditor', {
+    quill = new Quill('#texteditor', {
         theme: 'snow',
         modules: {
             'toolbar': [
