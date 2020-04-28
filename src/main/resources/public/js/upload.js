@@ -62,6 +62,27 @@ function loadFonts() {
     })();
 }
 
+function addHTMLWrapper(content) {
+var headContent = " \
+<!doctype html> \
+<html> \
+<head> \
+    <link href='https://notebook-oose.herokuapp.com/css/note-content.css' rel='stylesheet'> \
+    <link href='https://fonts.googleapis.com/css2?family=Inconsolata&family=Roboto&display=swap' rel='stylesheet'> \
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css' integrity='sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq' crossorigin='anonymous'> \
+    <script defer src='https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js' integrity='sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz' crossorigin='anonymous'></script> \
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/monokai.min.css'> \
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/editor.md@1/css/editormd.min.css'> \
+</head> \
+<body> \
+";
+var footerContent = " \
+</body> \
+</html> \
+";
+return headContent + content + footerContent;
+}
+
 filetypeSelect.addEventListener("change", function() {
     if (filetypeSelect.value == "pdf") {
         $('#texteditor-container').hide();
@@ -85,9 +106,9 @@ $('#note-form').submit(function() {
     }
 
     if (filetypeSelect.value == "html") {
-        document.getElementById("textarea").innerHTML = quill.root.innerHTML;
+        document.getElementById("textarea").innerHTML = addHTMLWrapper(quill.root.innerHTML);
     } else if (filetypeSelect.value == "md") {
-        document.getElementById("textarea").innerHTML = editor.getHTML();
+        document.getElementById("textarea").innerHTML = addHTMLWrapper(editor.getHTML());
         filetypeSelect.value = "html";
     } else if (filetypeSelect.value == "pdf") {
         var name = document.getElementById('name');
