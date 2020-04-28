@@ -238,6 +238,15 @@ public class NoteController extends Controller {
             noteDao.updateFulltext(note);
 
             fileServer.upload(textstream, note);
+        } else if (note.getFiletype().equals("md")) {
+            String text = ctx.formParam("text");
+            assert text != null;
+            InputStream textstream = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
+
+            note.setFulltext(text);
+            noteDao.updateFulltext(note);
+
+            fileServer.upload(textstream, note);
         }
 
         ctx.redirect("/courses/" + course.getId() + "/notes");

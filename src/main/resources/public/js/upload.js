@@ -5,6 +5,8 @@ var uploadFiles;
 
 var filetypeSelect = document.getElementById("filetype-field");
 
+var editor;
+
 $(document).ready(function() {
 
     var fonts = ['arial', 'roboto', 'inconsolata'];
@@ -33,11 +35,12 @@ $(document).ready(function() {
     loadFonts();
     $('#texteditor-container').hide();
 
-    var editor = editormd("markdown", {
+    editor = editormd("markdown", {
         path: "https://cdn.jsdelivr.net/npm/editor.md@1.5.0/lib/",
         onload : function() {
             $('#markdown-container').hide();
-        }
+        },
+        saveHTMLToTextarea : true
     });
     editormd.loadScript("https://cdn.jsdelivr.net/npm/editor.md@1/languages/en.min", function(){
         editor.lang = editormd.defaults.lang;
@@ -75,7 +78,12 @@ filetypeSelect.addEventListener("change", function() {
     }
 });
 $('#note-form').submit(function() {
-    document.getElementById("textarea").innerHTML = quill.root.innerHTML;
+    if (filetypeSelect.value == "html") {
+        document.getElementById("textarea").innerHTML = quill.root.innerHTML;
+    } else if (filetypeSelect.value == "md") {
+        document.getElementById("textarea").innerHTML = editor.getHTML();
+        filetypeSelect.value = "html";
+    }
 });
 
 var addFileName = function(name) {
