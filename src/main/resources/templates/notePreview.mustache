@@ -23,14 +23,46 @@
     <div class="row mx-auto">
     <h4>Made by {{ creatorName }} on {{dateCreated}}</h4>
     </div>
+    <meta property="og:url"           content="http://notebook-oose.herokuapp.com/courses/{{courseId}}/notes" />
+    <meta property="og:type"          content="Notebook" />
+    <meta property="og:title"         content="Your Study Partner" />
+    <meta property="og:description"   content="Check out the best class notes available on the internet" />
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
+
+
+
     <form id="upvote-form" onsubmit="return validateUpvote()" action="/courses/{{courseId}}/notes/{{noteId}}/upvote" method="post">
         <div class="row mx-auto">
             <input type="hidden" id="noteId" name="noteId" value={{noteId}}>
             <input type="hidden" id="courseId" name="courseId" value={{courseId}}>
             <input type="hidden" id="usernameUpvote" name="usernameUpvote" value="username">
             <button class="btn btn-primary my-2 my-lg-0"  id="upvote">Upvote: {{numberOfUpvotes}}</button>
+            <!-- Your share button code -->
+            <div class="fb-share-button" style="margin:5px;"
+                 data-href="http://notebook-oose.herokuapp.com/courses/{{courseId}}/notes"
+                 data-layout="button_count">
+            </div>
+
+<!--            <a class="twitter-share-button"-->
+<!--               href="https://twitter.com/intent/tweet?url=http://notebook-oose.herokuapp.com/courses/{{courseId}}/notes"-->
+<!--               data-size="large">-->
+<!--                Tweet</a>-->
+            <div style="margin-top:9px;">
+                <a href="https://twitter.com/share?ref_src=twsrc%5Etfw&url=http://notebook-oose.herokuapp.com/courses/{{courseId}}/notes"
+                   class="twitter-share-button" data-show-count="false">Tweet</a>
+                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+            </div>
         </div>
     </form>
+
+
     {{#showContent}}
     <div class="embed-responsive embed-responsive-4by3">
         <embed class="embed-responsive-item" src="{{ filepath }}">
