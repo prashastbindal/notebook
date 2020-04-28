@@ -11,4 +11,3 @@ function insertNoteCss() {
     var frame = document.getElementById("note-content");
     frame.contentDocument.head.innerHTML += cssLinks;
 }
-insertNoteCss();
