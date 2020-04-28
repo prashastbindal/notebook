@@ -77,11 +77,24 @@ filetypeSelect.addEventListener("change", function() {
     }
 });
 $('#note-form').submit(function() {
+    var title = document.getElementById('title-field').value;
+    if (title == null || title == '') {
+        e.preventDefault();
+        alert("Please supply a title for your note.");
+    }
+
     if (filetypeSelect.value == "html") {
         document.getElementById("textarea").innerHTML = quill.root.innerHTML;
     } else if (filetypeSelect.value == "md") {
         document.getElementById("textarea").innerHTML = editor.getHTML();
         filetypeSelect.value = "html";
+    } else if (filetypeSelect.value == "pdf") {
+        var name = document.getElementById('name');
+        if (name == null || name == '') {
+            e.preventDefault();
+            alert("Uploaded file is empty or invalid, please try again.");
+            window.location.reload();
+        }
     }
 });
 
@@ -105,20 +118,6 @@ selectForm.addEventListener('change', function(e) {
         element.parentNode.removeChild(element);
     }
     addFileName(document.getElementById('file-field').files[0].name);
-});
-
-submitForm.addEventListener('click', function(e) {
-    var name = document.getElementById('name');
-    var title = document.getElementById('title-field').value;
-    if (name == null || name == '') {
-        e.preventDefault();
-        alert("Uploaded file is empty or invalid, please try again.");
-        window.location.reload();
-    }
-    if (title == null || title == '') {
-        e.preventDefault();
-        alert("Please supply a title for your note.");
-    }
 });
 
 dropZone.ondrop = function(e) {
