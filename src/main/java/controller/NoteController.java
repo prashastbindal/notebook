@@ -119,6 +119,9 @@ public class NoteController extends Controller {
         String filepath = fileServer.getURL(note);
         Boolean fileExists = (filepath != null);
 
+        Boolean showPDF = fileExists && note.getFiletype().equals("pdf");
+        Boolean showHTML = fileExists && note.getFiletype().equals("html");
+
         ctx.render(
             "/templates/notePreview.mustache",
             TemplateUtil.model(
@@ -129,6 +132,8 @@ public class NoteController extends Controller {
                 "creatorName", note.getCreator(),
                 "filepath", filepath,
                 "showContent", fileExists,
+                "showPDF", showPDF,
+                "showHTML", showHTML,
                 "commentList", comments,
                 "dateCreated", note.getDate(),
                 "numberOfUpvotes", note.getUpvotes()

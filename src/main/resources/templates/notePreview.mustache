@@ -31,11 +31,17 @@
             <button class="btn btn-primary my-2 my-lg-0"  id="upvote">Upvote: {{numberOfUpvotes}}</button>
         </div>
     </form>
-    {{#showContent}}
+    {{#showPDF}}
     <div class="embed-responsive embed-responsive-4by3">
-        <embed class="embed-responsive-item" src="{{ filepath }}">
+        <embed id="note-content-pdf" class="embed-responsive-item" src="{{ filepath }}">
     </div>
-    {{/showContent}}
+    {{/showPDF}}
+    {{#showHTML}}
+        <script src="/js/noteContent.js"></script>
+        <div class="embed-responsive embed-responsive-4by3">
+            <iframe id="note-content" class="embed-responsive-item" src="{{ filepath }}" onload="insertNoteCss();"></iframe>
+        </div>
+    {{/showHTML}}
 
     {{^showContent}}
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PDF_file_icon.svg/1024px-PDF_file_icon.svg.png", height="200px">
