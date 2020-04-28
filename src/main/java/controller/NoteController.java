@@ -217,7 +217,39 @@ public class NoteController extends Controller {
         noteDao.add(note);
 
         UploadedFile file = ctx.uploadedFile("file");
-        notePublishService.publishNote(note, file, ctx.formParam("text"));
+        if (note.getFiletype().equals("pdf")) {
+            assert file != null;
+            fileServer.upload(file.getContent(), note);
+
+            Thread thread = new Thread(() -> {
+                String path = fileServer.getLocalFile(note);
+                String fulltext = textExtractor.extractText(path);
+                if (fulltext != null) {
+                    note.setFulltext(fulltext);
+                    noteDao.updateFulltext(note);
+                }
+            });
+            thread.start();
+        } else if (note.getFiletype().equals("html")) {
+            String text = ctx.formParam("text");
+            assert text != null;
+            InputStream textstream = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
+
+            text = text.replaceAll("\\<.*?\\>", "");
+            note.setFulltext(text);
+            noteDao.updateFulltext(note);
+
+            fileServer.upload(textstream, note);
+        } else if (note.getFiletype().equals("md")) {
+            String text = ctx.formParam("text");
+            assert text != null;
+            InputStream textstream = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
+
+            note.setFulltext(text);
+            noteDao.updateFulltext(note);
+
+            fileServer.upload(textstream, note);
+        }
 
         ctx.redirect("/courses/" + course.getId() + "/notes");
     }
