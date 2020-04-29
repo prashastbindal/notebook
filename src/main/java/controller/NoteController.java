@@ -88,6 +88,9 @@ public class NoteController extends Controller {
         String filepath = fileServer.getURL(note);
         Boolean fileExists = (filepath != null);
 
+        Boolean showPDF = fileExists && note.getFiletype().equals("pdf");
+        Boolean showHTML = fileExists && note.getFiletype().equals("html");
+
         ctx.render(
                 "/templates/notePreview.mustache",
             TemplateUtil.model(
@@ -98,6 +101,8 @@ public class NoteController extends Controller {
                 "creatorName", note.getCreator(),
                 "filepath", filepath,
                 "showContent", fileExists,
+                "showPDF", showPDF,
+                "showHTML", showHTML,
                 "commentList", comments,
                 "dateCreated", note.getDate(),
                 "numberOfUpvotes", note.getUpvotes()
@@ -181,7 +186,8 @@ public class NoteController extends Controller {
      */
     public void upvoteNote(Context ctx) {
         Note note = this.findNote(ctx);
-        String usernameCookie = ctx.formParam("usernameUpvote");
+        String usernameCookie = ctx.formParam("username-field");
+        usernameCookie+="."+note.getCourseId()+"."+note.getId();
         if (!usernameCookie.equals("username")) {
             if (ctx.cookieStore(usernameCookie) == null || ctx.cookieStore(usernameCookie).equals("False")) {
                 ctx.cookieStore(usernameCookie, "True");
