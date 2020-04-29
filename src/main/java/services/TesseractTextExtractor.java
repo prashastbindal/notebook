@@ -1,4 +1,4 @@
-package fileserver;
+package services;
 
 import io.javalin.Javalin;
 import net.sourceforge.tess4j.ITesseract;
@@ -8,11 +8,11 @@ import net.sourceforge.tess4j.TesseractException;
 import javax.imageio.ImageIO;
 import java.io.File;
 
-public class OCRTextExtractor {
+public class TesseractTextExtractor implements OCRTextExtractor{
 
     private ITesseract instance;
 
-    public OCRTextExtractor() {
+    public TesseractTextExtractor() {
         instance = new Tesseract();
         instance.setDatapath("src/main/resources/tessdata_min/");
         instance.setLanguage("eng+equ");

@@ -4,7 +4,6 @@ import dao.CourseDao;
 import dao.NoteDao;
 import dao.SubscriptionDao;
 import fileserver.FileServer;
-import fileserver.OCRTextExtractor;
 import io.javalin.http.UploadedFile;
 import model.Note;
 import model.Subscription;
@@ -14,7 +13,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Observable;
 import java.util.stream.Collectors;
 
 public class NotePublishService{
@@ -27,7 +25,7 @@ public class NotePublishService{
 
     public NotePublishService(NoteDao noteDao, SubscriptionDao subscriptionDao, CourseDao courseDao){
         this.fileServer = FileServer.getFileServer();
-        this.textExtractor = new OCRTextExtractor();
+        this.textExtractor = new TesseractTextExtractor();
         this.noteDao = noteDao;
         this.subscriptionDao = subscriptionDao;
         this.courseDao = courseDao;

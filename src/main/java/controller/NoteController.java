@@ -2,7 +2,6 @@ package controller;
 
 import dao.*;
 import fileserver.FileServer;
-import fileserver.OCRTextExtractor;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.NotFoundResponse;
@@ -27,7 +26,6 @@ public class NoteController extends Controller {
     NoteDao noteDao;
     CommentDao commentDao;
     FileServer fileServer;
-    OCRTextExtractor textExtractor;
     SubscriptionDao subscriptionDao;
     NotePublishService notePublishService;
 
@@ -47,7 +45,6 @@ public class NoteController extends Controller {
         this.noteDao = new NoteDao(sql2o);
         this.commentDao = new CommentDao(sql2o);
         this.fileServer = FileServer.getFileServer();
-        this.textExtractor = new OCRTextExtractor();
         this.subscriptionDao = new SubscriptionDao(sql2o);
         this.notePublishService = new NotePublishService(noteDao, subscriptionDao, courseDao);
     }
