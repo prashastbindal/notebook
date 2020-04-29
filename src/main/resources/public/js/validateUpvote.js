@@ -9,10 +9,6 @@ function validateUpvote() {
     } else {
         var username = auth2.currentUser.get().getBasicProfile().getName();
         console.log("Name is " + username);
-        var courseId = document.getElementById("courseId").getAttribute("value");
-        var noteId = document.getElementById("noteId").getAttribute("value");
-        var cookieKey = username + "_" + courseId + "_" + noteId;
-        document.getElementById("usernameUpvote").value = cookieKey;
         return true;
     }
 }
@@ -34,7 +30,7 @@ upvoteButton.addEventListener("click", function() {
             data: {
                 noteId: noteid,
                 courseId: courseid,
-                usernameUpvote: username + "_" + courseid + "_" + noteid
+                usernameField: username + "_" + courseid + "_" + noteid
             }
         });
 
