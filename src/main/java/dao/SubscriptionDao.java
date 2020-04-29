@@ -66,7 +66,7 @@ public class SubscriptionDao {
     }
 
 
-    public List<Subscription> findSubscriptoinsWithCourseId(int courseId) {
+    public List<Subscription> findSubscriptoin(int courseId) {
         String sql = "SELECT * FROM Subscriptions WHERE courseId = :courseId;";
         try(Connection conn = sql2o.open()){
             return conn.createQuery(sql)

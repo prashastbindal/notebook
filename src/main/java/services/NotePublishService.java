@@ -74,7 +74,7 @@ public class NotePublishService{
 
         String subject = "Suggested new note for you";
 
-        List<Subscription> subscription = subscriptionDao.findSubscriptoinsWithCourseId(note.getCourseId());
+        List<Subscription> subscription = subscriptionDao.findSubscriptoin(note.getCourseId());
         if(!CollectionUtils.isEmpty(subscription)){
             List<String> recipients = subscription.stream().map(x -> x.getUserEmail()).collect(Collectors.toList());
             emailService.sendEmail(body, recipients, subject);
