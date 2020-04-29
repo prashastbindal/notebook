@@ -6,7 +6,6 @@
 
     <link href="/css/note-preview.css" rel="stylesheet">
     <script src="/js/validateComment.js"></script>
-    <script src="/js/validateUpvote.js"></script>
     <script src="/js/setReplyId.js"></script>
     <script>
         gapi.load('auth2', function() {
@@ -23,14 +22,16 @@
     <div class="row mx-auto">
     <h4>Made by {{ creatorName }} on {{dateCreated}}</h4>
     </div>
-    <form id="upvote-form" onsubmit="return validateUpvote()" action="/courses/{{courseId}}/notes/{{noteId}}/upvote" method="post">
+    <span id="data" data-noteid="{{noteId}}" data-courseid="{{courseId}}" data-upvotes="{{numberOfUpvotes}}" data-notename="{{noteName}}" data-creator="{{creatorName}}"></span>
+    <form id="upvote-form">
         <div class="row mx-auto">
             <input type="hidden" id="noteId" name="noteId" value={{noteId}}>
             <input type="hidden" id="courseId" name="courseId" value={{courseId}}>
             <input type="hidden" id="usernameUpvote" name="usernameUpvote" value="username">
-            <button class="btn btn-primary my-2 my-lg-0"  id="upvote">Upvote: {{numberOfUpvotes}}</button>
+            <button class="btn btn-primary my-2 my-lg-0" id="upvote" type="button">Upvote: {{numberOfUpvotes}}</button>
         </div>
     </form>
+    <script src="/js/validateUpvote.js"></script>
     {{#showPDF}}
     <div class="embed-responsive embed-responsive-4by3">
         <embed id="note-content-pdf" class="embed-responsive-item" src="{{ filepath }}">
