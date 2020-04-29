@@ -25,18 +25,6 @@ public class SubscriptionDao {
     }
 
     public void addSubscription(Subscription subscription) {
-//        String sql = "WITH ins AS (" +
-//                "  INSERT INTO Users" +
-//                "    (name, email, courseId)" +
-//                "  VALUES" +
-//                "    (:name,  :email, :courseId)" +
-//                "  RETURNING email)," +
-//                "INSERT INTO Subscriptions" +
-//                "  (courseId, email)" +
-//                "SELECT id, 'test data'" +
-//                "FROM ins" +
-//                "ON CONFLICT DO NOTHING'";
-
         String sql = "INSERT INTO Subscriptions" +
                 "   (userName, userEmail, courseId)" +
                 " VALUES" +
