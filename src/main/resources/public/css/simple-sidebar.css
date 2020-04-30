@@ -8,7 +8,7 @@ body {
 }
 
 #sidebar-wrapper {
-  min-height: 100vh;
+  min-height: 115vh;
   margin-left: -20rem;
   -webkit-transition: margin .25s ease-out;
   -moz-transition: margin .25s ease-out;
@@ -30,8 +30,13 @@ body {
   width: 20rem;
 }
 
+#note-frame {
+  min-height: 100vh;
+}
+
 #page-content-wrapper {
   min-width: 100vw;
+  min-height: 100vh;
 }
 
 #wrapper.toggled #sidebar-wrapper {

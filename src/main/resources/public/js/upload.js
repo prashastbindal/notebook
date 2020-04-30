@@ -83,7 +83,7 @@ var footerContent = " \
 return headContent + content + footerContent;
 }
 
-filetypeSelect.addEventListener("change", function() {
+filetypeSelect.addEventListener("change", function(e) {
     if (filetypeSelect.value == "pdf") {
         $('#texteditor-container').hide();
         $('#file-area').show();
@@ -98,7 +98,8 @@ filetypeSelect.addEventListener("change", function() {
         $('#markdown-container').show();
     }
 });
-$('#note-form').submit(function() {
+
+$('#note-form').submit(function(e) {
     var title = document.getElementById('title-field').value;
     if (title == null || title == '') {
         e.preventDefault();
