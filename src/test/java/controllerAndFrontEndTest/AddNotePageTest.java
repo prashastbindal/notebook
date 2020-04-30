@@ -113,22 +113,22 @@ public class AddNotePageTest {
         driver.get("http://localhost:7000/courses/1/addNote/");
         boolean missingComponents = false;
         List<WebElement> inputs = driver.findElements(By.tagName("input"));
-        if (inputs.size() != 3) {
+        if (inputs.size() != 4) {
             missingComponents = true;
         }
 
         List<WebElement> select = driver.findElements(By.tagName("select"));
-        if (select.size() != 1) {
+        if (select.size() != 6) {
             missingComponents = true;
         }
 
         List<WebElement> textarea = driver.findElements(By.tagName("textarea"));
-        if (select.size() != 1) {
+        if (textarea.size() != 4) {
             missingComponents = true;
         }
 
         List<WebElement> submitButton = driver.findElements(By.tagName("button"));
-        if (select.size() != 1) {
+        if (submitButton.size() != 22) {
             missingComponents = true;
         }
 
