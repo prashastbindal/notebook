@@ -10,16 +10,12 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
     <script>
-        var gapiPromise = new Promise(function(resolve, reject) {
-            gapi.load('auth2', function() {
-                gapi.auth2.init().then(() => {
-                    resolve(gapi.auth2);
-                });
-            });
+        gapi.load('auth2', function() {
+            gapi.auth2.init();
         });
     </script>
 </head>
-<body>
+<body onload="checkSub({{ courseId }})">
 <main>
     <script src="/js/updateNavbar.js"></script>
 
@@ -27,12 +23,21 @@
         <!-- Sidebar -->
         <div class="bg-light border-right" id="sidebar-wrapper">
             <div class="sidebar-heading">
-                <p id="course-name-heade" class="break">{{ courseName
-                }}</p>
+                <p id="course-name-heade" class="break">{{ courseName}}</p>
                 <div>
                     <button class="btn btn-outline-primary my-2 my-sm-0"
                             id="add-note-button" onclick="checkSignin({{ courseId }});">Add a
                         Note</button>
+                    <button class="btn btn-primary my-2 my-sm-0"
+                            id="subscribe-btn" onClick="subscribe
+                            ({{courseId}})">
+                        Subscribe
+                    </button>
+                    <button class="btn btn-warning  my-2 my-sm-0"
+                            id="unsubscribe-btn" onClick="unsubscribe
+                            ({{courseId}})" style="display: none">
+                        Unsubscribe
+                    </button>
                 </div>
             </div>
             <div class="show sidebar-heading">
@@ -74,17 +79,6 @@
                             <button class="dropdown-item" type="button" onclick="sortcallback('upvotes', {{courseId}})">Upvotes</button>
                         </div>
                     </div>
-                    <div class="dropdown" style="margin:10px;">
-                        <button class="btn btn-primary my-2 my-sm-0"
-                                id="subscribe-btn" onClick="subscribe({{courseId}})">
-                            Subscribe
-                        </button>
-                        <button class="btn btn-warning  my-2 my-sm-0"
-                                id="unsubscribe-btn" onClick="unsubscribe({{courseId}})">
-                            Unsubscribe
-                        </button>
-                    </div>
-
                 </form>
             </div>
             <div class="list-group list-group-flush" id="note-list">
@@ -123,18 +117,11 @@
                     <script>
                         function onSignIn(googleUser) {
                             updateNavbar();
+                            checkSub({{courseId}});
                         }
                     </script>
                     <button id="signout-btn" onclick="signOut();">Sign
                         out</button>
-                    <script>
-                        function signOut() {
-                            var auth2 = gapi.auth2.getAuthInstance();
-                            auth2.signOut();
-                            document.getElementById("signin-btn").style.display = "inline";
-                            document.getElementById("signout-btn").style.display = "none";
-                        }
-                    </script>
                 </div>
             </nav>
             <div class="container-fluid" id="note-frame-container">
@@ -154,7 +141,6 @@
         e.preventDefault();
         $("#wrapper").toggleClass('toggle');
     });
-
     gapiPromise.then(() => {
         var auth2 = window.gapi.auth2.getAuthInstance();
         if (!auth2.isSignedIn.get()) {

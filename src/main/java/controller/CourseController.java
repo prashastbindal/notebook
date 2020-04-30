@@ -54,6 +54,7 @@ public class CourseController extends Controller {
             post("courses/addCourse", this::addCourse);
             post("courses/subscribe", this::subscribeCourse);
             post("courses/unsubscribe", this::unsubscribeCourse);
+            post("courses/checkSub", this::checkSub);
             get("courses/:courseId/notes/search/:key", this::searchNotesJSON);
             get("courses/:courseId/notes/searchName/:key", this::searchNotesNameJSON);
             get("courses/:courseId/notes/searchContent/:key", this::searchNotesContentJSON);
@@ -187,6 +188,21 @@ public class CourseController extends Controller {
         String searchKey = ctx.pathParam("key");
         List<Note> notes = noteDao.searchNotesByDate(searchKey, courseId);
         ctx.json(notes);
+        ctx.status(200);
+        ctx.contentType("application/json");
+    }
+
+    public void checkSub(Context ctx){
+
+        Subscription subscription = ctx.bodyAsClass(Subscription.class);
+        Properties properties = new Properties();
+
+        if(subscriptionDao.findSubscription(subscription) != null){
+            properties.put("preSubscribed", true);
+        }else{
+            properties.put("preSubscribed", false);
+        }
+        ctx.json(properties);
         ctx.status(200);
         ctx.contentType("application/json");
     }

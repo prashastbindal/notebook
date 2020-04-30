@@ -30,8 +30,8 @@ function checkSignin(courseId) {
     var auth2 = gapi.auth2.getAuthInstance();
     if (!auth2.isSignedIn.get()) {
         auth2.signIn().then(() => {
-            document.getElementById("signin-btn").style.display = "none";
-            document.getElementById("signout-btn").style.display = "inline";
+            $("#signin-btn").hide();
+            $("#signout-btn").show();
         });
     } else {
         window.location.href = "/courses/" + courseId + "/addNote";
@@ -99,7 +99,7 @@ function queryAllNotes(courseId, callback=null, callback_args=null){
         success: function (data, status, jqXHR) {
             notes = data;
             if(callback!=null){
-               callback(...callback_args);
+                callback(...callback_args);
             }
             updateNoteView(notes)
 
@@ -217,7 +217,6 @@ $("#menu-toggle").click(function(e) {
     $("#wrapper").toggleClass("toggled");
 });
 
-
 function subscribe(courseId){
     gapi.load('auth2', function() {
         auth2 = gapi.auth2.init();
@@ -236,16 +235,18 @@ function subscribe(courseId){
                     success: function (data, status, jqXHR) {
                         if(data['preSubscribed'] == true){
                             Swal.fire({
-                              icon: 'info',
-                              title: 'No need !',
-                              text: 'You are already subscribed',
+                                icon: 'info',
+                                title: 'No need !',
+                                text: 'You are already subscribed',
                             })
                         }else{
                             Swal.fire({
-                              icon: 'success',
-                              title: 'Congratulations!',
-                              text: 'You have been subscribed',
+                                icon: 'success',
+                                title: 'Congratulations!',
+                                text: 'You have been subscribed',
                             })
+                            $('#subscribe-btn').hide();
+                            $('#unsubscribe-btn').show();
                         }
                     },
 
@@ -257,9 +258,9 @@ function subscribe(courseId){
                 });
             }else{
                 Swal.fire({
-                  icon: 'error',
-                  title: 'Uh Oh!',
-                  text: 'Please sign in for any subscription activity',
+                    icon: 'error',
+                    title: 'Uh Oh!',
+                    text: 'Please sign in for any subscription activity',
                 })
             }
         });
@@ -285,15 +286,17 @@ function unsubscribe(courseId){
                     success: function (data, status, jqXHR) {
                         if(data['preSubscribed'] == true){
                             Swal.fire({
-                              icon: 'success',
-                              title: 'Success!',
-                              text: 'You have been unsubscribed',
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'You have been unsubscribed',
                             })
+                            $('#unsubscribe-btn').hide();
+                            $('#subscribe-btn').show();
                         }else{
                             Swal.fire({
-                              icon: 'info',
-                              title: 'No need!',
-                              text: 'You were never subscribed',
+                                icon: 'info',
+                                title: 'No need!',
+                                text: 'You were never subscribed',
                             })
                         }
                     },
@@ -306,12 +309,49 @@ function unsubscribe(courseId){
                 });
             }else{
                 Swal.fire({
-                  icon: 'error',
-                  title: 'Uh Oh!',
-                  text: 'Please sign in for any subscription activity',
+                    icon: 'error',
+                    title: 'Uh Oh!',
+                    text: 'Please sign in for any subscription activity',
                 })
             }
         });
     });
 };
 
+function checkSub(courseId) {
+    gapi.load("auth2", function() {
+        auth2 = gapi.auth2.init();
+        auth2.then(function () {
+            if (auth2.isSignedIn.get()) {
+                $.ajax({
+                    type: "POST",
+                    url: "/courses/checkSub",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        "courseId": courseId,
+                        "userEmail": auth2.currentUser.get().getBasicProfile().getEmail(),
+                        "userName": auth2.currentUser.get().getBasicProfile().getName(),
+                        "id": 1
+                    }),
+                    success: function (data, status, jqXHR) {
+                        if (data['preSubscribed'] == true) {
+                            $('#subscribe-btn').hide();
+                            $('#unsubscribe-btn').show();
+                        }
+                    }
+                });
+            }
+        });
+    });
+}
+
+function signOut() {
+    gapi.load("auth2", function() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut();
+        $('#signin-btn').show();
+        $('#signout-btn').hide();
+        $('#unsubscribe-btn').hide();
+        $('#subscribe-btn').show();
+    })
+}
