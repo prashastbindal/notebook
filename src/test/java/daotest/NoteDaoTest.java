@@ -19,6 +19,7 @@ public class NoteDaoTest {
 
     CourseDao courseDao;
     NoteDao noteDao;
+    private Course c1;
 
     @Before
     public void setUp() throws Exception {
@@ -29,7 +30,7 @@ public class NoteDaoTest {
         this.courseDao = new CourseDao(sql2o);
         this.noteDao = new NoteDao(sql2o);
 
-        Course c1 = new Course("CourseName1");
+        c1 = new Course("CourseName1");
         courseDao.add(c1);
     }
 
@@ -86,5 +87,14 @@ public class NoteDaoTest {
         List<Note> found = noteDao.search("text for Note2", 1);
         assertEquals(1, found.size());
         assertEquals(n2, found.get(0));
+    }
+
+    @Test
+    public void cascadeDeleteWorks() {
+        Note n1 = new Note(1, "Note1", "User1", "txt");
+        noteDao.add(n1);
+        courseDao.remove(c1);
+        List<Note> l1 = noteDao.findAll();
+        assertTrue(l1.isEmpty());
     }
 }

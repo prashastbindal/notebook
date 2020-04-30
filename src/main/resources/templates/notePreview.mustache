@@ -12,6 +12,11 @@
             gapi.auth2.init();
         });
     </script>
+
+    <meta property="og:url"           content="http://notebook-oose.herokuapp.com/courses/{{courseId}}/notes" />
+    <meta property="og:type"          content="Notebook" />
+    <meta property="og:title"         content="Your Study Partner" />
+    <meta property="og:description"   content="Check out the best class notes available on the internet" />
 </head>
 <body>
 <main>
@@ -22,13 +27,38 @@
     <div class="row mx-auto">
     <h4>Made by {{ creatorName }} on {{dateCreated}}</h4>
     </div>
+
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+        fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+
     <span id="data" data-noteid="{{noteId}}" data-courseid="{{courseId}}" data-upvotes="{{numberOfUpvotes}}" data-notename="{{noteName}}" data-creator="{{creatorName}}"></span>
-    <form id="upvote-form">
-        <div class="row mx-auto">
+
+    <div class="row mx-auto">
+
+        <div>
             <button class="btn btn-primary my-2 my-lg-0" id="upvote" type="button">Upvote: {{numberOfUpvotes}}</button>
         </div>
-    </form>
+
+        <!-- Your share button code -->
+        <div class="fb-share-button" style="margin:5px;"
+             data-href="http://notebook-oose.herokuapp.com/courses/{{courseId}}/notes"
+             data-layout="button_count">
+        </div>
+
+        <div style="margin-top:9px;">
+            <a href="https://twitter.com/share?ref_src=twsrc%5Etfw&url=http://notebook-oose.herokuapp.com/courses/{{courseId}}/notes"
+               class="twitter-share-button" data-show-count="false">Tweet</a>
+            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+    </div>
     <script src="/js/validateUpvote.js"></script>
+
     {{#showPDF}}
     <div class="embed-responsive embed-responsive-4by3">
         <embed id="note-content-pdf" class="embed-responsive-item" src="{{ filepath }}">
