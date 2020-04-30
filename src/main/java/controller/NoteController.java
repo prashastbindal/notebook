@@ -59,6 +59,7 @@ public class NoteController extends Controller {
             path("/courses/:courseId/notes/:noteId", () -> {
                 get(this::getNote);
                 get("json", this::getNoteJSON);
+                post("checkUpvote", this::checkUpvoteNote);
                 post("upvote", this::upvoteNote);
                 post("comment", this::addComment);
                 post("delete", this::deleteNote);
@@ -186,19 +187,35 @@ public class NoteController extends Controller {
      */
     public void upvoteNote(Context ctx) {
         Note note = this.findNote(ctx);
-        String usernameCookie = ctx.formParam("usernameField");
-        usernameCookie+="."+note.getCourseId()+"."+note.getId();
-        if (!usernameCookie.equals("username")) {
-            if (ctx.cookieStore(usernameCookie) == null || ctx.cookieStore(usernameCookie).equals("False")) {
-                ctx.cookieStore(usernameCookie, "True");
+        String upvotedCookieName = ctx.formParam("username")
+                                    + "." + note.getCourseId()
+                                    + "." + note.getId();
+        if (!upvotedCookieName.equals("username")) {
+            if (ctx.cookieStore(upvotedCookieName) == null || ctx.cookieStore(upvotedCookieName).equals("False")) {
+                ctx.cookieStore(upvotedCookieName, "True");
                 note.upvote();
             } else {
-                ctx.cookieStore(usernameCookie, "False");
+                ctx.cookieStore(upvotedCookieName, "False");
                 note.unvote();
             }
         }
         noteDao.updateUpvotes(note);
-        ctx.redirect("/courses/" + note.getCourseId() + "/notes/" + note.getId());
+    }
+
+    /**
+     * Check if a user can upvote a note.
+     *
+     * @param ctx request context
+     */
+    public void checkUpvoteNote(Context ctx) {
+        String upvotedCookieName = ctx.formParam("username")
+                + "." + ctx.pathParam("courseId")
+                + "." + ctx.pathParam("noteId");
+        if (ctx.cookieStore(upvotedCookieName) == null || ctx.cookieStore(upvotedCookieName).equals("False")) {
+            ctx.result("true");
+        } else {
+            ctx.result("false");
+        }
     }
 
     /**

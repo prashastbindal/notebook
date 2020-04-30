@@ -10,8 +10,12 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
     <script>
-        gapi.load('auth2', function() {
-            gapi.auth2.init();
+        var gapiPromise = new Promise(function(resolve, reject) {
+            gapi.load('auth2', function() {
+                gapi.auth2.init().then(() => {
+                    resolve(gapi.auth2);
+                });
+            });
         });
     </script>
 </head>
@@ -150,20 +154,12 @@
         $("#wrapper").toggleClass('toggle');
     });
 
-
-    var auth2 = gapi.auth2.getAuthInstance();
-
-    if (!auth2.isSignedIn.get()) {
-        auth2.signIn();
-        // TODO: Update the navbar on signin
-    } else {
-        var username = auth2.currentUser.get().getBasicProfile().getName();
-        document.getElementById("username-field").value = username;
-    }
-
-
-
-
+    gapiPromise.then(() => {
+        var auth2 = window.gapi.auth2.getAuthInstance();
+        if (!auth2.isSignedIn.get()) {
+            auth2.signIn();
+        }
+    });
 </script>
 </body>
 </html>
