@@ -1,5 +1,6 @@
 package controllerAndFrontEndTest;
 
+import com.amazonaws.services.dynamodbv2.xspec.B;
 import com.google.gson.Gson;
 import controller.*;
 import dao.CommentDao;
@@ -16,10 +17,14 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.service.DriverService;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.sql2o.Sql2o;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.apache.commons.lang3.SystemUtils.*;
 import static org.junit.Assert.*;
@@ -98,6 +103,10 @@ public class CoursePageTest {
         driver.close();
     }
 
+    public void login() {
+
+    }
+
     /**
      * Check that the add note button exists on the course page
      *
@@ -153,22 +162,11 @@ public class CoursePageTest {
      *
      */
     @Test
-    public  void upvoteExists(){
+    public  void upvoteExists() {
         driver.get("http://localhost:7000/courses/1/notes/1");
         WebElement upvotebtn = driver.findElement(By.id("upvote"));
         assertEquals("Upvote: 0", upvotebtn.getText());
     }
-    /*
-    @Test
-    public void noteUpvoteWorks() {
-        driver.get("http://localhost:7000/courses/1/notes/1");
-        WebElement upvoteForm = driver.findElement(By.id("upvote-form"));
-        upvoteForm.submit();
-        WebElement upvoteButton = driver.findElement(By.id("upvote"));
-
-        driver.get("http://localhost:7000/courses/1/notes/1/upvote");
-        assertEquals("Upvote: 1", upvoteButton.getText());
-    }  */
 
     /**
      * Check that a comment exists for a note

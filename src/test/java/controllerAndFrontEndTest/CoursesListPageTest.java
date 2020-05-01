@@ -106,6 +106,16 @@ public class CoursesListPageTest {
     }
 
     /**
+     * Test if the sign in button from Google exists on the page
+     */
+    @Test
+    public void signInExists() {
+        driver.get("http://localhost:7000/courses");
+        WebElement signInButton = driver.findElement(By.id("signin-btn"));
+        assertEquals("g-signin2", signInButton.getAttribute("class"));
+    }
+
+    /**
      * Check that a course exists on the course list page
      *
      */
