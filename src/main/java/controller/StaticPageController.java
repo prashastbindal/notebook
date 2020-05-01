@@ -3,7 +3,7 @@ package controller;
 import io.javalin.Javalin;
 import org.sql2o.Sql2o;
 
-public class StaticController extends Controller {
+public class StaticPageController extends Controller {
 
     /**
      * Instantiates a new controller.
@@ -11,7 +11,7 @@ public class StaticController extends Controller {
      * @param app   Javalin connection
      * @param sql2o database connection
      */
-    public StaticController(Javalin app, Sql2o sql2o) {
+    public StaticPageController(Javalin app, Sql2o sql2o) {
         super(app, sql2o);
     }
 
@@ -19,6 +19,9 @@ public class StaticController extends Controller {
     void init() {
     }
 
+    /**
+     * Register the handled endpoints with Javalin.
+     */
     @Override
     void register() {
         app.get("/", ctx -> ctx.redirect("/home"));

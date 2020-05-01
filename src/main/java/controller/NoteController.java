@@ -49,12 +49,15 @@ public class NoteController extends Controller {
         this.notePublishService = new NotePublishService(noteDao, subscriptionDao, courseDao);
     }
 
+    /**
+     * Register the handled endpoints with Javalin.
+     */
     @Override
     void register() {
 
         app.routes(() -> {
             path("/courses/:courseId/notes/:noteId", () -> {
-                get(this::getNote);
+                get(this::getNoteView);
                 get("json", this::getNoteJSON);
                 post("checkUpvote", this::checkUpvoteNote);
                 post("upvote", this::upvoteNote);
@@ -77,7 +80,7 @@ public class NoteController extends Controller {
      *
      * @param ctx request context
      */
-    public void getNote(Context ctx) {
+    public void getNoteView(Context ctx) {
         Course course = this.findCourse(ctx);
         Note note = this.findNote(ctx);
 

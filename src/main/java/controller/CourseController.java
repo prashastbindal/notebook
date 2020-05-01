@@ -42,12 +42,15 @@ public class CourseController extends Controller {
         this.subscriptionDao = new SubscriptionDao(sql2o);
     }
 
+    /**
+     * Register the handled endpoints with Javalin.
+     */
     @Override
     void register() {
 
         app.routes(() -> {
             path("courses/:courseId/notes", () -> {
-                get(this::getNotes);
+                get(this::getNotesView);
                 get("json", this::getNotesJSON);
             });
             post("courses/:courseId/delete", this::deleteCourse);
@@ -57,7 +60,7 @@ public class CourseController extends Controller {
             post("courses/checkSub", this::checkSub);
             get("courses/:courseId/notes/search/:key", this::searchNotesJSON);
             get("courses/:courseId/notes/searchName/:key", this::searchNotesNameJSON);
-            get("courses/:courseId/notes/searchContent/:key", this::searchNotesContentJSON);
+            get("courses/:courseId/notes/searchContent/:key", this::searchNotesBodyJSON);
             get("courses/:courseId/notes/searchCreator/:key", this::searchNotesCreatorJSON);
             get("courses/:courseId/notes/searchDate/:key", this::searchNotesDateJSON);
         });
@@ -69,7 +72,7 @@ public class CourseController extends Controller {
      *
      * @param ctx request context
      */
-    public void getNotes(Context ctx) {
+    public void getNotesView(Context ctx) {
         Course course = this.findCourse(ctx);
         List<Note> notes = noteDao.findNoteWithCourseId(course.getId());
 
@@ -140,53 +143,77 @@ public class CourseController extends Controller {
         return course;
     }
 
+    /**
+     * Handler for json requests to search in notes
+     *
+     * @param ctx request context
+     */
     public void searchNotesJSON(Context ctx) {
         int courseId = Integer.parseInt(ctx.pathParam("courseId"));
 
         String searchKey = ctx.pathParam("key");
-        List<Note> notes = noteDao.search(searchKey, courseId);
-        List<Note> notes2 = noteDao.searchNotesWithName(searchKey, courseId);
-        notes.addAll(notes2);
+        List<Note> notes = noteDao.searchWithBodyText(searchKey, courseId);
+        notes.addAll(noteDao.searchWithName(searchKey, courseId));
         ctx.json(notes);
         ctx.status(200);
         ctx.contentType("application/json");
     }
 
+    /**
+     * Search the notes by their name
+     *
+     * @param ctx request context
+     */
     public void searchNotesNameJSON(Context ctx) {
         int courseId = Integer.parseInt(ctx.pathParam("courseId"));
 
         String searchKey = ctx.pathParam("key");
-        List<Note> notes = noteDao.searchNotesWithName(searchKey, courseId);
+        List<Note> notes = noteDao.searchWithName(searchKey, courseId);
         ctx.json(notes);
         ctx.status(200);
         ctx.contentType("application/json");
     }
 
-    public void searchNotesContentJSON(Context ctx) {
+    /**
+     * Search the notes by their body
+     *
+     * @param ctx request context
+     */
+    public void searchNotesBodyJSON(Context ctx) {
         int courseId = Integer.parseInt(ctx.pathParam("courseId"));
 
         String searchKey = ctx.pathParam("key");
-        List<Note> notes = noteDao.search(searchKey, courseId);
+        List<Note> notes = noteDao.searchWithBodyText(searchKey, courseId);
         ctx.json(notes);
         ctx.status(200);
         ctx.contentType("application/json");
     }
 
+    /**
+     * Search the notes by their creator
+     *
+     * @param ctx request context
+     */
     public void searchNotesCreatorJSON(Context ctx) {
         int courseId = Integer.parseInt(ctx.pathParam("courseId"));
 
         String searchKey = ctx.pathParam("key");
-        List<Note> notes = noteDao.searchNotesByCreator(searchKey, courseId);
+        List<Note> notes = noteDao.searchByCreator(searchKey, courseId);
         ctx.json(notes);
         ctx.status(200);
         ctx.contentType("application/json");
     }
 
+    /**
+     * Search the notes by their creation date
+     *
+     * @param ctx request context
+     */
     public void searchNotesDateJSON(Context ctx) {
         int courseId = Integer.parseInt(ctx.pathParam("courseId"));
 
         String searchKey = ctx.pathParam("key");
-        List<Note> notes = noteDao.searchNotesByDate(searchKey, courseId);
+        List<Note> notes = noteDao.searchByDate(searchKey, courseId);
         ctx.json(notes);
         ctx.status(200);
         ctx.contentType("application/json");
@@ -208,12 +235,17 @@ public class CourseController extends Controller {
     }
 
 
+    /**
+     * Subscribe for emails to a course if not presubscribed
+     *
+     * @param ctx request context
+     */
     public void subscribeCourse(Context ctx){
 
         Subscription subscription = ctx.bodyAsClass(Subscription.class);
         Properties properties = new Properties();
 
-        if(subscriptionDao.findSubscription(subscription) != null){
+        if(subscriptionDao.findSubscriptionWithCourseId(subscription) != null){
             properties.put("preSubscribed", true);
         }else{
             subscriptionDao.addSubscription(subscription);
@@ -224,12 +256,17 @@ public class CourseController extends Controller {
         ctx.contentType("application/json");
     }
 
+    /**
+     * Unsubscribe for emails to a course if already subscribed
+     *
+     * @param ctx request context
+     */
     public void unsubscribeCourse(Context ctx){
 
         Subscription subscription = ctx.bodyAsClass(Subscription.class);
         Properties properties = new Properties();
 
-        Subscription dbSubscription = subscriptionDao.findSubscription(subscription);
+        Subscription dbSubscription = subscriptionDao.findSubscriptionWithCourseId(subscription);
         if(dbSubscription != null){
             subscriptionDao.remove(dbSubscription);
             properties.put("preSubscribed", true);

@@ -8,7 +8,6 @@ import model.Note;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
 import java.util.List;
@@ -17,8 +16,8 @@ import static org.junit.Assert.*;
 
 public class NoteDaoTest {
 
-    CourseDao courseDao;
-    NoteDao noteDao;
+    private CourseDao courseDao;
+    private NoteDao noteDao;
     private Course c1;
 
     @Before
@@ -84,14 +83,16 @@ public class NoteDaoTest {
         n2.setFulltext("This is some example text for Note2 created by User1.");
         noteDao.add(n2);
 
-        List<Note> found = noteDao.search("text for Note2", 1);
+        List<Note> found = noteDao.searchWithBodyText("text for Note2", 1);
         assertEquals(1, found.size());
         assertEquals(n2, found.get(0));
     }
 
     @Test
     public void cascadeDeleteWorks() {
-        Note n1 = new Note(1, "Note1", "User1", "txt");
+        Course c2 = new Course("CourseName1");
+        courseDao.add(c2);
+        Note n1 = new Note(c2.getId(), "Note1", "User1", "txt");
         noteDao.add(n1);
         courseDao.remove(c1);
         List<Note> l1 = noteDao.findAll();

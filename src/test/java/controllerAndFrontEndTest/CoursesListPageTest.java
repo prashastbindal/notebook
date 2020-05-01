@@ -7,7 +7,6 @@ import dao.CourseDao;
 import dao.DBBuilder;
 import dao.NoteDao;
 import io.javalin.Javalin;
-import io.javalin.http.staticfiles.Location;
 import io.javalin.plugin.json.JavalinJson;
 import org.junit.*;
 import org.openqa.selenium.By;
@@ -16,12 +15,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.service.DriverService;
 import org.sql2o.Sql2o;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Driver;
 import java.util.List;
 
 import static org.apache.commons.lang3.SystemUtils.*;
@@ -88,7 +85,7 @@ public class CoursesListPageTest {
             config.addStaticFiles("public/");
         }).start(PORT);
 
-        Controller staticPagesHandler = new StaticController(app, sql2o);
+        Controller staticPagesHandler = new StaticPageController(app, sql2o);
         Controller coursesPageHandler = new CourseListController(app, sql2o);
         Controller coursePageHandler  = new CourseController(app, sql2o);
         Controller notePageHandler    = new NoteController(app, sql2o);
@@ -108,6 +105,10 @@ public class CoursesListPageTest {
         assertEquals("NoteBook", driver.getTitle());
     }
 
+    /**
+     * Check that a course exists on the course list page
+     *
+     */
     @Test
     public void coursesAreListed() {
         driver.get("http://localhost:7000/courses");
@@ -124,6 +125,10 @@ public class CoursesListPageTest {
         assertEquals("Example Course 1", courseText);
     }
 
+    /**
+     * Check that the correct page is loaded upon clicking on a course
+     *
+     */
     @Test
     public void courseLinkWorks() {
         driver.get("http://localhost:7000/courses");

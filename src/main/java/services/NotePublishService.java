@@ -33,6 +33,13 @@ public class NotePublishService{
 
     }
 
+    /**
+     * Publish file for note to Fileserver and perform actions like email to subscribers associated with every upload.
+     *
+     * @param note : attributes of the note
+     * @param file: the file to be uploaded
+     * @param text : the text to be uploaded if the submitted note is not a file
+     */
     public void publishNote(Note note, UploadedFile file, String text){
         if (note.getFiletype().equals("pdf")) {
             assert file != null;
@@ -74,9 +81,9 @@ public class NotePublishService{
 
         String subject = "Suggested new note for you";
 
-        List<Subscription> subscription = subscriptionDao.findSubscriptoin(note.getCourseId());
-        if(!CollectionUtils.isEmpty(subscription)){
-            List<String> recipients = subscription.stream().map(x -> x.getUserEmail()).collect(Collectors.toList());
+        List<Subscription> subscriptions = subscriptionDao.findSubscriptionWithCourseId(note.getCourseId());
+        if(!CollectionUtils.isEmpty(subscriptions)){
+            List<String> recipients = subscriptions.stream().map(x -> x.getUserEmail()).collect(Collectors.toList());
             emailService.sendEmail(body, recipients, subject);
         }
 

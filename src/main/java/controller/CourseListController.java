@@ -34,6 +34,9 @@ public class CourseListController extends Controller {
         this.courseDao = new CourseDao(this.sql2o);
     }
 
+    /**
+     * Register the handled endpoints with Javalin.
+     */
     @Override
     public void register() {
 
@@ -71,6 +74,11 @@ public class CourseListController extends Controller {
         ctx.contentType("application/json");
     }
 
+    /**
+     * Search courses by their name
+     *
+     * @param ctx request context
+     */
     public void searchCoursesJSON(Context ctx){
         String searchKey = ctx.pathParam("key");
         List<Course> courses = courseDao.searchCoursesWithName(searchKey);

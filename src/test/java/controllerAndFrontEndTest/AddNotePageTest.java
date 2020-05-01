@@ -1,6 +1,5 @@
 package controllerAndFrontEndTest;
 
-import com.amazonaws.services.dynamodbv2.xspec.S;
 import com.google.gson.Gson;
 import controller.*;
 import dao.CommentDao;
@@ -12,14 +11,12 @@ import io.javalin.http.staticfiles.Location;
 import io.javalin.plugin.json.JavalinJson;
 import org.junit.*;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.service.DriverService;
-import org.openqa.selenium.support.ui.Select;
 import org.sql2o.Sql2o;
 import java.io.File;
 import java.io.IOException;
@@ -94,7 +91,7 @@ public class AddNotePageTest {
             config.addStaticFiles("public/");
         }).start(PORT);
 
-        Controller staticPagesHandler = new StaticController(app, sql2o);
+        Controller staticPagesHandler = new StaticPageController(app, sql2o);
         Controller coursesPageHandler = new CourseListController(app, sql2o);
         Controller coursePageHandler  = new CourseController(app, sql2o);
         Controller notePageHandler    = new NoteController(app, sql2o);
@@ -108,6 +105,10 @@ public class AddNotePageTest {
         driver.close();
     }
 
+    /**
+     * Check if the html elements exist on the webpage for adding note
+     *
+     */
     @Test
     public void webComponentsExist() {
         driver.get("http://localhost:7000/courses/1/addNote/");

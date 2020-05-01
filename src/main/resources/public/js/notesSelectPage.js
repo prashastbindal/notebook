@@ -141,42 +141,6 @@ function sorter(sortBy, is_ascending){
     });
 }
 
-//function queryAllNotes(courseId){
-//
-//    $.ajax({
-//            type: "GET",
-//            url: "/courses/" + courseId.toString() + "/notes/json",
-//            contentType: "application/json",
-//            success: function (data, status, jqXHR) {
-//                notes = data;
-//
-//                $("#note-list").empty();
-//
-//                notes.map(function(note){
-//                    $("#note-list").append(parse(noteItemFormat, note.courseId.toString(), note.id.toString(),
-//                        note.title.toString(), note.creator.toString(), note.date.toString(), note.upvotes.toString()))
-//                });
-//
-//                $(".note-select").click(function(e) {
-//                    $('#note-list .active').removeClass('active');
-//                    $(this).addClass('active');
-//
-//                    e.preventDefault();
-//                    $("#note-frame").attr("src", "".concat("/courses/", e.target.dataset.courseid, "/notes-preview/", e.target.dataset.noteid));
-//                });
-//
-//            },
-//
-//            error: function (jqXHR, status) {
-//                // error handler
-//                console.log(jqXHR);
-//                alert('fail' + status.code);
-//            }
-//        });
-//
-//
-//}
-
 function sortcallback(sortBy, courseId){
     console.log("sorting by " + sortBy);
 
@@ -191,9 +155,6 @@ function sortcallback(sortBy, courseId){
         sorter(sortBy, is_ascending);
         updateNoteView(notes);
     }
-
-
-
 };
 
 function searchcallback(searchBy, courseId) {

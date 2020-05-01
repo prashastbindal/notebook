@@ -31,7 +31,7 @@ public class Server {
         Javalin app = startServer();
 
         // setup all request handlers
-        Controller staticPagesHandler = new StaticController(app, sql2o);
+        Controller staticPagesHandler = new StaticPageController(app, sql2o);
         Controller coursesPageHandler = new CourseListController(app, sql2o);
         Controller coursePageHandler  = new CourseController(app, sql2o);
         Controller notePageHandler    = new NoteController(app, sql2o);

@@ -19,10 +19,15 @@ public class TesseractTextExtractor implements OCRTextExtractor{
         ImageIO.scanForPlugins();
     }
 
-    public String extractText(String fn) {
+    /**
+     * Extract text from the specified file path
+     *
+     * @param path : path to file from which to extract text
+     */
+    public String extractText(String path) {
 
-        Javalin.log.info("PDF fn: " + fn);
-        File pdf = new File(fn);
+        Javalin.log.info("PDF fn: " + path);
+        File pdf = new File(path);
         try {
             String fulltext = instance.doOCR(pdf);
             Javalin.log.info("Completed OCR.");

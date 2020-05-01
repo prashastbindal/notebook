@@ -101,10 +101,16 @@ public class CourseDao {
         }
     }
 
-    public List<Course> searchCoursesWithName(String searchKey) {
+    /**
+     * Search courses by their name
+     *
+     * @param searchValue the search value to be matched with course names
+     * @return  list of matched courses
+     */
+    public List<Course> searchCoursesWithName(String searchValue) {
         String sql = "SELECT * FROM Courses WHERE LOWER(name) LIKE LOWER(:courseName);";
         try(Connection conn = sql2o.open()){
-            return conn.createQuery(sql).addParameter("courseName", "%" + searchKey + "%").executeAndFetch(Course.class);
+            return conn.createQuery(sql).addParameter("courseName", "%" + searchValue + "%").executeAndFetch(Course.class);
         }
     }
 

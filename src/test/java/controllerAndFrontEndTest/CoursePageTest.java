@@ -1,6 +1,5 @@
 package controllerAndFrontEndTest;
 
-import com.amazonaws.services.dynamodbv2.xspec.S;
 import com.google.gson.Gson;
 import controller.*;
 import dao.CommentDao;
@@ -8,7 +7,6 @@ import dao.CourseDao;
 import dao.DBBuilder;
 import dao.NoteDao;
 import io.javalin.Javalin;
-import io.javalin.http.staticfiles.Location;
 import io.javalin.plugin.json.JavalinJson;
 import org.junit.*;
 import org.openqa.selenium.By;
@@ -87,7 +85,7 @@ public class CoursePageTest {
             config.addStaticFiles("public/");
         }).start(PORT);
 
-        Controller staticPagesHandler = new StaticController(app, sql2o);
+        Controller staticPagesHandler = new StaticPageController(app, sql2o);
         Controller coursesPageHandler = new CourseListController(app, sql2o);
         Controller coursePageHandler  = new CourseController(app, sql2o);
         Controller notePageHandler    = new NoteController(app, sql2o);
@@ -101,6 +99,10 @@ public class CoursePageTest {
         driver.close();
     }
 
+    /**
+     * Check that the correct course page is rendered for a course id
+     *
+     */
     @Test
     public void correctPage() {
         driver.get("http://localhost:7000/courses/1/notes/");
@@ -108,6 +110,10 @@ public class CoursePageTest {
         assertEquals("Example Course 1", h2.getText());
     }
 
+    /**
+     * Check that the add note button exists on the course page
+     *
+     */
     @Test
     public void addNoteExists() {
         driver.get("http://localhost:7000/courses/1/notes/");
@@ -116,6 +122,10 @@ public class CoursePageTest {
         assertEquals("Add a Note", addNote.getText());
     }
 
+    /**
+     * Check that the add note button works
+     *
+     */
     @Test
     public void addNoteLinkWorks() {
         driver.get("http://localhost:7000/courses/1/notes/");
@@ -124,6 +134,10 @@ public class CoursePageTest {
         assertEquals("http://localhost:7000/courses/1/notes/", driver.getCurrentUrl());
     }
 
+    /**
+     * Check that a note is present on the course apge
+     *
+     */
     @Test
     public void notesAreListed() {
         driver.get("http://localhost:7000/courses/1/notes/");
@@ -132,6 +146,10 @@ public class CoursePageTest {
         assertEquals("Note1 by student1\nUpvotes: 0", note1.getText());
     }
 
+    /**
+     * Check that a note view is rendered upon selecting a note
+     *
+     */
     @Test
     public void notesLinksWork() {
         driver.get("http://localhost:7000/courses/1/notes/");
@@ -142,6 +160,10 @@ public class CoursePageTest {
         assertEquals("http://localhost:7000/courses/1/notes-preview/1", frame.getAttribute("src"));
     }
 
+    /**
+     * Check that upvote button exists
+     *
+     */
     @Test
     public void noteUpvoteExists() {
         driver.get("http://localhost:7000/courses/1/notes/1");
@@ -161,6 +183,10 @@ public class CoursePageTest {
         assertEquals("Upvote: 1", upvoteButton.getText());
     }  */
 
+    /**
+     * Check that a comment exists for a note
+     *
+     */
     @Test
     public void commentsExist() {
         driver.get("http://localhost:7000/courses/1/notes/1");
@@ -168,6 +194,10 @@ public class CoursePageTest {
         assertEquals("student 1\nthis is a comment\nReply",comment.getText());
     }
 
+    /**
+     * Check that a comment reply button exists for a note
+     *
+     */
     @Test
     public void replyButtonExists() {
         driver.get("http://localhost:7000/courses/1/notes/1");

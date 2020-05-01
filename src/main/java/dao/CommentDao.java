@@ -35,7 +35,6 @@ public class CommentDao {
                      "VALUES(:parentId, :noteId, :text, :creator);";
         try(Connection conn = sql2o.open()){
             int id = (int) conn.createQuery(sql, true)
-                               .bind(Comment.class)
                                .bind(comment)
                                .executeUpdate()
                                .getKey();
