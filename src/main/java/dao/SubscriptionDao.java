@@ -53,7 +53,7 @@ public class SubscriptionDao {
      * @param subscription object containing attributes of the subscription to be found in database
      * @return retrieved subscription from database
      */
-    public Subscription findSubscriptionWithCourseId(Subscription subscription) {
+    public Subscription findSubscription(Subscription subscription) {
         String sql = "SELECT * FROM Subscriptions WHERE userName = :userName AND userEmail = :userEmail AND courseId = :courseId;";
         try (Connection conn = sql2o.open()) {
             return conn.createQuery(sql)

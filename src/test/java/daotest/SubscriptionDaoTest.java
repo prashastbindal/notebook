@@ -41,7 +41,7 @@ public class SubscriptionDaoTest {
     public void addSubscriptionWorks() {
         Subscription s1 = new Subscription("test@email.com", "un1", c1.getId());
         subscriptionDao.addSubscription(s1);
-        Subscription s2 = subscriptionDao.findSubscriptionWithId(s1.getId());
+        Subscription s2 = subscriptionDao.findSubscription(s1);
         assertNotNull(s2);
     }
 

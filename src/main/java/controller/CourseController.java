@@ -245,7 +245,7 @@ public class CourseController extends Controller {
         Subscription subscription = ctx.bodyAsClass(Subscription.class);
         Properties properties = new Properties();
 
-        if(subscriptionDao.findSubscriptionWithCourseId(subscription) != null){
+        if(subscriptionDao.findSubscription(subscription) != null){
             properties.put("preSubscribed", true);
         }else{
             subscriptionDao.addSubscription(subscription);
@@ -266,7 +266,7 @@ public class CourseController extends Controller {
         Subscription subscription = ctx.bodyAsClass(Subscription.class);
         Properties properties = new Properties();
 
-        Subscription dbSubscription = subscriptionDao.findSubscriptionWithCourseId(subscription);
+        Subscription dbSubscription = subscriptionDao.findSubscription(subscription);
         if(dbSubscription != null){
             subscriptionDao.remove(dbSubscription);
             properties.put("preSubscribed", true);
