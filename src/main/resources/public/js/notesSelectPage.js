@@ -40,8 +40,6 @@ function checkSignin(courseId) {
 }
 
 function searcher(courseId, searchKey, newUrl) {
-    console.log("search button clicked")
-    console.log(searchKey)
     $.ajax({
         type: "GET",
         url: newUrl,
@@ -66,7 +64,6 @@ function searcher(courseId, searchKey, newUrl) {
 
         error: function (jqXHR, status) {
             // error handler
-            console.log(jqXHR);
             alert("Empty or invalid search input");
         }
     });
@@ -107,7 +104,6 @@ function queryAllNotes(courseId, callback=null, callback_args=null){
 
         error: function (jqXHR, status) {
             // error handler
-            console.log(jqXHR);
             alert('fail' + status.code);
         }
     });
@@ -142,8 +138,6 @@ function sorter(sortBy, is_ascending){
 }
 
 function sortcallback(sortBy, courseId){
-    console.log("sorting by " + sortBy);
-
     var is_ascending = true;
     if(sortBy == "upvotes"){
         is_ascending = false;
@@ -213,7 +207,6 @@ function subscribe(courseId){
 
                     error: function (jqXHR, status) {
                         // error handler
-                        console.log(jqXHR);
                         alert("Error with subscription");
                     }
                 });
@@ -264,7 +257,6 @@ function unsubscribe(courseId){
 
                     error: function (jqXHR, status) {
                         // error handler
-                        console.log(jqXHR);
                         alert("Error with subscription");
                     }
                 });

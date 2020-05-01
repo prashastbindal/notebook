@@ -8,7 +8,6 @@ function validateUpvote() {
         return false;
     } else {
         var username = auth2.currentUser.get().getBasicProfile().getName();
-        console.log("Name is " + username);
         return true;
     }
 }
@@ -37,7 +36,6 @@ gapiPromise.then(() => {
             username: username
         },
         success: function(data, status, xhr) {
-            console.log("success");
             if (data == "false") {
                 canUpvote = false;
                 upvoteButton.innerHTML = "Downvote: " + upvotes;
