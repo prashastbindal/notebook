@@ -150,6 +150,12 @@ public class CoursePageTest {
     }
 
 
+    @Test
+    public  void upvoteExists(){
+        driver.get("http://localhost:7000/courses/1/notes/1");
+        WebElement upvotebtn = driver.findElement(By.id("upvote"));
+        assertEquals("Upvote: 0", upvotebtn.getText());
+    }
     /*
     @Test
     public void noteUpvoteWorks() {
