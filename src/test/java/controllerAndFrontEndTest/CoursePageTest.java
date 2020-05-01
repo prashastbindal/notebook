@@ -65,7 +65,6 @@ public class CoursePageTest {
 
     @Before
     public void setup() throws Exception {
-
         DBBuilder.createTestDatabase("coursepagetestdb");
         Sql2o sql2o = DBBuilder.getTestDatabaseConnection("coursepagetestdb");
         DBBuilder.createTables(sql2o, true);
@@ -149,7 +148,10 @@ public class CoursePageTest {
         assertEquals("http://localhost:7000/courses/1/notes-preview/1", frame.getAttribute("src"));
     }
 
-
+    /**
+     * Check that upvote button exists for a note and displays correctly
+     *
+     */
     @Test
     public  void upvoteExists(){
         driver.get("http://localhost:7000/courses/1/notes/1");
@@ -190,5 +192,4 @@ public class CoursePageTest {
         WebElement replyButton = buttons.get(1);
         assertEquals("Reply",replyButton.getText());
     }
-
 }
