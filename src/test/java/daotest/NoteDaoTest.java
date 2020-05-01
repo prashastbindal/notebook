@@ -94,7 +94,7 @@ public class NoteDaoTest {
         courseDao.add(c2);
         Note n1 = new Note(c2.getId(), "Note1", "User1", "txt");
         noteDao.add(n1);
-        courseDao.remove(c1);
+        courseDao.remove(c2);
         List<Note> l1 = noteDao.findAll();
         assertTrue(l1.isEmpty());
     }

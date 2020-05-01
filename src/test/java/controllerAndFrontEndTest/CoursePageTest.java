@@ -100,17 +100,6 @@ public class CoursePageTest {
     }
 
     /**
-     * Check that the correct course page is rendered for a course id
-     *
-     */
-    @Test
-    public void correctPage() {
-        driver.get("http://localhost:7000/courses/1/notes/");
-        WebElement h2 = driver.findElement(By.id("course-name-header"));
-        assertEquals("Example Course 1", h2.getText());
-    }
-
-    /**
      * Check that the add note button exists on the course page
      *
      */
@@ -160,16 +149,6 @@ public class CoursePageTest {
         assertEquals("http://localhost:7000/courses/1/notes-preview/1", frame.getAttribute("src"));
     }
 
-    /**
-     * Check that upvote button exists
-     *
-     */
-    @Test
-    public void noteUpvoteExists() {
-        driver.get("http://localhost:7000/courses/1/notes/1");
-        WebElement upvoteForm = driver.findElement(By.id("upvote-form"));
-        assertEquals("Upvote: 0", upvoteForm.getText());
-    }
 
     /*
     @Test
