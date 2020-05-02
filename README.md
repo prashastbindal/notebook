@@ -47,6 +47,8 @@ Before running the app, ensure that the following environment variables are set:
 JDBC_DATABASE_URL='jdbc:postgresql://localhost:5432/notebookdb?user=dbuser&password=dbpasswd'
 PORT=7000
 AWS_ENABLE=FALSE
+USERNAME=<email address of the Google account to use for sending email to course subscribers>
+PASSWORD=<password of the  Google account to use for sending email to course subscribers>
 ```
 These can be set manually in IntelliJ by modifying the run configutation, or by running `./heroku_local.sh`
 which builds and runs the app locally.
