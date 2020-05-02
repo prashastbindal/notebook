@@ -1,3 +1,4 @@
+// makes sure user is signed in before they upvote, signing them in if not
 function validateUpvote() {
     var auth2 = gapi.auth2.getAuthInstance();
     if (!auth2.isSignedIn.get()) {
@@ -6,6 +7,7 @@ function validateUpvote() {
             parent.document.getElementById("signout-btn").style.display = "inline";
         });
         return false;
+    //if not signed in keep track of username to prevent multiple upvotes
     } else {
         var username = auth2.currentUser.get().getBasicProfile().getName();
         return true;
@@ -27,6 +29,7 @@ gapiPromise.then(() => {
     var auth2 = gapi.auth2.getAuthInstance();
     var username = auth2.currentUser.get().getBasicProfile().getName();
 
+    // use ajax to ensure sidebar upvote count is updated immediately in response to user
     $.ajax({
         url: "/courses/" + courseid + "/notes/" + noteid + "/checkUpvote",
         method: "POST",

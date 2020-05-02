@@ -41,6 +41,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Title</span>
                             </div>
+                            <!-- username automatically populated on submission with gapi auth2 data -->
                             <input type="hidden" id="username-field"
                                    name="username" value="0">
                             <input id="title-field" name="title" type="text"
@@ -76,7 +77,7 @@
                             </div>
 
                         </div>
-
+                        <!-- on submit, we take content of texteditor or markdown and put it in textarea so either work with endpoint, see upload.js -->
                         <textarea id="textarea" name="text" hidden></textarea>
                         <div id="texteditor-container">
                             <div id="texteditor"></div>

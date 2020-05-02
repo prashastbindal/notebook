@@ -108,6 +108,7 @@
     <div class="form-group">
         <form id="comment-form" onsubmit="return validateComment()" action="/courses/{{courseId}}/notes/{{noteId}}/comment" method="post">
             <input type="hidden" id="reply-id-field" name="parent-id" value="0">
+            <!-- username automatically populated on submission with gapi auth2 data -->
             <input type="hidden" id="username-field" name="username" value="0">
             <textarea class="form-control comment-text-field" id="comment-field" name="text"
                   placeholder="Add a comment..."></textarea>

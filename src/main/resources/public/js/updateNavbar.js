@@ -1,3 +1,4 @@
+// makes sure the navbar has a signin button if user is signed out, sign out button if user is signed in
 function updateNavbar() {
     gapi.load('auth2', function() {
         auth2 = gapi.auth2.init();

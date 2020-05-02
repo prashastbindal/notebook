@@ -1,3 +1,4 @@
+// makes sure the user is signed in before submitting note--if not, signs them in
 function validateNote() {
     var auth2 = gapi.auth2.getAuthInstance();
     if (!auth2.isSignedIn.get()) {

@@ -10,6 +10,7 @@
 {{> navbar}}
 
 <div class="mx-auto">
+    <!-- search and sort -->
     <div class="dropdown show mx-auto row">
         <form id="search-form" class="form-inline my-2 my-lg-0" >
             <input class="form-control" id="searchbar" type="text" placeholder="Search Courses">
@@ -23,6 +24,7 @@
         </form>
     </div>
 
+    <!-- list of courses -->
     <ul class="list-group" id="courses-list">
         {{#courseList}}
             <li class="list-group-item"><a href="/courses/{{ id }}/notes/"> {{ name }} </a></li>
