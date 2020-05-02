@@ -9,6 +9,31 @@ Alex Hepp \
 Anirudh Sharma \
 Prashast Bindal
 
+##How to run the app
+1. Install and run postgres server
+2. Execute the following commands:
+```
+psql postgres -c "CREATE USER dbuser WITH PASSWORD 'dbpasswd'"; # add a postgres user
+psql postgres -c "ALTER ROLE dbuser WITH CREATEDB;"             # enable dbuser to make databases
+psql postgres -c "CREATE DATABASE notebookdb;"                  # create the database
+```
+3. Before running the app, ensure that the following environment variables are set:
+```
+JDBC_DATABASE_URL='jdbc:postgresql://localhost:5432/notebookdb?user=dbuser&password=dbpasswd'
+PORT=7000
+AWS_ENABLE=FALSE
+USERNAME=<email address of the Google account to use for sending email to course subscribers>
+PASSWORD=<password of the  Google account to use for sending email to course subscribers>
+```
+4. Build application by executing the following command inside project directory
+```
+./gradle stage 
+```
+5. Run application server with command
+```
+java -jar build/libs/notebook-0.3.jar 
+```
+
 ## Iteration 4
 This iteration we cleaned up the application's front end by styling comments, fixing upvotes, adding a "sort by" function, allowing the user to collapse the sidebar, etc. We also added Google authentication to the site and fully integrated it with our posting and commenting system.
 
