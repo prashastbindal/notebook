@@ -9,7 +9,7 @@ Alex Hepp \
 Anirudh Sharma \
 Prashast Bindal
 
-##How to run the app
+## How to run the app
 1. Install and run postgres server
 2. Execute the following commands:
 ```
