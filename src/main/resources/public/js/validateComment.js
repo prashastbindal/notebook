@@ -1,3 +1,4 @@
+// makes sure the comment is valid data, then asks the user to sign in if necessary
 function validateComment() {
     var comment = document.getElementById("comment-field").value;
     if (comment.length < 1) {
